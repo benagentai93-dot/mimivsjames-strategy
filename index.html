@@ -478,6 +478,7 @@
     <button class="nav-tab" onclick="switchTab('tab8',this)">&#127918; 選擇權四象限</button>
     <button class="nav-tab" onclick="switchTab('tab4',this)">&#9645; 機構筆記</button>
     <button class="nav-tab" onclick="switchTab('tab9',this)">&#128270; 型態指南</button>
+    <button class="nav-tab" onclick="switchTab('tab10',this)">&#128202; 五大進階工具</button>
   </div>
 </nav>
 
@@ -2950,6 +2951,244 @@ updateRiskSlider();
             <td style="padding:10px 12px;color:var(--red);">（做空）2B假突破確認後</td>
             <td style="padding:10px 12px;color:var(--red);">假突破最高點 + 1x ATR</td>
             <td style="padding:10px 12px;"><span style="color:var(--red);font-weight:600;">離場 / 做空 ▼</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 10: 五大進階工具 -->
+<div id="tab10" class="page">
+  <div class="banner">
+    <h2>五大進階工具 — 散戶看不到，華爾街每天在用</h2>
+    <p>VRVP + AVWAP + DIX + ADL + VVIX。五個工具組成完整的抄底保命系統：先找機構成本底部（VRVP × AVWAP 共振）→ 再確認機構真實意圖（DIX × ADL）→ 最後判斷市場恐慌是否見頂（VVIX）。</p>
+  </div>
+
+  <!-- ① VRVP -->
+  <div class="strategy-card" style="margin-bottom:16px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      <div class="card-icon icon-accent" style="flex-shrink:0;">&#128200;</div>
+      <div>
+        <h3 style="margin:0;">① VRVP — 成交量分布圖（籌碼地圖）</h3>
+        <p style="font-size:12px;color:var(--text-secondary);margin:4px 0 0;">傳統成交量告訴你「哪天」熱絡；VRVP 把成交量轉 90° 顯示「哪個價位」有大量真金白銀。</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px;">
+      <div style="background:var(--input-bg);border-radius:8px;padding:12px;">
+        <div style="color:var(--accent);font-weight:700;margin-bottom:6px;font-size:13px;">POC 控制點</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">圖表右側最長橫條 = 單一價位成交量最大 = 市場絕對共識價。機構大資金建倉防守的終極鐵底，最強支撐。</div>
+      </div>
+      <div style="background:var(--input-bg);border-radius:8px;padding:12px;">
+        <div style="color:var(--green);font-weight:700;margin-bottom:6px;font-size:13px;">HVN 高成交量節點</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">橫條明顯偏長的籌碼山丘 = 大戶護盤 / 散戶攤平的聚集地，容易形成支撐反彈（次級防禦陣地）。</div>
+      </div>
+      <div style="background:var(--input-bg);border-radius:8px;padding:12px;">
+        <div style="color:var(--red);font-weight:700;margin-bottom:6px;font-size:13px;">LVN 低成交量節點（真空區）</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">橫條極短的峽谷 = 籌碼真空，股價跌入後缺乏買盤，瞬間滑價加速下跌，直到碰到下個 HVN 才停。</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+      <div style="background:var(--input-bg);border-radius:8px;padding:12px;">
+        <div style="color:var(--orange);font-weight:700;margin-bottom:6px;font-size:13px;">VA 價值區域 — VAH / VAL</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">70% 總成交量集中的區間。VAH = 價值區高點；VAL = 價值區低點。這兩條線框出主力的「核心控盤範圍」。<br>
+          ▸ 股價帶量跌破 VAL → 趨勢由多轉空，若下方接 LVN 快速暴跌<br>
+          ▸ 股價突破 VAH 後回測不破 → 天花板成地板，高勝率起漲點</div>
+      </div>
+      <div style="background:var(--input-bg);border-radius:8px;padding:12px;">
+        <div style="color:var(--purple);font-weight:700;margin-bottom:6px;font-size:13px;">選擇權搭配策略</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+          <strong style="color:var(--green);">底部 POC/HVN 區：</strong>Sell Put / Sell Put Spread 收租（不跌破就收保費，跌破則以低成本接股）<br>
+          <strong style="color:var(--red);">跌入 LVN 真空區：</strong>買 Put Spread（買近價 Put + 賣下方 HVN 處 Put），降低避險成本又吃滿滑落價差<br>
+          <strong style="color:var(--orange);">POC 成壓力後：</strong>不斷 Sell Call / Covered Call 降低被套持倉成本
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ② AVWAP -->
+  <div class="strategy-card" style="margin-bottom:16px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      <div class="card-icon icon-blue" style="flex-shrink:0;">&#9875;</div>
+      <div>
+        <h3 style="margin:0;">② AVWAP — 錨定加權均價（機構 GPS）</h3>
+        <p style="font-size:12px;color:var(--text-secondary);margin:4px 0 0;">一般均線計算時間與收盤價；AVWAP 將起點「錨定」在重大事件上，算出帶動趨勢的大資金真實平均成本。</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px;">
+      <div style="background:var(--input-bg);border-radius:8px;padding:12px;">
+        <div style="color:var(--blue);font-weight:700;margin-bottom:6px;font-size:13px;">常用錨點（重大事件）</div>
+        <ul style="font-size:12px;color:var(--text-secondary);padding-left:14px;line-height:2;">
+          <li>財報日（爆出天量/大跳空）</li>
+          <li>聯準會降息/升息當天</li>
+          <li>大盤連續暴跌後爆量長下影線（市場大底）</li>
+          <li>重大政策/事件發布當天</li>
+        </ul>
+      </div>
+      <div style="background:var(--input-bg);border-radius:8px;padding:12px;">
+        <div style="color:var(--accent);font-weight:700;margin-bottom:6px;font-size:13px;">判讀訊號</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:2;">
+          <span style="color:var(--green);">▲ 股價在 AVWAP 之上</span> = 主力都在獲利，多頭控盤，續抱<br>
+          <span style="color:var(--red);">▼ 帶量跌破 AVWAP</span> = 連主力都虧損/跑路，果斷停損<br>
+          <span style="color:var(--orange);">回測 AVWAP 量縮不破</span> = 最佳加碼位
+        </div>
+      </div>
+      <div style="background:var(--input-bg);border-radius:8px;padding:12px;">
+        <div style="color:var(--purple);font-weight:700;margin-bottom:6px;font-size:13px;">標準差通道（2σ）</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">AVWAP ± 2σ = 95% 統計機率的極限邊界（極度過熱或超跌）。碰到 +2σ 上軌 = 短線獲利了結；碰到 -2σ 下軌 = 恐慌超跌的抄底參考線。</div>
+      </div>
+    </div>
+    <div style="background:rgba(45,212,168,0.07);border-radius:8px;padding:12px;border-left:3px solid var(--accent);">
+      <strong style="color:var(--accent);">⭐ AVWAP × VRVP 共振買點（最高勝率）：</strong>
+      <span style="font-size:13px;color:var(--text-secondary);">當 AVWAP（動態主力成本）與 VRVP 的 POC/HVN（靜態籌碼鐵底）指向同一個價位時，代表過去與現在的大資金成本都在此集結 = 防守成本最低、勝率最高的「共振鐵底區」。</span>
+    </div>
+  </div>
+
+  <!-- ③ DIX + ④ ADL + ⑤ VVIX 三欄 -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;">
+    <!-- DIX -->
+    <div class="strategy-card">
+      <div class="card-icon icon-orange">&#128065;</div>
+      <h3>③ DIX — 暗池指數</h3>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">機構動態監視器。機構大戶買賣不會在一般看盤軟體顯示，DIX 讓你看到他們在暗池裡的真實動作。</p>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;">
+        <div style="background:var(--input-bg);border-radius:6px;padding:8px;border-left:3px solid var(--red);">
+          <div style="color:var(--red);font-weight:600;margin-bottom:3px;">DIX 下降 / 低位</div>
+          大盤暴跌時機構也在暗池跟著砸盤 → 反彈可能是假的，不宜接刀
+        </div>
+        <div style="background:var(--input-bg);border-radius:6px;padding:8px;border-left:3px solid var(--green);">
+          <div style="color:var(--green);font-weight:600;margin-bottom:3px;">DIX 上升 / 高位</div>
+          大盤下跌但機構在暗池偷偷吃貨（吸籌）→ 下跌可能是誘空，真底部訊號
+        </div>
+        <div style="background:var(--input-bg);border-radius:6px;padding:8px;">
+          <div style="color:var(--accent);font-weight:600;margin-bottom:3px;">搭配 ADL 使用</div>
+          DIX（機構意圖）× ADL（市場廣度）雙重確認，才能識破機構真正的劇本
+        </div>
+      </div>
+    </div>
+
+    <!-- ADL -->
+    <div class="strategy-card">
+      <div class="card-icon icon-blue">&#128202;</div>
+      <h3>④ ADL — 騰落線（市場廣度透視鏡）</h3>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">S&P500 是市值加權，容易被少數科技巨頭綁架。ADL 追蹤全市場真實上漲/下跌家數，看穿指數的真相。</p>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;">
+        <div style="background:var(--input-bg);border-radius:6px;padding:8px;border-left:3px solid var(--red);">
+          <div style="color:var(--red);font-weight:600;margin-bottom:3px;">指數漲但 ADL 不漲（背離）</div>
+          機構用少數權重股拉高指數製造假象，廣大成分股其實在跌 → 反彈不健康，謹慎追高
+        </div>
+        <div style="background:var(--input-bg);border-radius:6px;padding:8px;border-left:3px solid var(--green);">
+          <div style="color:var(--green);font-weight:600;margin-bottom:3px;">指數跌但 ADL 不跌（背離）</div>
+          機構用權重股壓盤製造恐慌，但廣泛成分股在吸籌 → 下跌是假的，底部正在形成
+        </div>
+        <div style="background:var(--input-bg);border-radius:6px;padding:8px;">
+          <div style="color:var(--orange);font-weight:600;margin-bottom:3px;">搭配 ATR 預警</div>
+          ATR 增加 + ADL 廣度減弱 = 市場噪音大，下行風險升溫，應降倉
+        </div>
+      </div>
+    </div>
+
+    <!-- VVIX -->
+    <div class="strategy-card">
+      <div class="card-icon icon-red">&#128293;</div>
+      <h3>⑤ VVIX — 恐慌加速度</h3>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">VIX 是恐慌程度；VVIX 是恐慌的「加速度」。精準抓出市場情緒崩潰的最高點。</p>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;">
+        <div style="background:rgba(239,68,68,0.08);border-radius:6px;padding:8px;border-left:3px solid var(--red);">
+          <div style="color:var(--red);font-weight:600;margin-bottom:3px;">VVIX 急速飆升</div>
+          恐慌加速中，市場仍在崩潰進行式 → 等待、防守，不急著抄底
+        </div>
+        <div style="background:var(--input-bg);border-radius:6px;padding:8px;border-left:3px solid var(--green);">
+          <div style="color:var(--green);font-weight:600;margin-bottom:3px;">VVIX 高位後開始下彎</div>
+          恐慌加速度見頂放緩 → 歷史上幾乎每次都是大盤反轉前 <strong>1～3 個交易日</strong>的預兆，進攻訊號
+        </div>
+        <div style="background:var(--input-bg);border-radius:6px;padding:8px;border-left:3px solid var(--orange);">
+          <div style="color:var(--orange);font-weight:600;margin-bottom:3px;">VVIX 低位平靜</div>
+          市場情緒穩定 → 正常操作，可維持正常倉位
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 五工具整合 SOP -->
+  <div class="strategy-card">
+    <div class="card-icon icon-accent">&#128295;</div>
+    <h3>五工具整合 SOP — 抄底保命三步驟</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:14px;">
+      <div style="background:var(--input-bg);border-radius:10px;padding:14px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+          <div style="width:28px;height:28px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#0f1923;flex-shrink:0;">1</div>
+          <div style="font-weight:700;color:var(--accent);">找出機構成本底部區</div>
+        </div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+          用 <strong style="color:var(--text);">VRVP / FRVP</strong> 找到資金密集價位（POC / HVN）<br>
+          再用 <strong style="color:var(--text);">AVWAP</strong> 找出機構動態持倉成本<br>
+          <span style="color:var(--accent);">▶ 兩者指向同一位置 = 共振鐵底，機構成本的底部區，最高勝率進場點</span>
+        </div>
+      </div>
+      <div style="background:var(--input-bg);border-radius:10px;padding:14px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+          <div style="width:28px;height:28px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#0f1923;flex-shrink:0;">2</div>
+          <div style="font-weight:700;color:var(--blue);">確認機構是買還是賣</div>
+        </div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+          用 <strong style="color:var(--text);">DIX</strong> 判斷機構在暗池的真實動作（吃貨 or 砸盤）<br>
+          用 <strong style="color:var(--text);">ADL</strong> 看大盤指數的真相（廣度健康 or 僅靠權重股撐）<br>
+          <span style="color:var(--blue);">▶ DIX 上升 + ADL 不跌 = 反彈為真，可進場；兩者背離 = 反彈為假，等待</span>
+        </div>
+      </div>
+      <div style="background:var(--input-bg);border-radius:10px;padding:14px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+          <div style="width:28px;height:28px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;flex-shrink:0;">3</div>
+          <div style="font-weight:700;color:var(--red);">判斷恐慌是否見頂</div>
+        </div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+          用 <strong style="color:var(--text);">VVIX</strong> 判斷市場情緒崩潰是在加速還是在減速<br>
+          VVIX 高位下彎 = 恐慌最高點，通常是反轉前 1～3 日<br>
+          <span style="color:var(--red);">▶ 三個訊號同時出現 = 「等待 → 進攻」的黃金切換時刻</span>
+        </div>
+      </div>
+    </div>
+    <!-- 決策矩陣 -->
+    <div style="margin-top:16px;overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:13px;">
+        <thead>
+          <tr style="background:var(--input-bg);">
+            <th style="padding:9px 12px;text-align:left;color:var(--text-secondary);border-bottom:1px solid var(--card-border);">DIX</th>
+            <th style="padding:9px 12px;text-align:left;color:var(--text-secondary);border-bottom:1px solid var(--card-border);">ADL</th>
+            <th style="padding:9px 12px;text-align:left;color:var(--text-secondary);border-bottom:1px solid var(--card-border);">VVIX</th>
+            <th style="padding:9px 12px;text-align:left;color:var(--text-secondary);border-bottom:1px solid var(--card-border);">VRVP + AVWAP</th>
+            <th style="padding:9px 12px;text-align:left;color:var(--text-secondary);border-bottom:1px solid var(--card-border);">建議操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--card-border);">
+            <td style="padding:9px 12px;color:var(--green);">↑ 吃貨</td>
+            <td style="padding:9px 12px;color:var(--green);">↑ 廣度健康</td>
+            <td style="padding:9px 12px;color:var(--green);">↓ 恐慌退燒</td>
+            <td style="padding:9px 12px;">POC / HVN 共振支撐</td>
+            <td style="padding:9px 12px;"><span style="color:var(--green);font-weight:600;">積極進場，分批建倉</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--card-border);">
+            <td style="padding:9px 12px;color:var(--green);">↑ 吃貨</td>
+            <td style="padding:9px 12px;color:var(--orange);">→ 混訊</td>
+            <td style="padding:9px 12px;color:var(--orange);">→ 高位震盪</td>
+            <td style="padding:9px 12px;">接近支撐區</td>
+            <td style="padding:9px 12px;"><span style="color:var(--orange);font-weight:600;">小量試單，嚴設停損</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--card-border);">
+            <td style="padding:9px 12px;color:var(--red);">↓ 砸盤</td>
+            <td style="padding:9px 12px;color:var(--red);">↓ 廣度轉弱</td>
+            <td style="padding:9px 12px;color:var(--red);">↑ 恐慌加速</td>
+            <td style="padding:9px 12px;">跌破 VAL 進入 LVN</td>
+            <td style="padding:9px 12px;"><span style="color:var(--red);font-weight:600;">等待 / 對沖 / 空手保命</span></td>
+          </tr>
+          <tr>
+            <td style="padding:9px 12px;color:var(--red);">↓ 砸盤</td>
+            <td style="padding:9px 12px;color:var(--orange);">→ 混訊</td>
+            <td style="padding:9px 12px;color:var(--green);">↓ 開始下彎</td>
+            <td style="padding:9px 12px;">接近 HVN / 下方有 HVN</td>
+            <td style="padding:9px 12px;"><span style="color:var(--orange);font-weight:600;">觀察等待，備好彈藥</span></td>
           </tr>
         </tbody>
       </table>
