@@ -469,22 +469,21 @@
     </div>
   </div>
   <div class="nav-tabs">
-    <button class="nav-tab active" onclick="switchTab('tab1',this)">&#9201; 再平衡/風控</button>
-    <button class="nav-tab" onclick="switchTab('tab2',this)">&#10138; 個股決策</button>
-    <button class="nav-tab" onclick="switchTab('tab3',this)">&#9635; 部位/停損</button>
-    <button class="nav-tab" onclick="switchTab('tab5',this)">&#9876; 停利計算</button>
-    <button class="nav-tab" onclick="switchTab('tab6',this)">&#128203; 交易SOP</button>
-    <button class="nav-tab" onclick="switchTab('tab7',this)">&#128200; 財報AVWAP</button>
-    <button class="nav-tab" onclick="switchTab('tab8',this)">&#127918; 選擇權四象限</button>
-    <button class="nav-tab" onclick="switchTab('tab4',this)">&#9645; 機構筆記</button>
+    <button class="nav-tab active" onclick="switchTab('tab6',this)">&#128203; 交易SOP</button>
     <button class="nav-tab" onclick="switchTab('tab9',this)">&#128270; 型態指南</button>
     <button class="nav-tab" onclick="switchTab('tab10',this)">&#128202; 五大進階工具</button>
-    <button class="nav-tab" onclick="switchTab('tab11',this)">&#128218; 閱讀清單</button>
+    <button class="nav-tab" onclick="switchTab('tab4',this)">&#9645; 機構筆記</button>
+    <button class="nav-tab" onclick="switchTab('tab2',this)">&#10138; 個股決策</button>
+    <button class="nav-tab" onclick="switchTab('tab7',this)">&#128200; 財報AVWAP</button>
+    <button class="nav-tab" onclick="switchTab('tab3',this)">&#9635; 部位/停損</button>
+    <button class="nav-tab" onclick="switchTab('tab5',this)">&#9876; 停利計算</button>
+    <button class="nav-tab" onclick="switchTab('tab8',this)">&#127918; 選擇權四象限</button>
+    <button class="nav-tab" onclick="switchTab('tab1',this)">&#9201; 再平衡/風控</button>
   </div>
 </nav>
 
 <!-- TAB 1: 資產再平衡與風控 -->
-<div id="tab1" class="page active">
+<div id="tab1" class="page">
   <div class="grid-4">
     <div class="stat-card">
       <div class="label">總資產市值</div>
@@ -765,7 +764,7 @@
 </div>
 
 <!-- TAB 6: 交易SOP -->
-<div id="tab6" class="page">
+<div id="tab6" class="page active">
   <div class="banner">
     <h2>&#128203; 完整交易SOP流程</h2>
     <p>從選股、進場到出場的系統化操作流程。每筆交易都依循這套 SOP，用紀律取代情緒，用系統取代直覺。先問長線或短線？再決定週期與策略。</p>
@@ -3310,240 +3309,6 @@ updateRiskSlider();
   </div>
 </div>
 
-<div id="tab11" class="page">
-  <h2 style="color:var(--accent);margin-bottom:8px">&#128218; 閱讀清單</h2>
-  <p style="color:var(--text-dim);margin-bottom:24px">以下文章來自 NotebookLM「MimivsJames美股操作邏輯」，建議依階段系統性補充閱讀</p>
-
-  <!-- 第一階段 -->
-  <div class="card" style="margin-bottom:20px">
-    <h3 style="color:var(--green);margin-bottom:12px">&#9312; 第一階段：心態 &amp; 系統基礎</h3>
-    <p style="color:var(--text-dim);font-size:0.85rem;margin-bottom:12px">建立正確交易心態與操作系統的根基，優先閱讀</p>
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid var(--green)">
-        <div style="font-weight:600;margin-bottom:4px">技術分析入門</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">量價關係基礎、K線結構解讀、支撐壓力判斷邏輯</div>
-      </div>
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid var(--green)">
-        <div style="font-weight:600;margin-bottom:4px">倉位管理的背後</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">資金分配邏輯、風險單位計算、為何倉位比進場點更重要</div>
-      </div>
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid var(--green)">
-        <div style="font-weight:600;margin-bottom:4px">投資心理學的終點</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">克服 FOMO 與 Loss Aversion、建立機械化執行思維</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 第二階段 -->
-  <div class="card" style="margin-bottom:20px">
-    <h3 style="color:var(--accent);margin-bottom:12px">&#9313; 第二階段：指標工具深化</h3>
-    <p style="color:var(--text-dim);font-size:0.85rem;margin-bottom:12px">強化技術指標的實戰運用，避免常見誤判</p>
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid var(--accent)">
-        <div style="font-weight:600;margin-bottom:4px">為什麼你的 MACD 用起來不準</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">MACD 背離誤區、正確搭配量能與趨勢濾網的方式</div>
-      </div>
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid var(--accent)">
-        <div style="font-weight:600;margin-bottom:4px">學會 SQZMOM 指標</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">Squeeze Momentum 動能判斷、盤整突破前的訊號識別</div>
-      </div>
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid var(--accent)">
-        <div style="font-weight:600;margin-bottom:4px">如何設定機構獲得財富密碼</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">VRVP + AVWAP 參數設定、機構成本區辨識實務</div>
-      </div>
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid var(--accent)">
-        <div style="font-weight:600;margin-bottom:4px">為什麼有時候要用 2B 法則</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">假突破辨識、2B 反轉確認邏輯、結合成交量驗證</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 第三階段 -->
-  <div class="card" style="margin-bottom:20px">
-    <h3 style="color:var(--orange);margin-bottom:12px">&#9314; 第三階段：長線佈局思維</h3>
-    <p style="color:var(--text-dim);font-size:0.85rem;margin-bottom:12px">從長期持有到主動管理的思維升級</p>
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid var(--orange)">
-        <div style="font-weight:600;margin-bottom:4px">長期投資的真相</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">被動投資 vs 主動管理的報酬差異、ETF 陷阱與個股選擇</div>
-      </div>
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid var(--orange)">
-        <div style="font-weight:600;margin-bottom:4px">從買進並持有到主動管理</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">何時該從 Buy &amp; Hold 轉換為動態管理的判斷標準</div>
-      </div>
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid var(--orange)">
-        <div style="font-weight:600;margin-bottom:4px">年化報酬 30% 之後的清醒</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">高報酬後的心態管理、規模放大時的風控重新校準</div>
-      </div>
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid var(--orange)">
-        <div style="font-weight:600;margin-bottom:4px">美股正確使用槓桿長期投資篇</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">槓桿 ETF 的衰減風險、正確槓桿比例與再平衡頻率</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 第四階段 -->
-  <div class="card" style="margin-bottom:20px">
-    <h3 style="color:var(--red);margin-bottom:12px">&#9315; 第四階段：型態辨識 &amp; 進階操作</h3>
-    <p style="color:var(--text-dim);font-size:0.85rem;margin-bottom:12px">深化主力行為解讀與進階操作思維</p>
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid var(--red)">
-        <div style="font-weight:600;margin-bottom:4px">美股的靜態分析</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">破解只看靜態目標價的盲點；市場具路徑依賴性，須拆解機構報告假設前提，當基本面改變時主動調整，而非陷入跟單式被動投資</div>
-      </div>
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid var(--red)">
-        <div style="font-weight:600;margin-bottom:4px">主力洗盤進行式</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">洗盤特徵識別、量縮價穩 vs 真正出貨的區別方法</div>
-      </div>
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid var(--red)">
-        <div style="font-weight:600;margin-bottom:4px">不是跌破 20MA 就停損</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">MA 停損的情境條件、結構性破壞 vs 雜訊的判斷框架</div>
-      </div>
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid var(--red)">
-        <div style="font-weight:600;margin-bottom:4px">操盤人思維</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">從散戶視角升級為操盤視角、籌碼分佈與決策邏輯</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 第五階段 -->
-  <div class="card" style="margin-bottom:20px">
-    <h3 style="color:#a78bfa;margin-bottom:12px">&#9316; 第五階段：短線實戰技術</h3>
-    <p style="color:var(--text-dim);font-size:0.85rem;margin-bottom:12px">短線操作進階技巧與衍生工具應用</p>
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid #a78bfa">
-        <div style="font-weight:600;margin-bottom:4px">從輪動止盈到反馬丁</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">板塊輪動止盈時機、反向加碼（反馬丁）策略適用情境</div>
-      </div>
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid #a78bfa">
-        <div style="font-weight:600;margin-bottom:4px">深度會員做空</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">做空選股邏輯、借券機制、頂部型態放空時機確認</div>
-      </div>
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid #a78bfa">
-        <div style="font-weight:600;margin-bottom:4px">選擇權教學</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">選擇權基礎定價、Greeks 實戰應用、IV 與 HV 差距判讀</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 宏觀市場觀察 -->
-  <div class="card" style="margin-bottom:20px">
-    <h3 style="color:#38bdf8;margin-bottom:12px">&#127758; 宏觀市場觀察</h3>
-    <p style="color:var(--text-dim);font-size:0.85rem;margin-bottom:12px">市場週期與總經事件的解讀框架</p>
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid #38bdf8">
-        <div style="font-weight:600;margin-bottom:4px">有沒有 AI 泡沫</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">AI 估值合理性分析、泡沫特徵對比歷史科技週期</div>
-      </div>
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid #38bdf8">
-        <div style="font-weight:600;margin-bottom:4px">CPI 數據釋放量化交易</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">通膨數據公布前後的量化策略、事件驅動操作邏輯</div>
-      </div>
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid #38bdf8">
-        <div style="font-weight:600;margin-bottom:4px">2026 科技大週期</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">AI 基建週期判讀、2026 年科技股配置建議與風險評估</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 個股實戰案例 -->
-  <div class="card" style="margin-bottom:20px">
-    <h3 style="color:#f59e0b;margin-bottom:12px">&#127919; 個股實戰案例</h3>
-    <p style="color:var(--text-dim);font-size:0.85rem;margin-bottom:12px">具體個股操作案例研究，對照自身持倉學習</p>
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid #f59e0b">
-        <div style="font-weight:600;margin-bottom:4px">工業 4.0 投資</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">工業自動化族群選股邏輯、ETF vs 個股配置比較</div>
-      </div>
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid #f59e0b">
-        <div style="font-weight:600;margin-bottom:4px">核能投資</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">核能復興主題、SMR 小型核反應爐相關個股分析</div>
-      </div>
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid #f59e0b">
-        <div style="font-weight:600;margin-bottom:4px">PLTR 與 NVDA 佈局</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">Palantir 政府合約週期、NVDA 財報前後的佈局時機</div>
-      </div>
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid #f59e0b">
-        <div style="font-weight:600;margin-bottom:4px">NVDA 賭財報</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">財報前後 IV Crush 操作、Straddle vs 單向多頭策略</div>
-      </div>
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid #f59e0b">
-        <div style="font-weight:600;margin-bottom:4px">如何用右側做 AMD</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">右側確認進場邏輯、AMD 週期低谷反轉訊號識別</div>
-      </div>
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid #f59e0b">
-        <div style="font-weight:600;margin-bottom:4px">利用 S&amp;P500 納入效應</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">指數成分調整前後的機構買盤預測與套利邏輯</div>
-      </div>
-      <div style="background:var(--bg-secondary);border-radius:8px;padding:12px 16px;border-left:3px solid #f59e0b">
-        <div style="font-weight:600;margin-bottom:4px">兩檔彩蛋股</div>
-        <div style="color:var(--text-dim);font-size:0.85rem">低知名度高潛力個股發掘邏輯、籌碼集中度與催化劑判斷</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 閱讀進度追蹤 -->
-  <div class="card">
-    <h3 style="color:var(--text-dim);margin-bottom:12px">&#128203; 閱讀進度追蹤建議</h3>
-    <div style="overflow-x:auto">
-      <table style="width:100%;border-collapse:collapse;font-size:0.85rem">
-        <thead>
-          <tr style="background:var(--bg-secondary)">
-            <th style="padding:10px;text-align:left;border-bottom:1px solid var(--card-border)">階段</th>
-            <th style="padding:10px;text-align:center;border-bottom:1px solid var(--card-border)">篇數</th>
-            <th style="padding:10px;text-align:left;border-bottom:1px solid var(--card-border)">核心收穫</th>
-            <th style="padding:10px;text-align:center;border-bottom:1px solid var(--card-border)">優先度</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid var(--card-border)">&#9312; 心態/系統</td>
-            <td style="padding:10px;text-align:center;border-bottom:1px solid var(--card-border)">3</td>
-            <td style="padding:10px;border-bottom:1px solid var(--card-border)">交易系統根基</td>
-            <td style="padding:10px;text-align:center;border-bottom:1px solid var(--card-border);color:var(--red)">★★★</td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid var(--card-border)">&#9313; 指標工具</td>
-            <td style="padding:10px;text-align:center;border-bottom:1px solid var(--card-border)">4</td>
-            <td style="padding:10px;border-bottom:1px solid var(--card-border)">避免指標誤用</td>
-            <td style="padding:10px;text-align:center;border-bottom:1px solid var(--card-border);color:var(--red)">★★★</td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid var(--card-border)">&#9314; 長線佈局</td>
-            <td style="padding:10px;text-align:center;border-bottom:1px solid var(--card-border)">4</td>
-            <td style="padding:10px;border-bottom:1px solid var(--card-border)">複利思維升級</td>
-            <td style="padding:10px;text-align:center;border-bottom:1px solid var(--card-border);color:var(--orange)">★★☆</td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid var(--card-border)">&#9315; 型態/進階</td>
-            <td style="padding:10px;text-align:center;border-bottom:1px solid var(--card-border)">4</td>
-            <td style="padding:10px;border-bottom:1px solid var(--card-border)">主力行為解讀</td>
-            <td style="padding:10px;text-align:center;border-bottom:1px solid var(--card-border);color:var(--orange)">★★☆</td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid var(--card-border)">&#9316; 短線實戰</td>
-            <td style="padding:10px;text-align:center;border-bottom:1px solid var(--card-border)">3</td>
-            <td style="padding:10px;border-bottom:1px solid var(--card-border)">衍生工具應用</td>
-            <td style="padding:10px;text-align:center;border-bottom:1px solid var(--card-border);color:var(--accent)">★☆☆</td>
-          </tr>
-          <tr>
-            <td style="padding:10px;border-bottom:1px solid var(--card-border)">&#127758; 宏觀觀察</td>
-            <td style="padding:10px;text-align:center;border-bottom:1px solid var(--card-border)">3</td>
-            <td style="padding:10px;border-bottom:1px solid var(--card-border)">市場週期判讀</td>
-            <td style="padding:10px;text-align:center;border-bottom:1px solid var(--card-border);color:var(--orange)">★★☆</td>
-          </tr>
-          <tr>
-            <td style="padding:10px">&#127919; 個股案例</td>
-            <td style="padding:10px;text-align:center">7</td>
-            <td style="padding:10px">實戰對照學習</td>
-            <td style="padding:10px;text-align:center;color:var(--accent)">★☆☆</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <p style="color:var(--text-dim);font-size:0.82rem;margin-top:12px">&#9888; 建議從第一、二階段開始，確保操作系統紮實後再進入個股案例研究</p>
-  </div>
-</div>
 
 <script>
 function showPattern(type) {
