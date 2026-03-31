@@ -686,6 +686,66 @@
       </div>
     </div>
   </div>
+
+  <!-- 進階操作選股: 移自機構筆記 -->
+    <!-- Card 13: 進階選股 -->
+    <div class="strategy-card" style="grid-column: 1 / -1;">
+      <div class="card-icon icon-accent">&#128269;</div>
+      <h3>進階操作選股 (風險低、報酬高、續航力強)</h3>
+      <p style="margin-bottom:16px;">均線共振 + 量價配合的三階段建倉法，在趨勢初期介入、趨勢確認後加碼、回踩支撐時追加，用移動止盈鎖住獲利。</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+        <!-- Phase 1 -->
+        <div style="background:rgba(45,212,168,.06);border-radius:10px;padding:18px;border-left:3px solid var(--accent);">
+          <div style="font-weight:700;color:var(--accent);margin-bottom:8px;">&#9312; 試單建倉 (10-20%)</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+            <strong style="color:var(--text);">進場訊號：</strong><br>
+            &#8226; 5MA 剛上穿 10MA / 20MA<br>
+            &#8226; 20MA 開始下彎變平 / 微微上彎<br>
+            &#8226; 成交量開始放大，但還沒爆天量<br>
+            &#8226; 股價站上所有均線<br>
+            <div style="margin-top:8px;padding:8px 10px;background:rgba(239,68,68,.1);border-radius:6px;">
+              <strong style="color:var(--red);">停損：</strong>跌破箱體 或 10MA
+            </div>
+          </div>
+        </div>
+        <!-- Phase 2 -->
+        <div style="background:rgba(59,130,246,.06);border-radius:10px;padding:18px;border-left:3px solid var(--blue);">
+          <div style="font-weight:700;color:var(--blue);margin-bottom:8px;">&#9313; 趨勢確認加碼 (30-40%)</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+            <strong style="color:var(--text);">加碼條件：</strong><br>
+            &#8226; 均線多頭排列確認<br>
+            &#8226; 5MA > 10MA > 20MA<br>
+            &#8226; 量價齊揚，趨勢延續<br>
+            &#8226; 已處於獲利狀態<br>
+            <div style="margin-top:8px;padding:8px 10px;background:rgba(239,68,68,.1);border-radius:6px;">
+              <strong style="color:var(--red);">停損：</strong>跌破箱體上緣 或 20MA 下方一點
+            </div>
+          </div>
+        </div>
+        <!-- Phase 3 -->
+        <div style="background:rgba(139,92,246,.06);border-radius:10px;padding:18px;border-left:3px solid var(--purple);">
+          <div style="font-weight:700;color:var(--purple);margin-bottom:8px;">&#9314; 回踩追加 (每次 10-20%)</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+            <strong style="color:var(--text);">追加時機：</strong><br>
+            &#8226; 股價踩回箱體上緣 或 20MA<br>
+            &#8226; 等量縮價穩後再放量上攻<br>
+            &#8226; 確認支撐有效再進場<br>
+            &#8226; 每次加碼後上移停損<br>
+            <div style="margin-top:8px;padding:8px 10px;background:rgba(245,158,11,.1);border-radius:6px;">
+              <strong style="color:var(--orange);">移動止盈：</strong>用前一波回踩低點做防守
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding:14px 18px;background:rgba(45,212,168,.06);border-radius:8px;display:flex;align-items:center;gap:12px;">
+        <span style="font-size:20px;">&#128161;</span>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;">
+          <strong style="color:var(--accent);">核心邏輯：</strong>
+          在均線共振的初期用小倉位試單（低風險），趨勢確認後才大幅加碼（高報酬），回踩支撐時追加並用移動止盈保護利潤（續航力強）。整個過程嚴格遵守右側交易紀律，絕不左側攤平。
+        </div>
+      </div>
+    </div>
+
   <div class="footer">
     此工具基於機構再平衡、1%風控公式與反馬丁策略設計。<br>
     核心概念：70% 核心配置 + 30% 動能衛星部位 | 右側交易 | 嚴格停損
@@ -1223,63 +1283,6 @@
             <strong style="color:var(--purple);">Step 4：抓鬼與系統優化</strong><br>
             透過週期性檢討（每週五），抓出盲點與情緒漏洞，轉化為下一週的「天條」
           </div>
-        </div>
-      </div>
-    </div>
-    <!-- Card 13: 進階選股 -->
-    <div class="strategy-card" style="grid-column: 1 / -1;">
-      <div class="card-icon icon-accent">&#128269;</div>
-      <h3>進階操作選股 (風險低、報酬高、續航力強)</h3>
-      <p style="margin-bottom:16px;">均線共振 + 量價配合的三階段建倉法，在趨勢初期介入、趨勢確認後加碼、回踩支撐時追加，用移動止盈鎖住獲利。</p>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
-        <!-- Phase 1 -->
-        <div style="background:rgba(45,212,168,.06);border-radius:10px;padding:18px;border-left:3px solid var(--accent);">
-          <div style="font-weight:700;color:var(--accent);margin-bottom:8px;">&#9312; 試單建倉 (10-20%)</div>
-          <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
-            <strong style="color:var(--text);">進場訊號：</strong><br>
-            &#8226; 5MA 剛上穿 10MA / 20MA<br>
-            &#8226; 20MA 開始下彎變平 / 微微上彎<br>
-            &#8226; 成交量開始放大，但還沒爆天量<br>
-            &#8226; 股價站上所有均線<br>
-            <div style="margin-top:8px;padding:8px 10px;background:rgba(239,68,68,.1);border-radius:6px;">
-              <strong style="color:var(--red);">停損：</strong>跌破箱體 或 10MA
-            </div>
-          </div>
-        </div>
-        <!-- Phase 2 -->
-        <div style="background:rgba(59,130,246,.06);border-radius:10px;padding:18px;border-left:3px solid var(--blue);">
-          <div style="font-weight:700;color:var(--blue);margin-bottom:8px;">&#9313; 趨勢確認加碼 (30-40%)</div>
-          <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
-            <strong style="color:var(--text);">加碼條件：</strong><br>
-            &#8226; 均線多頭排列確認<br>
-            &#8226; 5MA > 10MA > 20MA<br>
-            &#8226; 量價齊揚，趨勢延續<br>
-            &#8226; 已處於獲利狀態<br>
-            <div style="margin-top:8px;padding:8px 10px;background:rgba(239,68,68,.1);border-radius:6px;">
-              <strong style="color:var(--red);">停損：</strong>跌破箱體上緣 或 20MA 下方一點
-            </div>
-          </div>
-        </div>
-        <!-- Phase 3 -->
-        <div style="background:rgba(139,92,246,.06);border-radius:10px;padding:18px;border-left:3px solid var(--purple);">
-          <div style="font-weight:700;color:var(--purple);margin-bottom:8px;">&#9314; 回踩追加 (每次 10-20%)</div>
-          <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
-            <strong style="color:var(--text);">追加時機：</strong><br>
-            &#8226; 股價踩回箱體上緣 或 20MA<br>
-            &#8226; 等量縮價穩後再放量上攻<br>
-            &#8226; 確認支撐有效再進場<br>
-            &#8226; 每次加碼後上移停損<br>
-            <div style="margin-top:8px;padding:8px 10px;background:rgba(245,158,11,.1);border-radius:6px;">
-              <strong style="color:var(--orange);">移動止盈：</strong>用前一波回踩低點做防守
-            </div>
-          </div>
-        </div>
-      </div>
-      <div style="margin-top:16px;padding:14px 18px;background:rgba(45,212,168,.06);border-radius:8px;display:flex;align-items:center;gap:12px;">
-        <span style="font-size:20px;">&#128161;</span>
-        <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;">
-          <strong style="color:var(--accent);">核心邏輯：</strong>
-          在均線共振的初期用小倉位試單（低風險），趨勢確認後才大幅加碼（高報酬），回踩支撐時追加並用移動止盈保護利潤（續航力強）。整個過程嚴格遵守右側交易紀律，絕不左側攤平。
         </div>
       </div>
     </div>
