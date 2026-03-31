@@ -1885,6 +1885,119 @@
   <div class="footer">
     選擇權核心：買方押方向+波動，賣方賺時間+IV崩。組合策略 = 限制風險 ＋ 降低成本 ＋ 鎖定目標區間。先搞懂四象限再做組合，才不會搞錯方向。
   </div>
+
+  <!-- 績優股 現金備兌賣權 × VRVP 高勝率策略 -->
+  <div style="margin-top:28px;margin-bottom:8px;font-size:18px;font-weight:700;display:flex;align-items:center;gap:10px;">
+    &#11088; 績優股「現金備兌賣權」× VRVP 高勝率策略
+    <span style="font-size:13px;font-weight:400;color:var(--text-secondary);">機構在不容易跌破的底部區收租金，三種情境完整 SOP</span>
+  </div>
+
+  <div style="background:rgba(45,212,168,0.06);border:1px solid rgba(45,212,168,0.2);border-radius:12px;padding:16px;margin-bottom:16px;">
+    <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+      <strong style="color:var(--accent);">核心邏輯：</strong>利用 VRVP 找出「不容易跌破的底部區」（POC / HVN），在該區域賣出 Put / Sell Put Spread 收取權利金（收租）。跌破進入籌碼真空（LVN）時買 Put Spread 對沖，股價套在壓力區時用 Covered Call 降持倉成本。三種情境覆蓋 <strong style="color:var(--text);">多頭底部收租 → 空頭真空對沖 → 高檔套牢降本</strong> 的完整週期。
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;">
+
+    <!-- 情境一：底部收租 -->
+    <div style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:20px;border-top:4px solid var(--green);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+        <div style="background:rgba(34,197,94,.15);border-radius:8px;padding:6px 12px;font-weight:800;color:var(--green);font-size:14px;">情境一</div>
+        <div style="font-weight:700;font-size:14px;">底部 POC / HVN 收租</div>
+      </div>
+      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">VRVP 判讀</div>
+      <div style="font-size:13px;margin-bottom:10px;">股價跌至 <strong style="color:var(--accent);">POC / HVN</strong> 支撐密集區，柱子長，機構大資金曾在此大量建倉</div>
+      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">策略操作</div>
+      <div style="background:rgba(34,197,94,0.07);border-radius:8px;padding:10px;margin-bottom:10px;font-size:13px;border-left:3px solid var(--green);">
+        <strong style="color:var(--green);">Sell Put / Cash-Secured Put (CSP)</strong><br>
+        在 POC / HVN <strong>下方一點點</strong>賣出 Put，收取權利金<br>
+        ▸ 不跌破 → 穩收租金<br>
+        ▸ 跌破被指派 → 以低於市價成本承接績優股（願意持有）
+      </div>
+      <div style="background:var(--input-bg);border-radius:8px;padding:10px;font-size:12px;color:var(--text-secondary);">
+        <strong style="color:var(--text);">停損條件：</strong>股價帶量跌破 POC 且下方為 LVN 真空區 → 立即買回 Put 平倉，避免被指派後繼續套牢
+      </div>
+    </div>
+
+    <!-- 情境二：LVN 真空區 Put Spread 對沖 -->
+    <div style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:20px;border-top:4px solid var(--red);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+        <div style="background:rgba(239,68,68,.15);border-radius:8px;padding:6px 12px;font-weight:800;color:var(--red);font-size:14px;">情境二</div>
+        <div style="font-weight:700;font-size:14px;">跌入 LVN 真空區對沖</div>
+      </div>
+      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">VRVP 判讀</div>
+      <div style="font-size:13px;margin-bottom:10px;">股價跌破 POC 防線，下方是 <strong style="color:var(--red);">LVN 籌碼真空</strong>，缺乏支撐，預期快速滑落至下一個 HVN</div>
+      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">策略操作</div>
+      <div style="background:rgba(239,68,68,0.07);border-radius:8px;padding:10px;margin-bottom:10px;font-size:13px;border-left:3px solid var(--red);">
+        <strong style="color:var(--red);">Bear Put Spread（Put 空頭價差）</strong><br>
+        買入一個已進入 LVN 的<strong>較高履約價 Put</strong><br>
+        賣出下方 HVN 支撐處的<strong>較低履約價 Put</strong><br>
+        ▸ 大幅降低避險成本（比單買 Put 便宜）<br>
+        ▸ 精準吃滿 LVN 真空區的下跌價差利潤
+      </div>
+      <div style="background:var(--input-bg);border-radius:8px;padding:10px;font-size:12px;color:var(--text-secondary);">
+        <strong style="color:var(--text);">選履約價技巧：</strong>高 Strike 設在剛進入 LVN 上緣；低 Strike 設在下方第一個明顯 HVN 處，讓最大獲利區間正好涵蓋真空段
+      </div>
+    </div>
+
+    <!-- 情境三：Covered Call 降持倉成本 -->
+    <div style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:20px;border-top:4px solid var(--orange);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+        <div style="background:rgba(245,158,11,.15);border-radius:8px;padding:6px 12px;font-weight:800;color:var(--orange);font-size:14px;">情境三</div>
+        <div style="font-weight:700;font-size:14px;">高檔套牢區 Covered Call 降本</div>
+      </div>
+      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">VRVP 判讀</div>
+      <div style="font-size:13px;margin-bottom:10px;">股價上方有 <strong style="color:var(--orange);">大量套牢籌碼（前波 POC / HVN 已轉壓力）</strong>，成千上萬散戶等著解套倒貨，股價短期難以突破</div>
+      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">策略操作</div>
+      <div style="background:rgba(245,158,11,0.07);border-radius:8px;padding:10px;margin-bottom:10px;font-size:13px;border-left:3px solid var(--orange);">
+        <strong style="color:var(--orange);">Covered Call（備兌買權）</strong><br>
+        持有 100 股正股 + 不斷在<strong>套牢壓力區（POC）附近 Sell Call</strong><br>
+        ▸ 每次收取保費，累積降低現股持倉成本<br>
+        ▸ 若股價突破壓力被 Call 走 → 需買回股票並重新評估布局
+      </div>
+      <div style="background:var(--input-bg);border-radius:8px;padding:10px;font-size:12px;color:var(--text-secondary);">
+        <strong style="color:var(--text);">履約價設定：</strong>Sell Call 的 Strike 設在 VRVP 上方最長橫條（套牢 POC）附近，這裡賣壓最重，Call 被行使的機率最低，收租效率最高
+      </div>
+    </div>
+  </div>
+
+  <!-- 三情境速覽表 -->
+  <div style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:18px;margin-bottom:8px;">
+    <div style="font-weight:700;font-size:15px;margin-bottom:14px;color:var(--text);">&#128196; 三情境 × VRVP 區域速覽</div>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:13px;">
+        <thead>
+          <tr style="background:var(--input-bg);">
+            <th style="padding:9px 12px;text-align:left;color:var(--text-secondary);border-bottom:1px solid var(--card-border);">VRVP 區域</th>
+            <th style="padding:9px 12px;text-align:left;color:var(--text-secondary);border-bottom:1px solid var(--card-border);">市場含義</th>
+            <th style="padding:9px 12px;text-align:left;color:var(--text-secondary);border-bottom:1px solid var(--card-border);">選擇權策略</th>
+            <th style="padding:9px 12px;text-align:left;color:var(--text-secondary);border-bottom:1px solid var(--card-border);">目的</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--card-border);">
+            <td style="padding:9px 12px;"><span style="color:var(--accent);font-weight:600;">POC / HVN（支撐）</span></td>
+            <td style="padding:9px 12px;color:var(--text-secondary);">大資金建倉防守，跌到此易止跌反彈</td>
+            <td style="padding:9px 12px;font-weight:600;color:var(--green);">Sell Put / CSP</td>
+            <td style="padding:9px 12px;color:var(--text-secondary);">收租金；跌破則低成本接股</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--card-border);">
+            <td style="padding:9px 12px;"><span style="color:var(--red);font-weight:600;">LVN（籌碼真空）</span></td>
+            <td style="padding:9px 12px;color:var(--text-secondary);">無支撐，跌入後快速加速下滑</td>
+            <td style="padding:9px 12px;font-weight:600;color:var(--red);">Bear Put Spread</td>
+            <td style="padding:9px 12px;color:var(--text-secondary);">低成本吃滿真空段跌幅</td>
+          </tr>
+          <tr>
+            <td style="padding:9px 12px;"><span style="color:var(--orange);font-weight:600;">上方 POC（壓力 / 套牢區）</span></td>
+            <td style="padding:9px 12px;color:var(--text-secondary);">大量解套賣壓，短期難以突破</td>
+            <td style="padding:9px 12px;font-weight:600;color:var(--orange);">Covered Call</td>
+            <td style="padding:9px 12px;color:var(--text-secondary);">每月收租，持續降低現股持倉成本</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
 <script>
