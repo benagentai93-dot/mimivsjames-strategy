@@ -1,0 +1,2973 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>美股機構策略系統</title>
+<style>
+  :root {
+    --bg: #0f1923;
+    --card: #1a2733;
+    --card-border: #253545;
+    --text: #e8edf2;
+    --text-secondary: #8a9bb0;
+    --accent: #2dd4a8;
+    --accent-dark: #1a8a6e;
+    --red: #ef4444;
+    --green: #22c55e;
+    --blue: #3b82f6;
+    --orange: #f59e0b;
+    --purple: #8b5cf6;
+    --input-bg: #0d1520;
+    --input-border: #2a3a4a;
+    --hover: #253545;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+  /* NAV */
+  .navbar {
+    background: var(--card);
+    border-bottom: 1px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-right: auto;
+  }
+  .logo svg { width: 28px; height: 28px; }
+  .logo-text { font-weight: 700; font-size: 16px; }
+  .logo-sub { font-size: 11px; color: var(--accent); display: block; }
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+  .nav-tab {
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text-secondary);
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    background: none;
+    white-space: nowrap;
+  }
+  .nav-tab:hover { color: var(--text); background: var(--hover); }
+  .nav-tab.active {
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 600;
+  }
+  /* LAYOUT */
+  .page { display: none; padding: 24px; max-width: 1400px; margin: 0 auto; }
+  .page.active { display: block; }
+  .grid-2 { display: grid; grid-template-columns: 420px 1fr; gap: 24px; align-items: start; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .grid-cards-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .stat-card .label { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
+  .stat-card .value { font-size: 28px; font-weight: 700; }
+  .stat-card .value.green { color: var(--green); }
+  .stat-card .value.red { color: var(--red); }
+  .stat-card .value.accent { color: var(--accent); }
+  /* FORMS */
+  .form-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .form-title .icon { font-size: 22px; }
+  .form-row { display: flex; gap: 12px; margin-bottom: 16px; }
+  .form-group { flex: 1; }
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+  }
+  .form-group input, .form-group select {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+    transition: border .2s;
+  }
+  .form-group input:focus, .form-group select:focus {
+    border-color: var(--accent);
+  }
+  .form-group input::placeholder { color: var(--text-secondary); opacity: .5; }
+  .btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .2s;
+    margin-top: 8px;
+  }
+  .btn-primary:hover { background: var(--accent-dark); }
+  .btn-secondary {
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid var(--card-border);
+    color: var(--text);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all .2s;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-blue {
+    width: 100%;
+    padding: 16px;
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .2s;
+    margin-top: 12px;
+  }
+  .btn-blue:hover { opacity: .9; }
+  /* TABLE */
+  .table-card { overflow-x: auto; }
+  .table-card .table-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .tolerance { font-size: 13px; color: var(--text-secondary); }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--card-border);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  td {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255,255,255,.04);
+    font-size: 14px;
+    vertical-align: middle;
+  }
+  tr:hover { background: rgba(255,255,255,.02); }
+  .ticker { font-weight: 700; font-size: 15px; }
+  .price-main { font-weight: 600; }
+  .price-sub { font-size: 12px; color: var(--text-secondary); }
+  .pnl-positive { color: var(--green); }
+  .pnl-negative { color: var(--red); }
+  .target-badge {
+    background: rgba(255,255,255,.06);
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .action-btns { display: flex; gap: 8px; }
+  .action-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    transition: color .2s;
+  }
+  .action-btn:hover { color: var(--text); }
+  .action-btn.delete:hover { color: var(--red); }
+  /* RISK */
+  .risk-box {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .risk-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+  }
+  .risk-status .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .risk-status .dot.green { background: var(--green); }
+  .risk-status .dot.red { background: var(--red); }
+  .risk-pnl { margin-left: auto; }
+  .risk-pnl .label { font-size: 13px; color: var(--text-secondary); }
+  .risk-pnl .val { font-size: 20px; font-weight: 700; }
+  /* SLIDER */
+  .slider-group { margin-bottom: 20px; }
+  .slider-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .slider-label { font-size: 13px; color: var(--text-secondary); }
+  .slider-value { font-size: 14px; font-weight: 600; }
+  input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, var(--accent) 0%, var(--accent) 50%, #2a3a4a 50%);
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: 3px solid var(--bg);
+  }
+  .slider-hint { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+  /* BANNER */
+  .banner {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+  .banner h2 { font-size: 24px; margin-bottom: 12px; }
+  .banner p { color: var(--text-secondary); line-height: 1.7; font-size: 15px; }
+  /* STRATEGY CARDS */
+  .strategy-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 28px;
+    transition: border-color .2s;
+  }
+  .strategy-card:hover { border-color: var(--accent); }
+  .strategy-card .card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+  .strategy-card h3 { font-size: 17px; margin-bottom: 12px; font-weight: 700; }
+  .strategy-card p, .strategy-card li {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .strategy-card ol, .strategy-card ul { padding-left: 18px; }
+  .strategy-card li { margin-bottom: 4px; }
+  .icon-blue { background: rgba(59,130,246,.15); color: var(--blue); }
+  .icon-green { background: rgba(34,197,94,.15); color: var(--green); }
+  .icon-orange { background: rgba(245,158,11,.15); color: var(--orange); }
+  .icon-red { background: rgba(239,68,68,.15); color: var(--red); }
+  .icon-purple { background: rgba(139,92,246,.15); color: var(--purple); }
+  .icon-accent { background: rgba(45,212,168,.15); color: var(--accent); }
+  /* DIAGNOSIS RESULT */
+  .diagnosis-result { min-height: 400px; display: flex; flex-direction: column; }
+  .diagnosis-empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+  }
+  .diagnosis-empty svg { margin-bottom: 16px; opacity: .3; }
+  .result-section { margin-bottom: 20px; }
+  .result-section h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--accent);
+  }
+  .result-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,.04);
+    font-size: 14px;
+  }
+  .result-item .label { color: var(--text-secondary); }
+  .result-badge {
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .badge-green { background: rgba(34,197,94,.15); color: var(--green); }
+  .badge-red { background: rgba(239,68,68,.15); color: var(--red); }
+  .badge-orange { background: rgba(245,158,11,.15); color: var(--orange); }
+  .badge-blue { background: rgba(59,130,246,.15); color: var(--blue); }
+  /* PYRAMID */
+  .pyramid-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .pyramid-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .pyramid-table { width: 100%; }
+  .pyramid-table th {
+    text-align: left;
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--card-border);
+  }
+  .pyramid-table td {
+    padding: 12px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255,255,255,.04);
+  }
+  .pyramid-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+  /* TIP BOX */
+  .tip-box {
+    background: rgba(245,158,11,.08);
+    border-left: 3px solid var(--orange);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-top: 16px;
+  }
+  .tip-box .tip-title { font-weight: 600; font-size: 14px; color: var(--orange); margin-bottom: 4px; }
+  .tip-box p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+  /* BACKUP */
+  .backup-section { margin-top: 20px; }
+  .backup-section .label { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
+  .backup-btns { display: flex; gap: 8px; }
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.8;
+  }
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .nav-tabs { overflow-x: auto; }
+    .nav-tab { font-size: 12px; padding: 8px 12px; }
+    .grid-4 { grid-template-columns: 1fr 1fr; }
+    .grid-cards-2 { grid-template-columns: 1fr; }
+  }
+  /* Prevent price input spinner */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  input[type="number"] { -moz-appearance: textfield; }
+  /* Cloud sync indicator */
+  .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: inline-block; margin-right: 4px; }
+  /* Edit modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.6);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 32px;
+    width: 420px;
+    max-width: 90vw;
+  }
+  .modal h3 { margin-bottom: 20px; font-size: 18px; }
+  .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
+  .modal-actions .btn-primary { flex: 1; }
+  .modal-actions .btn-secondary { flex: 1; text-align: center; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="logo">
+    <svg viewBox="0 0 28 28" fill="none">
+      <path d="M4 20L14 4L24 20" stroke="#2dd4a8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M8 20L14 10L20 20" stroke="#2dd4a8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/>
+    </svg>
+    <div>
+      <span class="logo-text">美股機構策略系統</span>
+      <span class="logo-sub"><span class="sync-dot"></span>雲端已同步</span>
+    </div>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="switchTab('tab1',this)">&#9201; 再平衡/風控</button>
+    <button class="nav-tab" onclick="switchTab('tab2',this)">&#10138; 個股決策</button>
+    <button class="nav-tab" onclick="switchTab('tab3',this)">&#9635; 部位/停損</button>
+    <button class="nav-tab" onclick="switchTab('tab5',this)">&#9876; 停利計算</button>
+    <button class="nav-tab" onclick="switchTab('tab6',this)">&#128203; 交易SOP</button>
+    <button class="nav-tab" onclick="switchTab('tab7',this)">&#128200; 財報AVWAP</button>
+    <button class="nav-tab" onclick="switchTab('tab8',this)">&#127918; 選擇權四象限</button>
+    <button class="nav-tab" onclick="switchTab('tab4',this)">&#9645; 機構筆記</button>
+    <button class="nav-tab" onclick="switchTab('tab9',this)">&#128270; 型態指南</button>
+  </div>
+</nav>
+
+<!-- TAB 1: 資產再平衡與風控 -->
+<div id="tab1" class="page active">
+  <div class="grid-4">
+    <div class="stat-card">
+      <div class="label">總資產市值</div>
+      <div class="value" id="totalMarketValue">$0</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">總損益</div>
+      <div class="value green" id="totalPnL">$0</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">現金水位</div>
+      <div class="value accent" id="cashDisplay">$0</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">持股檔數</div>
+      <div class="value" id="holdingCount">0</div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <!-- LEFT: Add holdings -->
+    <div>
+      <div class="card">
+        <div class="form-title"><span class="icon">+</span> 新增持股</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>代號</label>
+            <input type="text" id="addTicker" placeholder="如 NVDA" style="text-transform:uppercase">
+          </div>
+          <div class="form-group">
+            <label>類型</label>
+            <select id="addType">
+              <option>個股 (Alpha)</option>
+              <option>ETF (Beta)</option>
+              <option>槓桿ETF</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>產業分類 (風控)</label>
+            <select id="addSector">
+              <option>科技/半導體</option>
+              <option>科技/軟體</option>
+              <option>科技/網路</option>
+              <option>工業</option>
+              <option>醫療保健</option>
+              <option>金融</option>
+              <option>能源</option>
+              <option>消費</option>
+              <option>通訊</option>
+              <option>公用事業</option>
+              <option>材料</option>
+              <option>房地產</option>
+              <option>ETF/指數</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>目標權重 %</label>
+            <input type="number" id="addTargetWeight" placeholder="如 10" step="0.1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>現價 (USD)</label>
+            <input type="number" id="addPrice" placeholder="現價" step="0.01">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>持有股數</label>
+            <input type="number" id="addShares" placeholder="股數" step="1">
+          </div>
+          <div class="form-group">
+            <label>平均成本</label>
+            <input type="number" id="addCost" placeholder="成本價" step="0.01">
+          </div>
+        </div>
+        <button class="btn-primary" onclick="addHolding()">加入並儲存</button>
+        <div style="margin-top: 16px;">
+          <div class="form-group">
+            <label>現金水位 (USD)</label>
+            <input type="number" id="cashInput" placeholder="輸入現金餘額" step="0.01" onchange="updateCash()">
+          </div>
+        </div>
+      </div>
+      <div class="backup-section" style="margin-top:16px;">
+        <div class="label">資料備份管理</div>
+        <div class="backup-btns">
+          <button class="btn-secondary" onclick="exportData()">&#128229; 匯出備份</button>
+          <button class="btn-secondary" onclick="document.getElementById('importFile').click()">&#128228; 匯入資料</button>
+          <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+        </div>
+      </div>
+    </div>
+    <!-- RIGHT: Holdings table -->
+    <div class="card table-card">
+      <div class="table-header">
+        <div class="table-title">&#9878; 持股再平衡檢查表</div>
+        <div class="tolerance">容許誤差: ±2% (機構標準)</div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>代號</th>
+            <th>現價/成本</th>
+            <th>市值/損益</th>
+            <th>目前權重</th>
+            <th>目標權重%</th>
+            <th>再平衡建議</th>
+            <th>動作</th>
+          </tr>
+        </thead>
+        <tbody id="holdingsTable"></tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Risk box -->
+  <div class="risk-box">
+    <div class="risk-status">
+      &#128308; 風險控管狀態：<span class="dot green" id="riskDot"></span> <span id="riskLabel">正常監控</span>
+    </div>
+    <div class="risk-pnl">
+      <span class="label">總體損益率：</span>
+      <span class="val" id="totalPnLRate" style="color:var(--green)">0%</span>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: 個股決策 -->
+<div id="tab2" class="page">
+  <div class="grid-2">
+    <div class="card">
+      <div class="form-title"><span class="icon">&#128202;</span> 輸入個股參數</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>代號</label>
+          <input type="text" id="diagTicker" placeholder="NVDA" style="text-transform:uppercase">
+        </div>
+        <div class="form-group">
+          <label>現價</label>
+          <input type="number" id="diagPrice" placeholder="" step="0.01">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>10 MA</label>
+          <input type="number" id="diag10MA" placeholder="" step="0.01">
+        </div>
+        <div class="form-group">
+          <label>趨勢 (週線)</label>
+          <select id="diagTrend">
+            <option>多頭趨勢</option>
+            <option>盤整</option>
+            <option>空頭趨勢</option>
+          </select>
+        </div>
+      </div>
+      <div class="slider-group">
+        <div style="font-weight:600; margin-bottom:12px;">估值與品質 (長線濾網)</div>
+        <div class="slider-header">
+          <span class="slider-label">歷史估值百分位 (0-100%)</span>
+          <span class="slider-value" id="valSliderVal">50%</span>
+        </div>
+        <input type="range" id="diagValuation" min="0" max="100" value="50" oninput="updateValSlider()">
+        <div class="slider-hint">>85% 為過熱，<40% 為便宜</div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>ROIC (資本回報)</label>
+          <select id="diagROIC">
+            <option>高於 10% (優)</option>
+            <option>5%-10% (中)</option>
+            <option>低於 5% (差)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>FCF (自由現金流)</label>
+          <select id="diagFCF">
+            <option>成長且 > 10%</option>
+            <option>穩定 5%-10%</option>
+            <option>衰退或為負</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:16px;">
+        <label>毛利率趨勢</label>
+        <select id="diagMargin">
+          <option>持平或上升 (定價權強)</option>
+          <option>小幅下降</option>
+          <option>明顯下降 (競爭加劇)</option>
+        </select>
+      </div>
+      <button class="btn-blue" onclick="runDiagnosis()">開始診斷</button>
+    </div>
+    <div class="card diagnosis-result" id="diagResult">
+      <div class="diagnosis-empty">
+        <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><path d="M10 45L30 15L50 45" stroke="#8a9bb0" stroke-width="2"/><path d="M20 45L30 25L40 45" stroke="#8a9bb0" stroke-width="1.5" opacity=".5"/></svg>
+        <p>請輸入左側數據並點擊「開始診斷」</p>
+        <p style="font-size:13px;margin-top:4px;">系統將整合基本面品質與估值位階進行判斷</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    此工具基於機構再平衡、1%風控公式與反馬丁策略設計。<br>
+    核心概念：70% 核心配置 + 30% 動能衛星部位 | 右側交易 | 嚴格停損
+  </div>
+</div>
+
+<!-- TAB 3: 部位與停損計算 -->
+<div id="tab3" class="page">
+  <div class="banner">
+    <h2>&#127919; 1% 救命公式與反馬丁加倉計算機</h2>
+    <p>真正的職業交易員不是看戶頭有多少錢就買多少股。而是先算「這筆交易我最多能賠多少」。利用總資金的 1~2% 設為單筆最大虧損，並透過「右側反馬丁金字塔加倉法」將風險越堆越小。</p>
+  </div>
+  <div class="grid-4">
+    <div class="stat-card">
+      <div class="label">實際承受風險</div>
+      <div class="value" id="actualRisk">$0 <span style="font-size:14px;color:var(--text-secondary)">(0.00%)</span></div>
+      <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">上限 <span id="riskCap">$0</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="label">每股承擔風險</div>
+      <div class="value" id="perShareRisk">$0</div>
+    </div>
+    <div class="stat-card">
+      <div class="label" style="color:var(--green)">總買入股數</div>
+      <div class="value" id="totalSharesBuy" style="color:var(--green)">0 股</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">實際需投入資金 (權重)</div>
+      <div class="value" id="actualInvest">$0 <span style="font-size:14px;color:var(--text-secondary)">(0.0%)</span></div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="form-title"><span class="icon">&#9635;</span> 設定交易參數</div>
+      <div class="form-group" style="margin-bottom:16px;">
+        <label>總資金 (Total Capital)</label>
+        <input type="number" id="totalCapital" placeholder="如 200000" step="0.01" oninput="calcPosition()">
+      </div>
+      <div class="slider-group">
+        <div class="slider-header">
+          <span class="slider-label">單筆最大風險容忍度 (%)</span>
+          <span class="slider-value" id="riskSliderVal" style="color:var(--accent)">1%</span>
+        </div>
+        <input type="range" id="riskTolerance" min="0.5" max="3" step="0.1" value="1" oninput="updateRiskSlider();calcPosition()">
+        <div class="slider-hint">機構標準：單筆交易虧損不超過總資金的 1%~2%</div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>預計買入價</label>
+          <input type="number" id="entryPrice" placeholder="如 100" step="0.01" oninput="calcPosition()">
+        </div>
+        <div class="form-group">
+          <label>防守停損價 (必填)</label>
+          <input type="number" id="stopLoss" placeholder="如 95" step="0.01" style="border-color:var(--red)" oninput="calcPosition()">
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:16px;">
+        <label>自訂投入資金 (選填)</label>
+        <input type="number" id="customAmount" placeholder="留白則自動依 1% 風險計算" step="0.01" oninput="calcPosition()">
+        <div class="slider-hint">若填寫此欄位，系統將優先以此資金配置，並「提醒」是否違反風控紀律。</div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-title">&#128161; 停損怎麼設？</div>
+        <p>可使用前一波低點、重要均線(10MA/20MA) 或使用 ATR × 1~1.5 倍來設定你的容忍波動區間。</p>
+      </div>
+    </div>
+    <div class="pyramid-card">
+      <div class="pyramid-title">&#127760; 反馬丁金字塔加倉計畫 (50-30-20)</div>
+      <div id="pyramidContent">
+        <div class="pyramid-empty">
+          請在左側輸入預計買入價與停損價，系統將自動生成加倉計畫
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: 交易SOP -->
+<div id="tab6" class="page">
+  <div class="banner">
+    <h2>&#128203; 完整交易SOP流程</h2>
+    <p>從選股、進場到出場的系統化操作流程。每筆交易都依循這套 SOP，用紀律取代情緒，用系統取代直覺。先問長線或短線？再決定週期與策略。</p>
+  </div>
+
+  <!-- STEP FLOW -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;">
+    <!-- Step 1 -->
+    <div class="card" style="border-top:3px solid var(--blue);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;">1</div>
+        <h3 style="font-size:16px;">選股與定位</h3>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+        <p><strong style="color:var(--text);">先問自己：長線 or 短線？</strong></p>
+        <p>&#8226; 長線重「質」(護城河、估值合理性)</p>
+        <p>&#8226; 短線重「勢」(動能、量價、催化劑)</p>
+        <p style="margin-top:8px;"><strong style="color:var(--text);">Alpha 選股條件：</strong></p>
+        <p>&#8226; Beta 合理 + Alpha 表現突出</p>
+        <p>&#8226; 無事件驅動下的量價上漲</p>
+        <p>&#8226; 均線健康：5>10>20 多頭排列</p>
+        <p>&#8226; 日成交量 &ge; 5日均量 1~1.5倍</p>
+        <div style="margin-top:10px;padding:8px;background:rgba(59,130,246,.08);border-radius:6px;">
+          <strong style="color:var(--blue);">時間週期選擇：</strong><br>
+          波段(1~4週)：日K為主，60分K為輔<br>
+          短線(1~7日)：60分K為主，15分K為輔
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="card" style="border-top:3px solid var(--accent);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--bg);">2</div>
+        <h3 style="font-size:16px;">大週期找趨勢</h3>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+        <p><strong style="color:var(--text);">日線/週線確認方向：</strong></p>
+        <p>&#8226; 均線糾結後突破 + 三線張口放量</p>
+        <p>&#8226; 20MA 斜率連續 3-5 根向上</p>
+        <p>&#8226; VIX 高點持續下降（恐慌退潮）</p>
+        <p style="margin-top:8px;"><strong style="color:var(--text);">趨勢啟動確認：</strong></p>
+        <p>&#8226; SPY 突破箱體 3 日不回跌</p>
+        <p>&#8226; 5MA/10MA/20MA 糾結後張開上彎</p>
+        <p>&#8226; 量能不失衡 (1~1.5倍均量)</p>
+        <div style="margin-top:10px;padding:8px;background:rgba(45,212,168,.08);border-radius:6px;">
+          <strong style="color:var(--accent);">21MA 動能判斷：</strong><br>
+          日內低點在 21MA 之上 = 強勢動能<br>
+          跌破 21MA = 動能鈍化，攻守切換
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="card" style="border-top:3px solid var(--green);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--bg);">3</div>
+        <h3 style="font-size:16px;">量穩結構確認</h3>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+        <p><strong style="color:var(--text);">站穩支撐 + 回檔量縮：</strong></p>
+        <p>&#8226; 收盤站穩均線</p>
+        <p>&#8226; 拉回量縮再放量上攻</p>
+        <p>&#8226; K線下引線長 = 轉強訊號</p>
+        <p style="margin-top:8px;"><strong style="color:var(--text);">VWAP 盤中確認：</strong></p>
+        <p>&#8226; 開盤30分後觀察站上/跌破</p>
+        <p>&#8226; 多次回測不破 = 強勢整理</p>
+        <p>&#8226; 下跌量縮 + 上攻放量 = 進攻</p>
+        <div style="margin-top:10px;padding:8px;background:rgba(34,197,94,.08);border-radius:6px;">
+          <strong style="color:var(--green);">真趨勢 vs 假突破：</strong><br>
+          真：斜率增、線拉開、量放大、多日站穩<br>
+          假：角度平、線糾結、量縮、單日即回
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;">
+    <!-- Step 4 -->
+    <div class="card" style="border-top:3px solid var(--orange);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--bg);">4</div>
+        <h3 style="font-size:16px;">進場 (右側交易)</h3>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+        <p><strong style="color:var(--text);">進場條件 (至少符合2項)：</strong></p>
+        <p>&#8226; 收盤站穩均線 (20MA/21MA)</p>
+        <p>&#8226; 放量突破箱體上緣</p>
+        <p>&#8226; 拉回量縮再放量上攻</p>
+        <p>&#8226; K線下引線長，轉強訊號</p>
+        <p style="margin-top:8px;"><strong style="color:var(--text);">盈虧比檢查：</strong></p>
+        <p>&#8226; R:R &ge; 2 才能進場</p>
+        <p>&#8226; 日線找不到 R:R>2 就空手</p>
+        <div style="margin-top:10px;padding:8px;background:rgba(245,158,11,.08);border-radius:6px;">
+          <strong style="color:var(--orange);">進階進場法：</strong><br>
+          日線確認方向 &rarr; 60分K等洗盤 &rarr;<br>
+          站回8EMA進場，停損設假跌破低點
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="card" style="border-top:3px solid var(--red);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;">5</div>
+        <h3 style="font-size:16px;">停損設定</h3>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+        <p><strong style="color:var(--text);">停損方法 (擇一)：</strong></p>
+        <p>&#8226; 關鍵支撐下方 1~2%</p>
+        <p>&#8226; ATR &times; 0.5~1.5 倍</p>
+        <p>&#8226; 前一波低點下方一點</p>
+        <p>&#8226; 1% 救命公式 (總資金 &times; 1%)</p>
+        <p style="margin-top:8px;"><strong style="color:var(--text);">執行原則：</strong></p>
+        <p>&#8226; 收盤跌破均線才算，盤中刺穿不算</p>
+        <p>&#8226; 箱型整理用箱底低點，不用均線</p>
+        <p>&#8226; 搭配 MACD/KD 死叉加強確認</p>
+        <div style="margin-top:10px;padding:8px;background:rgba(239,68,68,.08);border-radius:6px;">
+          <strong style="color:var(--red);">風控紀律：</strong><br>
+          單筆虧損 &le; 總資金 1~2%<br>
+          日虧 &le; 3~5% 強制關機<br>
+          同方向總曝險 &lt; 5%
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 6 -->
+    <div class="card" style="border-top:3px solid var(--purple);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--purple);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;">6</div>
+        <h3 style="font-size:16px;">停利與加碼</h3>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+        <p><strong style="color:var(--text);">分批停利 SOP：</strong></p>
+        <p>&#9312; 達目標價賣 30%，停損移至成本價</p>
+        <p>&#9313; 調高目標再賣 30%，停損移至第一目標</p>
+        <p>&#9314; 剩 40% 不設目標，移動止盈單</p>
+        <p style="margin-top:8px;"><strong style="color:var(--text);">加碼條件（反馬丁）：</strong></p>
+        <p>&#8226; 已獲利 + 趨勢延續</p>
+        <p>&#8226; 回踩支撐量縮價穩再放量</p>
+        <p>&#8226; 每次加碼後停損上移</p>
+        <div style="margin-top:10px;padding:8px;background:rgba(139,92,246,.08);border-radius:6px;">
+          <strong style="color:var(--purple);">停利觸發訊號：</strong><br>
+          爆量下跌長黑K、突破短期生命線(8/21EMA)、<br>
+          VRVP前波高套牢區壓力
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom: 出場判斷矩陣 -->
+  <div class="card" style="margin-bottom:24px;">
+    <h3 style="margin-bottom:16px;font-size:17px;">&#128680; 出場決策矩陣</h3>
+    <div style="display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:0;font-size:13px;">
+      <div style="padding:12px;background:rgba(255,255,255,.04);font-weight:700;border-bottom:1px solid var(--card-border);">情境</div>
+      <div style="padding:12px;background:rgba(255,255,255,.04);font-weight:700;border-bottom:1px solid var(--card-border);">動作</div>
+      <div style="padding:12px;background:rgba(255,255,255,.04);font-weight:700;border-bottom:1px solid var(--card-border);">賣出比例</div>
+      <div style="padding:12px;background:rgba(255,255,255,.04);font-weight:700;border-bottom:1px solid var(--card-border);">後續</div>
+
+      <div style="padding:12px;color:var(--text-secondary);border-bottom:1px solid rgba(255,255,255,.04);">大盤高 + 個股高</div>
+      <div style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);">分批獲利了結</div>
+      <div style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);">30% &rarr; 30% &rarr; 移動停利</div>
+      <div style="padding:12px;color:var(--text-secondary);border-bottom:1px solid rgba(255,255,255,.04);">達目標價前先賣30%鎖利</div>
+
+      <div style="padding:12px;color:var(--text-secondary);border-bottom:1px solid rgba(255,255,255,.04);">大盤中低 + 個股高</div>
+      <div style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);">基本面已反映利多</div>
+      <div style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);">先落袋 50%</div>
+      <div style="padding:12px;color:var(--text-secondary);border-bottom:1px solid rgba(255,255,255,.04);">剩下移動停利</div>
+
+      <div style="padding:12px;color:var(--text-secondary);border-bottom:1px solid rgba(255,255,255,.04);">技術面：爆量長黑K</div>
+      <div style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--orange);">籌碼不穩警訊</div>
+      <div style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);">先落袋 30%</div>
+      <div style="padding:12px;color:var(--text-secondary);border-bottom:1px solid rgba(255,255,255,.04);">觀察是否跌破支撐</div>
+
+      <div style="padding:12px;color:var(--text-secondary);border-bottom:1px solid rgba(255,255,255,.04);">量縮後爆量收黑</div>
+      <div style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--red);">短線全賣</div>
+      <div style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);">100%</div>
+      <div style="padding:12px;color:var(--text-secondary);border-bottom:1px solid rgba(255,255,255,.04);">反彈不要再接，觀望</div>
+
+      <div style="padding:12px;color:var(--text-secondary);">倉位超標 / 基本面轉弱</div>
+      <div style="padding:12px;color:var(--red);">確定出場</div>
+      <div style="padding:12px;">全部清倉</div>
+      <div style="padding:12px;color:var(--text-secondary);">個股權重 &plusmn;2% 控管</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    交易系統 SOP：選股 &rarr; 大週期找趨勢 &rarr; 量穩結構 &rarr; 進場 &rarr; 設停損 &rarr; 加碼/停利 &rarr; 檢討復盤<br>
+    核心心法：賺大賠小、先想風險再想獲利、別對股票有感情、空手也是倉位
+  </div>
+</div>
+
+<!-- TAB 4: 機構策略筆記 -->
+<div id="tab4" class="page">
+  <div class="banner">
+    <h2>機構投資思維與操作紀律筆記</h2>
+    <p>投資心理學的終點，不是靠意志力對抗人性，而是設計一套「自動導航系統」。結合右側加碼、嚴格停損與再平衡，讓你在市場恐慌或狂熱時，都能依循SOP做出正確決策。</p>
+  </div>
+  <div class="grid-cards-2">
+    <!-- Card 1 -->
+    <div class="strategy-card">
+      <div class="card-icon icon-blue">&#128202;</div>
+      <h3>投資系統五大模組</h3>
+      <ol>
+        <li>目標模組 (定義IRR與回撤)</li>
+        <li>配置模組 (核心70%-衛星30%架構)</li>
+        <li>估值模組 (P/E分位與盈利品質濾網)</li>
+        <li>再平衡模組 (紀律性觸發買賣)</li>
+        <li>檢視模組 (定期回顧與剔除)</li>
+      </ol>
+    </div>
+    <!-- Card 2 -->
+    <div class="strategy-card">
+      <div class="card-icon icon-green">&#9635;</div>
+      <h3>1% 救命公式與資金控管</h3>
+      <p>單筆交易的最大虧損，絕對不能超過總資金的 1%~2%。進場前先算好「停損價」，用 (總資金×1%) / (買價-停損價) 來決定你可以買幾股。這保證你連錯10次都不會畢業。</p>
+    </div>
+    <!-- Card 3 -->
+    <div class="strategy-card">
+      <div class="card-icon icon-accent">&#128200;</div>
+      <h3>右側反馬丁金字塔加倉</h3>
+      <p>永遠不要「左側攤平」(越跌越買)。加倉必須在「已經獲利」且「趨勢延續」時進行。資金拆分為 50% → 30% → 20%。每加碼一次，就把停損點往上移，保護已實現利潤。</p>
+    </div>
+    <!-- Card 4 -->
+    <div class="strategy-card">
+      <div class="card-icon icon-orange">&#128737;</div>
+      <h3>再平衡與防禦模式</h3>
+      <p>設定目標權重(如10%)與容忍區間(±2%)。漲超就賣，跌深就補，克服處置效應。</p>
+      <p style="margin-top:8px;">當總資產回撤達 -15% 時啟動防禦：凍結主題股加碼，資金僅補核心ETF，產業上限下調至30%。</p>
+    </div>
+    <!-- Card 5 -->
+    <div class="strategy-card">
+      <div class="card-icon icon-red">&#9888;</div>
+      <h3>假突破 (2B法則) 與破底翻</h3>
+      <p>開盤急拉別急著追。突破必須帶量 (1.2倍以上)，且回測不破箱體。如果突破後「量縮上行留長上影線」，或跌回箱體內，就是主力的假突破誘多，應立即停損出場。</p>
+    </div>
+    <!-- Card 6 -->
+    <div class="strategy-card">
+      <div class="card-icon icon-purple">&#127919;</div>
+      <h3>對沖 (Hedging) 與最後一擊</h3>
+      <p>對沖不是放空，是買保險。用總資金 1-2% 買 Put 防禦宏觀大跌。</p>
+      <p style="margin-top:8px;">反馬丁最後的 10-20% 加倉，可使用 Long Call Spread (買權多頭價差)，風險有限且能參與主升段爆發。</p>
+    </div>
+    <!-- Card 7: 均線實戰 -->
+    <div class="strategy-card">
+      <div class="card-icon icon-blue">&#128200;</div>
+      <h3>均線實戰應用 (5/10/20/50/200)</h3>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;">
+          <strong style="color:var(--accent);">5MA</strong><span>短線動能，跌破就跑</span>
+          <strong style="color:var(--blue);">10MA</strong><span>波段節奏線，跌破代表動能轉弱</span>
+          <strong style="color:var(--green);">20MA</strong><span>波段防守線，跌破後要減碼</span>
+          <strong style="color:var(--orange);">50MA</strong><span>跌破三日收不回 = 資金撤離訊號</span>
+          <strong style="color:var(--red);">200MA</strong><span>年線，空轉多最重要的確認線</span>
+        </div>
+        <div style="margin-top:10px;padding:8px 10px;background:rgba(45,212,168,.06);border-radius:6px;">
+          <strong style="color:var(--accent);">判讀四要素：</strong>方向(收盤在均線上方)、角度(斜率=力道)、間距(三線拉開=趨勢一致)、次序(5>10>20=多頭排列)
+        </div>
+      </div>
+    </div>
+    <!-- Card 8: 量價分析 -->
+    <div class="strategy-card">
+      <div class="card-icon icon-green">&#128202;</div>
+      <h3>量價關係判讀法則</h3>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 12px;">
+          <span class="result-badge badge-green" style="font-size:12px;">價漲量增</span><span>有資金真正進場，趨勢健康</span>
+          <span class="result-badge badge-orange" style="font-size:12px;">價漲量縮</span><span>散戶追價、主力觀望，假多頭徵兆</span>
+          <span class="result-badge badge-blue" style="font-size:12px;">價跌量縮</span><span>通常是洗盤，主力仍在場</span>
+          <span class="result-badge badge-red" style="font-size:12px;">價跌量增</span><span>主力撤出，趨勢反轉</span>
+        </div>
+        <p style="margin-top:10px;">突破確認：成交量放大至近 5 日平均的 <strong style="color:var(--text);">1~1.5 倍以上</strong>，收盤價站穩壓力區上方。無事件驅動下的量價上漲，參考價值更高。</p>
+      </div>
+    </div>
+    <!-- Card 9: 布林帶 -->
+    <div class="strategy-card">
+      <div class="card-icon icon-orange">&#128202;</div>
+      <h3>布林帶 (Bollinger Bands) 應用</h3>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <p><strong style="color:var(--text);">盤整盤：</strong>價格跑到 +2&sigma; 代表偏離平均，均值回歸機率高。</p>
+        <p><strong style="color:var(--text);">趨勢盤：</strong>貼著上軌走 + 回檔量縮 + 5MA不破 = 趨勢尚未耗竭，可持有。</p>
+        <div style="margin-top:8px;padding:8px 10px;background:rgba(239,68,68,.1);border-radius:6px;">
+          <strong style="color:var(--red);">風險訊號：</strong>頻繁跌破5MA且3日站不回、價格回不到上軌向中軸靠近、中軸走平或下彎。一旦跌破中軸(20MA)，股價往下跳一個級距(如50MA)。
+        </div>
+      </div>
+    </div>
+    <!-- Card 10: VWAP -->
+    <div class="strategy-card">
+      <div class="card-icon icon-purple">&#128202;</div>
+      <h3>VWAP 主力成本線判讀</h3>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <p>開盤30分後用5/15分K觀察：</p>
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 12px;margin-top:6px;">
+          <span class="result-badge badge-green" style="font-size:11px;">穩站VWAP</span><span>偏多盤，回測不破再進場</span>
+          <span class="result-badge badge-red" style="font-size:11px;">拉高跌破</span><span>假拉真出，轉弱訊號勿追</span>
+          <span class="result-badge badge-orange" style="font-size:11px;">上下洗盤</span><span>無方向盤，觀望</span>
+          <span class="result-badge badge-blue" style="font-size:11px;">多次不破</span><span>強勢整理，下跌量縮+上攻放量=進攻</span>
+        </div>
+        <p style="margin-top:8px;">無量突破VWAP可能為假突破，需放量且重新站回確認。</p>
+      </div>
+    </div>
+    <!-- Card 11: 止跌見底 -->
+    <div class="strategy-card">
+      <div class="card-icon icon-accent">&#128200;</div>
+      <h3>止跌與見底訊號判讀</h3>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <p><strong style="color:var(--orange);">止跌訊號（可小量試單）：</strong></p>
+        <p>三天不創新低、長陽K創近期新高且量增、走勢橫盤不再下滑、下影線變長、利空不跌。</p>
+        <p style="margin-top:8px;"><strong style="color:var(--green);">見底訊號（右側進場/加碼）：</strong></p>
+        <p>突破壓力線、站回重要均線(20/60/200MA)、出現長紅K創小新高。空轉多最重要：站上200MA年線。</p>
+        <p style="margin-top:8px;"><strong style="color:var(--blue);">輔助確認：</strong>MACD柱縮短即將金叉、RSI回升>40、底部愈來愈高、利空不跌反漲。</p>
+      </div>
+    </div>
+    <!-- Card 12: 交易日誌 7 欄位 -->
+    <div class="strategy-card">
+      <div class="card-icon icon-red">&#128221;</div>
+      <h3>交易日誌 7 欄位</h3>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <p style="margin-bottom:8px;">準備 A4 紙或 Excel，每筆交易都寫下來，避免大腦美化記憶或合理化錯誤。寫久了就會產生「盤感」——肌肉記憶。</p>
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 10px;">
+          <strong style="color:var(--accent);">①日期/標的</strong><span>如 10/25 NVDA</span>
+          <strong style="color:var(--accent);">②劇本</strong><span>進場依據（箱型突破/支撐回測），<strong style="color:var(--red);">絕對不能寫「感覺會漲」</strong></span>
+          <strong style="color:var(--accent);">③觸發</strong><span>扣板機的瞬間看到什麼訊號（大單敲進、5分K收下影線量增）</span>
+          <strong style="color:var(--accent);">④情緒</strong><span>誠實記錄：心跳很快、怕買不到(FOMO)、想報復市場</span>
+          <strong style="color:var(--accent);">⑤結果</strong><span>具體盈虧金額</span>
+          <strong style="color:var(--accent);">⑥錯誤標記</strong><span>照規則賠錢→「無錯誤」；追高/凹單/亂攤平→<strong style="color:var(--red);">紅筆圈起來</strong></span>
+          <strong style="color:var(--accent);">⑦備註</strong><span>對這筆交易的總結檢討</span>
+        </div>
+      </div>
+    </div>
+    <!-- Card 12b: HALT 盤前檢查 -->
+    <div class="strategy-card">
+      <div class="card-icon icon-orange">&#9888;</div>
+      <h3>HALT 盤前檢查</h3>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <p style="margin-bottom:8px;">每天開盤前花 10 秒評估自己狀態，<strong style="color:var(--red);">符合任何一項 → 當天遠離交易或只做模擬單</strong></p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="padding:10px;background:rgba(239,68,68,.08);border-radius:8px;border-left:3px solid var(--red);">
+            <strong style="color:var(--red);font-size:16px;">H</strong><br>
+            <strong style="color:var(--text);">飢渴 / 急著翻本</strong><br>
+            <span>急於把虧損賺回來的心態</span>
+          </div>
+          <div style="padding:10px;background:rgba(245,158,11,.08);border-radius:8px;border-left:3px solid var(--orange);">
+            <strong style="color:var(--orange);font-size:16px;">A</strong><br>
+            <strong style="color:var(--text);">憤怒 / 報復市場</strong><br>
+            <span>昨天被洗出去，今天要報仇</span>
+          </div>
+          <div style="padding:10px;background:rgba(59,130,246,.08);border-radius:8px;border-left:3px solid var(--blue);">
+            <strong style="color:var(--blue);font-size:16px;">L</strong><br>
+            <strong style="color:var(--text);">無助 / 沒主見</strong><br>
+            <span>沒自己的判斷，跟單心態</span>
+          </div>
+          <div style="padding:10px;background:rgba(139,92,246,.08);border-radius:8px;border-left:3px solid var(--purple);">
+            <strong style="color:var(--purple);font-size:16px;">T</strong><br>
+            <strong style="color:var(--text);">疲勞 / 專注力下降</strong><br>
+            <span>沒睡好、精神不佳</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Card 12c: 決策四象限 -->
+    <div class="strategy-card">
+      <div class="card-icon icon-blue">&#128200;</div>
+      <h3>決策四象限</h3>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <p style="margin-bottom:8px;">專業交易員看<strong style="color:var(--accent);">過程（決策）</strong>，小白看<strong style="color:var(--red);">結果（賺賠）</strong>。每次交易後用決策矩陣檢視自己：</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+          <div style="padding:8px 10px;background:rgba(34,197,94,.1);border-radius:6px;">
+            <strong style="color:var(--green);">好決策+好結果 ＝ 實力</strong><br>
+            <span>繼續保持，這是你的獲利來源</span>
+          </div>
+          <div style="padding:8px 10px;background:rgba(245,158,11,.1);border-radius:6px;">
+            <strong style="color:var(--orange);">壞決策+好結果 ＝ 運氣</strong><br>
+            <span style="color:var(--red);font-weight:700;">⚠ 最危險的毒藥！</span><br>
+            <span>沒設停損卻凹單賺錢→間歇性強化，讓你誤以為不停損是對的，最終導致畢業</span>
+          </div>
+          <div style="padding:8px 10px;background:rgba(59,130,246,.1);border-radius:6px;">
+            <strong style="color:var(--blue);">好決策+壞結果 ＝ 機率</strong><br>
+            <span>做生意的合理成本，必須學會接受</span>
+          </div>
+          <div style="padding:8px 10px;background:rgba(239,68,68,.1);border-radius:6px;">
+            <strong style="color:var(--red);">壞決策+壞結果 ＝ 教訓</strong><br>
+            <span>情緒化或亂做，必須立即修正</span>
+          </div>
+        </div>
+        <div style="margin-top:8px;padding:8px 10px;background:rgba(45,212,168,.1);border-radius:6px;">
+          <strong style="color:var(--accent);">檢視標準：</strong>問自己「有沒有符合進場邏輯？」＋「有沒有遵守資金控管？」→ 若皆是，即便賠錢也是一筆好交易。
+        </div>
+      </div>
+    </div>
+    <!-- Card 12d: 情緒斷路器 -->
+    <div class="strategy-card">
+      <div class="card-icon icon-red">&#128680;</div>
+      <h3>情緒斷路器（連虧降速機制）</h3>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <p style="margin-bottom:8px;">防止連續虧損後產生「把錢贏回來」的報復性交易，<strong style="color:var(--text);">必須設定並強制執行自動煞車</strong>：</p>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="padding:10px 12px;background:rgba(245,158,11,.1);border-radius:8px;border-left:3px solid var(--orange);">
+            <strong style="color:var(--orange);">&#9888; 日風控（每日最大虧損）</strong><br>
+            當日虧損達帳戶總資金 <strong style="color:var(--red);">3%</strong> → 強制關機、離開房間<br>
+            <span style="font-size:12px;">（虧3%容易賺回；虧10%心態崩潰想賭大）</span>
+          </div>
+          <div style="padding:10px 12px;background:rgba(239,68,68,.1);border-radius:8px;border-left:3px solid var(--red);">
+            <strong style="color:var(--red);">&#128308; 連輸 2 筆 → 下一筆部位強制減半</strong><br>
+            代表今天節奏與市場不合，降速保護本金
+          </div>
+          <div style="padding:10px 12px;background:rgba(239,68,68,.2);border-radius:8px;border-left:3px solid var(--red);">
+            <strong style="color:var(--red);">&#9940; 連輸 3 筆 → 直接強制關機（Stop Trading）</strong><br>
+            紅燈亮起，去睡覺或運動，絕對禁止再交易
+          </div>
+        </div>
+        <div style="margin-top:8px;padding:8px 10px;background:rgba(45,212,168,.08);border-radius:6px;">
+          <strong style="color:var(--accent);">核心觀念：</strong>空手也是倉位，讓你保有下次進場的權利。
+        </div>
+      </div>
+    </div>
+    <!-- Card 12e: 每週五抓鬼儀式 -->
+    <div class="strategy-card">
+      <div class="card-icon icon-purple">&#128123;</div>
+      <h3>每週五抓鬼儀式</h3>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <p style="margin-bottom:8px;">每週五收盤後（或每月一次），花 30 分鐘打開交易日誌，抓出<strong style="color:var(--red);">重複出現的虧損行為模式</strong>。</p>
+        <div style="padding:10px 12px;background:rgba(139,92,246,.08);border-radius:8px;margin-bottom:8px;">
+          <strong style="color:var(--purple);">抓鬼流程：</strong><br>
+          &#8226; 翻閱本週所有「紅筆圈起」的錯誤交易<br>
+          &#8226; 找出情緒盲點，例如：「70%的虧損都發生在開盤前10分鐘去追高(FOMO)」<br>
+          &#8226; 或是「只要心情煩躁時下單，勝率幾乎是零」
+        </div>
+        <div style="padding:10px 12px;background:rgba(245,158,11,.08);border-radius:8px;">
+          <strong style="color:var(--orange);">設定「一條天條」：</strong><br>
+          針對本週最常讓你賠錢的壞習慣，設定一條新規則嚴格執行。<br>
+          例如：<strong style="color:var(--text);">「沒有回踩，死都不追」</strong>
+        </div>
+      </div>
+    </div>
+    <!-- Card 12f: 完整復盤 SOP -->
+    <div class="strategy-card">
+      <div class="card-icon icon-accent">&#128260;</div>
+      <h3>完整復盤 SOP（4步驟）</h3>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <p style="margin-bottom:10px;">將交易串聯成「觀察 → 進場 → 出場 → 檢討」的 SOP，藉此不斷進步：</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="padding:10px 12px;background:rgba(45,212,168,.06);border-radius:8px;border-left:3px solid var(--accent);">
+            <strong style="color:var(--accent);">Step 1：填寫交易日誌</strong><br>
+            交易結束後，確實記錄進出場點位、劇本、觸發條件與當下情緒
+          </div>
+          <div style="padding:10px 12px;background:rgba(59,130,246,.06);border-radius:8px;border-left:3px solid var(--blue);">
+            <strong style="color:var(--blue);">Step 2：決策四象限歸類</strong><br>
+            客觀評估這筆是靠實力還是運氣，有沒有因情緒提早出場或衝動加碼
+          </div>
+          <div style="padding:10px 12px;background:rgba(245,158,11,.06);border-radius:8px;border-left:3px solid var(--orange);">
+            <strong style="color:var(--orange);">Step 3：檢視紀律執行度</strong><br>
+            回頭檢查是否按照設定條件進場？有沒有嚴格設好停損？
+          </div>
+          <div style="padding:10px 12px;background:rgba(139,92,246,.06);border-radius:8px;border-left:3px solid var(--purple);">
+            <strong style="color:var(--purple);">Step 4：抓鬼與系統優化</strong><br>
+            透過週期性檢討（每週五），抓出盲點與情緒漏洞，轉化為下一週的「天條」
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Card 13: 進階選股 -->
+    <div class="strategy-card" style="grid-column: 1 / -1;">
+      <div class="card-icon icon-accent">&#128269;</div>
+      <h3>進階操作選股 (風險低、報酬高、續航力強)</h3>
+      <p style="margin-bottom:16px;">均線共振 + 量價配合的三階段建倉法，在趨勢初期介入、趨勢確認後加碼、回踩支撐時追加，用移動止盈鎖住獲利。</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+        <!-- Phase 1 -->
+        <div style="background:rgba(45,212,168,.06);border-radius:10px;padding:18px;border-left:3px solid var(--accent);">
+          <div style="font-weight:700;color:var(--accent);margin-bottom:8px;">&#9312; 試單建倉 (10-20%)</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+            <strong style="color:var(--text);">進場訊號：</strong><br>
+            &#8226; 5MA 剛上穿 10MA / 20MA<br>
+            &#8226; 20MA 開始下彎變平 / 微微上彎<br>
+            &#8226; 成交量開始放大，但還沒爆天量<br>
+            &#8226; 股價站上所有均線<br>
+            <div style="margin-top:8px;padding:8px 10px;background:rgba(239,68,68,.1);border-radius:6px;">
+              <strong style="color:var(--red);">停損：</strong>跌破箱體 或 10MA
+            </div>
+          </div>
+        </div>
+        <!-- Phase 2 -->
+        <div style="background:rgba(59,130,246,.06);border-radius:10px;padding:18px;border-left:3px solid var(--blue);">
+          <div style="font-weight:700;color:var(--blue);margin-bottom:8px;">&#9313; 趨勢確認加碼 (30-40%)</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+            <strong style="color:var(--text);">加碼條件：</strong><br>
+            &#8226; 均線多頭排列確認<br>
+            &#8226; 5MA > 10MA > 20MA<br>
+            &#8226; 量價齊揚，趨勢延續<br>
+            &#8226; 已處於獲利狀態<br>
+            <div style="margin-top:8px;padding:8px 10px;background:rgba(239,68,68,.1);border-radius:6px;">
+              <strong style="color:var(--red);">停損：</strong>跌破箱體上緣 或 20MA 下方一點
+            </div>
+          </div>
+        </div>
+        <!-- Phase 3 -->
+        <div style="background:rgba(139,92,246,.06);border-radius:10px;padding:18px;border-left:3px solid var(--purple);">
+          <div style="font-weight:700;color:var(--purple);margin-bottom:8px;">&#9314; 回踩追加 (每次 10-20%)</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+            <strong style="color:var(--text);">追加時機：</strong><br>
+            &#8226; 股價踩回箱體上緣 或 20MA<br>
+            &#8226; 等量縮價穩後再放量上攻<br>
+            &#8226; 確認支撐有效再進場<br>
+            &#8226; 每次加碼後上移停損<br>
+            <div style="margin-top:8px;padding:8px 10px;background:rgba(245,158,11,.1);border-radius:6px;">
+              <strong style="color:var(--orange);">移動止盈：</strong>用前一波回踩低點做防守
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding:14px 18px;background:rgba(45,212,168,.06);border-radius:8px;display:flex;align-items:center;gap:12px;">
+        <span style="font-size:20px;">&#128161;</span>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;">
+          <strong style="color:var(--accent);">核心邏輯：</strong>
+          在均線共振的初期用小倉位試單（低風險），趨勢確認後才大幅加碼（高報酬），回踩支撐時追加並用移動止盈保護利潤（續航力強）。整個過程嚴格遵守右側交易紀律，絕不左側攤平。
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    此工具基於機構再平衡、1%風控公式與反馬丁策略設計。<br>
+    核心概念：70% 核心配置 + 30% 動能衛星部位 | 右側交易 | 嚴格停損
+  </div>
+</div>
+
+<!-- TAB 5: 停利計算 -->
+<div id="tab5" class="page">
+  <div class="banner">
+    <h2>&#9876; 盈虧比與分批停利計算機</h2>
+    <p>為什麼你總是「賺小賠大」？因為你沒有在進場前算好盈虧比。機構標準：<strong style="color:var(--accent)">盈虧比 (R:R) > 2 才能進場</strong>。先設好停利目標與停損防守價，讓系統幫你判斷這筆交易值不值得做。</p>
+  </div>
+  <div class="grid-2">
+    <!-- LEFT: Input -->
+    <div class="card">
+      <div class="form-title"><span class="icon">&#128202;</span> 交易參數設定</div>
+      <div class="form-group" style="margin-bottom:16px;">
+        <label>代號 (選填)</label>
+        <input type="text" id="rrTicker" placeholder="如 NVDA" style="text-transform:uppercase">
+      </div>
+      <div class="form-group" style="margin-bottom:20px;">
+        <label style="font-size:15px;font-weight:600;color:var(--text);">1. Entry Price 進場價格</label>
+        <input type="number" id="rrEntry" placeholder="買進的價位" step="0.01" oninput="calcRR()" style="margin-top:6px;font-size:16px;padding:14px;">
+        <div class="slider-hint">你預計買進的價位</div>
+      </div>
+      <div class="form-group" style="margin-bottom:20px;">
+        <label style="font-size:15px;font-weight:600;color:var(--green);">2. Profit Level 停利目標價</label>
+        <input type="number" id="rrProfit" placeholder="上方壓力區或前波高點" step="0.01" oninput="calcRR()" style="margin-top:6px;font-size:16px;padding:14px;border-color:var(--green);">
+        <div class="slider-hint">輸入找好的上方壓力區或前波高點</div>
+      </div>
+      <div class="form-group" style="margin-bottom:20px;">
+        <label style="font-size:15px;font-weight:600;color:var(--red);">3. Stop Level 停損防守價</label>
+        <input type="number" id="rrStop" placeholder="防守停損價位" step="0.01" oninput="calcRR()" style="margin-top:6px;font-size:16px;padding:14px;border-color:var(--red);">
+        <div class="slider-hint">跌破此價位立即出場，建議設在支撐位下方</div>
+      </div>
+      <div class="form-group" style="margin-bottom:16px;">
+        <label>持有股數 (選填，用於計算金額)</label>
+        <input type="number" id="rrShares" placeholder="如 100" step="1" oninput="calcRR()">
+      </div>
+      <div class="tip-box">
+        <div class="tip-title">&#128161; 為什麼盈虧比 > 2？</div>
+        <p>假設你的勝率只有 40%，只要每次賺的是賠的 2 倍以上，長期下來你仍然是正期望值。這就是職業交易員不追求高勝率，而追求高盈虧比的原因。</p>
+      </div>
+    </div>
+    <!-- RIGHT: Result -->
+    <div>
+      <!-- RR Gauge -->
+      <div class="card" style="margin-bottom:16px;">
+        <div style="text-align:center;margin-bottom:16px;">
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">盈虧比 (Risk-Reward Ratio)</div>
+          <div id="rrRatioDisplay" style="font-size:64px;font-weight:800;color:var(--text-secondary);">—</div>
+          <div id="rrVerdict" style="font-size:18px;font-weight:700;margin-top:8px;color:var(--text-secondary);">請輸入交易參數</div>
+        </div>
+        <!-- RR Bar -->
+        <div id="rrBarContainer" style="display:none;">
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);margin-bottom:6px;">
+            <span>停損</span>
+            <span>進場</span>
+            <span>停利</span>
+          </div>
+          <div style="position:relative;height:32px;background:var(--input-bg);border-radius:8px;overflow:hidden;">
+            <div id="rrBarLoss" style="position:absolute;left:0;top:0;height:100%;background:rgba(239,68,68,.25);transition:width .3s;"></div>
+            <div id="rrBarProfit" style="position:absolute;right:0;top:0;height:100%;background:rgba(34,197,94,.25);transition:width .3s;"></div>
+            <div id="rrBarEntry" style="position:absolute;top:0;width:3px;height:100%;background:var(--accent);transition:left .3s;"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-top:8px;">
+            <span style="color:var(--red);" id="rrLossLabel">-$0 (0%)</span>
+            <span style="color:var(--green);" id="rrProfitLabel">+$0 (0%)</span>
+          </div>
+        </div>
+      </div>
+      <!-- Details -->
+      <div class="card" style="margin-bottom:16px;">
+        <h4 style="margin-bottom:14px;font-size:15px;">&#128200; 交易分析</h4>
+        <div class="result-item"><span class="label">每股潛在獲利</span><span id="rrPerShareProfit" style="color:var(--green);">—</span></div>
+        <div class="result-item"><span class="label">每股潛在虧損</span><span id="rrPerShareLoss" style="color:var(--red);">—</span></div>
+        <div class="result-item"><span class="label">獲利空間 %</span><span id="rrProfitPct">—</span></div>
+        <div class="result-item"><span class="label">虧損空間 %</span><span id="rrLossPct">—</span></div>
+        <div class="result-item" id="rrAmountRow" style="display:none;"><span class="label">預計總獲利</span><span id="rrTotalProfit" style="color:var(--green);">—</span></div>
+        <div class="result-item" id="rrLossAmountRow" style="display:none;"><span class="label">最大總虧損</span><span id="rrTotalLoss" style="color:var(--red);">—</span></div>
+      </div>
+      <!-- Partial Profit Plan -->
+      <div class="card" id="rrPartialCard" style="display:none;">
+        <h4 style="margin-bottom:14px;font-size:15px;">&#127919; 分批停利計畫</h4>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">不要一次全部賣出，分批停利才能兼顧「鎖定利潤」與「參與續漲」。</p>
+        <table class="pyramid-table">
+          <thead>
+            <tr>
+              <th>階段</th>
+              <th>賣出比例</th>
+              <th>目標價</th>
+              <th>獲利 %</th>
+              <th>動作說明</th>
+            </tr>
+          </thead>
+          <tbody id="rrPartialTable"></tbody>
+        </table>
+        <div style="margin-top:14px;padding:12px 16px;background:rgba(45,212,168,.06);border-radius:8px;">
+          <div style="font-size:13px;color:var(--text-secondary);">
+            <strong style="color:var(--accent);">分批停利核心：</strong>
+            第一批先鎖住確定獲利，第二批在接近目標時落袋，最後留一部分倉位讓利潤奔跑，用移動止盈保護。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: 財報後 AVWAP 應用 -->
+<div id="tab7" class="page">
+  <div class="banner">
+    <h2>&#128200; 財報後 AVWAP 應用 (Anchored VWAP)</h2>
+    <p>財報公布後的第一週是機構「定錨成本」的關鍵時間窗口。<strong style="color:var(--accent)">Anchored VWAP（錨定成交量加權均價）</strong>以財報日為起點，計算機構平均進場成本線，是判斷「多空防線」最精準的工具。股價站上 AVWAP = 機構獲利 = 強多頭；跌破 AVWAP = 機構虧損 = 多頭潰散。</p>
+  </div>
+
+  <div class="grid-2">
+    <!-- LEFT: 輸入 -->
+    <div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="form-title"><span class="icon">&#128203;</span> 財報後 K 線數據輸入</div>
+        <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;line-height:1.7;">
+          請輸入財報公布日後的每日K線數據（典型觀察窗口：5～20個交易日）。<br>
+          系統將自動計算 Anchored VWAP 與偏差，並給出操作建議。
+        </div>
+
+        <!-- 股票代號 + 財報日 -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>股票代號</label>
+            <input type="text" id="avwapTicker" placeholder="如 NVDA" style="text-transform:uppercase">
+          </div>
+          <div class="form-group">
+            <label>財報公布日</label>
+            <input type="date" id="avwapEarningsDate">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>財報前收盤價 (Pre-Earnings)</label>
+            <input type="number" id="avwapPreClose" placeholder="財報前一日收盤" step="0.01">
+          </div>
+          <div class="form-group">
+            <label>財報後跳空方向</label>
+            <select id="avwapGapDir">
+              <option value="up">跳空上漲 Gap Up &#9650;</option>
+              <option value="down">跳空下跌 Gap Down &#9660;</option>
+              <option value="flat">平開 Flat</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 日線資料 Table Input -->
+        <div style="font-weight:600;font-size:14px;margin-bottom:10px;color:var(--accent);">&#9998; 逐日 K 線輸入（從財報後首個交易日起）</div>
+        <div style="overflow-x:auto;">
+          <table id="avwapInputTable" style="width:100%;border-collapse:collapse;font-size:13px;">
+            <thead>
+              <tr>
+                <th style="padding:8px;color:var(--text-secondary);border-bottom:1px solid var(--card-border);text-align:center;">日</th>
+                <th style="padding:8px;color:var(--text-secondary);border-bottom:1px solid var(--card-border);text-align:center;">最高</th>
+                <th style="padding:8px;color:var(--text-secondary);border-bottom:1px solid var(--card-border);text-align:center;">最低</th>
+                <th style="padding:8px;color:var(--text-secondary);border-bottom:1px solid var(--card-border);text-align:center;">收盤</th>
+                <th style="padding:8px;color:var(--text-secondary);border-bottom:1px solid var(--card-border);text-align:center;">成交量(萬)</th>
+              </tr>
+            </thead>
+            <tbody id="avwapInputBody">
+            </tbody>
+          </table>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:12px;">
+          <button class="btn-secondary" onclick="addAvwapRow()" style="flex:1;">+ 新增一天</button>
+          <button class="btn-secondary" onclick="removeAvwapRow()" style="flex:0 0 auto;padding:10px 14px;">&#128465;</button>
+        </div>
+        <button class="btn-primary" onclick="calcAVWAP()" style="margin-top:12px;">&#9654; 計算 AVWAP</button>
+      </div>
+
+      <!-- 策略說明卡片 -->
+      <div class="card">
+        <div style="font-weight:700;font-size:15px;margin-bottom:14px;display:flex;align-items:center;gap:8px;">&#127919; AVWAP 操作核心策略</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin-bottom:14px;">
+            <span class="result-badge badge-green" style="font-size:12px;align-self:start;margin-top:2px;">股價 &#62; AVWAP</span>
+            <div>
+              <strong style="color:var(--green);">機構平均獲利中（多頭防線）</strong><br>
+              回測 AVWAP 量縮不破 = 最佳加碼位。突破 AVWAP 後放量上攻 = 進攻訊號。
+            </div>
+            <span class="result-badge badge-red" style="font-size:12px;align-self:start;margin-top:2px;">股價 &#60; AVWAP</span>
+            <div>
+              <strong style="color:var(--red);">機構平均虧損中（空頭防線）</strong><br>
+              AVWAP 成壓力，每次反彈至 AVWAP 下方就是放空或出場位，不宜追多。
+            </div>
+            <span class="result-badge badge-orange" style="font-size:12px;align-self:start;margin-top:2px;">偏差 &#60; ±2%</span>
+            <div>
+              <strong style="color:var(--orange);">中性震盪區</strong><br>
+              多空不明，等待放量突破方向確認後再操作。避免在此區間追高殺低。
+            </div>
+          </div>
+          <div style="padding:12px 14px;background:rgba(45,212,168,.08);border-radius:8px;border-left:3px solid var(--accent);">
+            <strong style="color:var(--accent);">&#128161; 機構的財報後操作節奏：</strong><br>
+            財報後 1-3 天：機構建倉期（AVWAP 尚在形成中）<br>
+            財報後 3-7 天：AVWAP 確立，觀察站上/跌破<br>
+            財報後 2-4 週：AVWAP 成為重要的多空分界線
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: 結果 -->
+    <div>
+      <div class="card" id="avwapResultCard" style="min-height:400px;">
+        <div class="diagnosis-empty" id="avwapEmptyState">
+          <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><path d="M10 45L30 15L50 45" stroke="#8a9bb0" stroke-width="2"/><path d="M15 45L30 22L45 45" stroke="#8a9bb0" stroke-width="1.5" opacity=".5"/></svg>
+          <p>請在左側輸入財報後K線數據並點擊「計算 AVWAP」</p>
+          <p style="font-size:13px;margin-top:4px;">系統將計算錨定成交量加權均價，判斷機構多空防線</p>
+        </div>
+        <div id="avwapResultContent" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部：操作原則說明 -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px;">
+    <div class="card" style="border-top:3px solid var(--accent);">
+      <div style="font-weight:700;color:var(--accent);margin-bottom:10px;font-size:15px;">&#128200; AVWAP 怎麼計算？</div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <p><strong style="color:var(--text);">公式：</strong></p>
+        <div style="background:var(--input-bg);border-radius:8px;padding:10px 12px;font-family:monospace;font-size:12px;margin:8px 0;color:var(--accent);">
+          典型價 TP = (High + Low + Close) / 3<br>
+          AVWAP = Σ(TPᵢ × Volᵢ) / Σ(Volᵢ)<br>
+          其中 i 從財報日後第一天開始累積
+        </div>
+        <p>與日內 VWAP 不同，AVWAP 跨越多日累積，是機構從財報後持續建倉的「真實平均成本」。</p>
+      </div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--blue);">
+      <div style="font-weight:700;color:var(--blue);margin-bottom:10px;font-size:15px;">&#128268; 財報後 AVWAP 帶寬（±1σ）</div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <p>進階版 AVWAP 可以加上「標準差帶寬」：</p>
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:8px 0;">
+          <span class="result-badge badge-green" style="font-size:11px;">+1σ</span><span>機構高點出貨區，分批停利</span>
+          <span class="result-badge badge-orange" style="font-size:11px;">AVWAP</span><span>機構成本線，中性區/觀察位</span>
+          <span class="result-badge badge-red" style="font-size:11px;">-1σ</span><span>超跌修復區，但需謹慎</span>
+        </div>
+        <p>系統計算的「偏差率」即為股價相對 AVWAP 的位置，超過 ±5% 代表趨勢明顯。</p>
+      </div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--orange);">
+      <div style="font-weight:700;color:var(--orange);margin-bottom:10px;font-size:15px;">&#9888; 財報後操作風險注意</div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="padding:6px 10px;background:rgba(239,68,68,.08);border-radius:6px;border-left:2px solid var(--red);"><strong style="color:var(--red);">跳空缺口回補</strong>：財報跳漲後，回補缺口前先別重押</div>
+          <div style="padding:6px 10px;background:rgba(245,158,11,.08);border-radius:6px;border-left:2px solid var(--orange);"><strong style="color:var(--orange);">IV 崩潰</strong>：財報後 IV 急跌，期權持有者需警覺</div>
+          <div style="padding:6px 10px;background:rgba(59,130,246,.08);border-radius:6px;border-left:2px solid var(--blue);"><strong style="color:var(--blue);">量能驗證</strong>：財報後放量站上 AVWAP 才算有效突破</div>
+          <div style="padding:6px 10px;background:rgba(45,212,168,.08);border-radius:6px;border-left:2px solid var(--accent);"><strong style="color:var(--accent);">連續涉及財報</strong>：AVWAP 只在財報後 1-4 週最有參考性</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Anchored VWAP 是機構追蹤「事件後資金成本」的核心工具。財報後使用 AVWAP 判斷多空分界，配合量能驗證，是吃到財報後「第二波段」最可靠的方法。
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <h3>編輯持股</h3>
+    <input type="hidden" id="editIndex">
+    <div class="form-row">
+      <div class="form-group">
+        <label>代號</label>
+        <input type="text" id="editTicker" disabled style="opacity:.6">
+      </div>
+      <div class="form-group">
+        <label>目標權重 %</label>
+        <input type="number" id="editTargetWeight" step="0.1">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>現價</label>
+        <input type="number" id="editPrice" step="0.01">
+      </div>
+      <div class="form-group">
+        <label>股數</label>
+        <input type="number" id="editShares" step="1">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>平均成本</label>
+      <input type="number" id="editCost" step="0.01">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeEditModal()">取消</button>
+      <button class="btn-primary" onclick="saveEdit()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 8: 選擇權四象限 -->
+<div id="tab8" class="page">
+  <div class="banner">
+    <h2>&#127918; 選擇權四象限：Buy / Sell × Call / Put</h2>
+    <p>選擇權的所有單腳策略，都可以用「<strong style="color:var(--accent)">方向 × 角色</strong>」來定位。橫軸是你對市場的看法（看多/看空），縱軸是你的角色（權利方 Buy / 義務方 Sell）。搞清楚四象限，才能正確選擇單腳或組合策略。</p>
+  </div>
+
+  <!-- 四象限圖 -->
+  <div style="display:grid;grid-template-columns:80px 1fr 1fr;grid-template-rows:50px 1fr 1fr;gap:3px;margin-bottom:28px;border-radius:14px;overflow:hidden;">
+    <!-- 角落空白 -->
+    <div style="background:transparent;"></div>
+    <!-- 頂部標題 -->
+    <div style="background:rgba(34,197,94,.15);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--green);border-radius:10px 0 0 0;">&#9650; 看多 (Bullish)</div>
+    <div style="background:rgba(239,68,68,.15);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--red);border-radius:0 10px 0 0;">&#9660; 看空 (Bearish)</div>
+    <!-- 左側標題 買方 -->
+    <div style="background:rgba(45,212,168,.12);display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-weight:700;font-size:13px;color:var(--accent);letter-spacing:2px;">BUY 買方</div>
+    <!-- 象限 1: Buy Call -->
+    <div style="background:var(--card);border:1.5px solid rgba(34,197,94,.4);padding:22px;border-radius:0;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="background:rgba(34,197,94,.18);border-radius:10px;padding:8px 14px;font-weight:800;font-size:18px;color:var(--green);">Buy Call</div>
+        <div style="font-size:11px;color:var(--text-secondary);">支付權利金・無限獲利・有限風險</div>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+        <p><strong style="color:var(--text);">使用時機：</strong></p>
+        <p>&#8226; 強烈看多，預期大幅上漲</p>
+        <p>&#8226; 財報/事件前預期跳空上漲</p>
+        <p>&#8226; 資金有限、想放大槓桿</p>
+        <p>&#8226; 趨勢初段突破確認後進場</p>
+        <div style="margin-top:10px;padding:10px;background:rgba(34,197,94,.07);border-radius:8px;border-left:3px solid var(--green);">
+          <strong style="color:var(--green);">最大風險：</strong>權利金全損（最差）<br>
+          <strong style="color:var(--green);">最大獲利：</strong>理論無限<br>
+          <strong style="color:var(--green);">盈虧平衡：</strong>Strike + Premium
+        </div>
+        <div style="margin-top:8px;padding:8px 10px;background:rgba(239,68,68,.06);border-radius:6px;font-size:12px;">
+          <strong style="color:var(--red);">&#9888; 注意：</strong>時間值每天流失（Theta衰減），IV高時買Call成本昂貴，財報前IV高不適合單買Call
+        </div>
+      </div>
+    </div>
+    <!-- 象限 2: Buy Put -->
+    <div style="background:var(--card);border:1.5px solid rgba(239,68,68,.4);padding:22px;border-radius:0;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="background:rgba(239,68,68,.18);border-radius:10px;padding:8px 14px;font-weight:800;font-size:18px;color:var(--red);">Buy Put</div>
+        <div style="font-size:11px;color:var(--text-secondary);">支付權利金・看空下跌・有限風險</div>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+        <p><strong style="color:var(--text);">使用時機：</strong></p>
+        <p>&#8226; 強烈看空，預期大幅下跌</p>
+        <p>&#8226; 市場高點、技術面轉弱訊號</p>
+        <p>&#8226; <strong style="color:var(--orange);">對沖現股部位（保險）</strong></p>
+        <p>&#8226; VIX低時便宜對沖，財報前護盤</p>
+        <div style="margin-top:10px;padding:10px;background:rgba(239,68,68,.07);border-radius:8px;border-left:3px solid var(--red);">
+          <strong style="color:var(--red);">最大風險：</strong>權利金全損<br>
+          <strong style="color:var(--red);">最大獲利：</strong>Strike - Premium (股跌至0)<br>
+          <strong style="color:var(--red);">盈虧平衡：</strong>Strike - Premium
+        </div>
+        <div style="margin-top:8px;padding:8px 10px;background:rgba(45,212,168,.06);border-radius:6px;font-size:12px;">
+          <strong style="color:var(--accent);">&#128161; 機構常用：</strong>買Put保護正股，總資金1~2%買OTM Put當保險，特別在財報前或高點震盪期
+        </div>
+      </div>
+    </div>
+    <!-- 左側標題 賣方 -->
+    <div style="background:rgba(139,92,246,.12);display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-weight:700;font-size:13px;color:var(--purple);letter-spacing:2px;">SELL 賣方</div>
+    <!-- 象限 3: Sell Put -->
+    <div style="background:var(--card);border:1.5px solid rgba(34,197,94,.25);padding:22px;border-radius:0 0 0 10px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="background:rgba(59,130,246,.18);border-radius:10px;padding:8px 14px;font-weight:800;font-size:18px;color:var(--blue);">Sell Put</div>
+        <div style="font-size:11px;color:var(--text-secondary);">收取權利金・看多橫盤・無限風險</div>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+        <p><strong style="color:var(--text);">使用時機：</strong></p>
+        <p>&#8226; 看多或中性，股價橫盤不跌</p>
+        <p>&#8226; <strong style="color:var(--blue);">等待回踩時低價買入正股（Wheel策略）</strong></p>
+        <p>&#8226; 支撐位下方賣Put，願意以Strike承接</p>
+        <p>&#8226; IV高時賣出，賺IV崩潰的錢</p>
+        <div style="margin-top:10px;padding:10px;background:rgba(59,130,246,.07);border-radius:8px;border-left:3px solid var(--blue);">
+          <strong style="color:var(--blue);">最大獲利：</strong>收取的全部權利金<br>
+          <strong style="color:var(--blue);">最大風險：</strong>股跌至0 (Strike × 100股)<br>
+          <strong style="color:var(--blue);">盈虧平衡：</strong>Strike - Premium
+        </div>
+        <div style="margin-top:8px;padding:8px 10px;background:rgba(239,68,68,.06);border-radius:6px;font-size:12px;">
+          <strong style="color:var(--red);">&#9888; 切記：</strong>必須有足夠保證金，股票大跌時虧損極大。只在你「願意持有該股」的支撐位賣Put
+        </div>
+      </div>
+    </div>
+    <!-- 象限 4: Sell Call -->
+    <div style="background:var(--card);border:1.5px solid rgba(239,68,68,.25);padding:22px;border-radius:0 0 10px 0;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="background:rgba(245,158,11,.18);border-radius:10px;padding:8px 14px;font-weight:800;font-size:18px;color:var(--orange);">Sell Call</div>
+        <div style="font-size:11px;color:var(--text-secondary);">收取權利金・看空橫盤・無限風險</div>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+        <p><strong style="color:var(--text);">使用時機：</strong></p>
+        <p>&#8226; 看空或中性，預期漲不過壓力位</p>
+        <p>&#8226; <strong style="color:var(--orange);">已持有正股，賣Covered Call增加收入</strong></p>
+        <p>&#8226; 技術面顯示上方有強壓力（前波高）</p>
+        <p>&#8226; 財報前IV高，賣出賺IV崩塌</p>
+        <div style="margin-top:10px;padding:10px;background:rgba(245,158,11,.07);border-radius:8px;border-left:3px solid var(--orange);">
+          <strong style="color:var(--orange);">最大獲利：</strong>收取的全部權利金<br>
+          <strong style="color:var(--orange);">最大風險：</strong>Naked Sell = 理論無限<br>
+          <strong style="color:var(--orange);">盈虧平衡：</strong>Strike + Premium
+        </div>
+        <div style="margin-top:8px;padding:8px 10px;background:rgba(45,212,168,.06);border-radius:6px;font-size:12px;">
+          <strong style="color:var(--accent);">&#128161; Covered Call：</strong>持有100股 + Sell Call = 安全且常用，限制上漲獲利，但每月穩定收租金
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 關鍵觀念橫幅 -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:28px;">
+    <div style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:18px;border-top:3px solid var(--accent);">
+      <div style="font-weight:700;color:var(--accent);margin-bottom:10px;">&#128200; Theta (時間值衰減)</div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <p>買方每天損失時間值（Theta負）。賣方每天收取時間值（Theta正）。</p>
+        <div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;">
+          <div style="padding:6px 8px;background:rgba(239,68,68,.08);border-radius:6px;text-align:center;"><strong style="color:var(--red);">買方 Theta &lt; 0</strong><br>時間是敵人</div>
+          <div style="padding:6px 8px;background:rgba(34,197,94,.08);border-radius:6px;text-align:center;"><strong style="color:var(--green);">賣方 Theta &gt; 0</strong><br>時間是朋友</div>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:18px;border-top:3px solid var(--blue);">
+      <div style="font-weight:700;color:var(--blue);margin-bottom:10px;">&#127754; IV (隱含波動率) 影響</div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <p>IV高時期權貴，IV低時期權便宜。財報前IV高，財報後IV崩。</p>
+        <div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;">
+          <div style="padding:6px 8px;background:rgba(34,197,94,.08);border-radius:6px;text-align:center;"><strong style="color:var(--green);">IV低時</strong><br>適合買方策略</div>
+          <div style="padding:6px 8px;background:rgba(59,130,246,.08);border-radius:6px;text-align:center;"><strong style="color:var(--blue);">IV高時</strong><br>適合賣方策略</div>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:18px;border-top:3px solid var(--orange);">
+      <div style="font-weight:700;color:var(--orange);margin-bottom:10px;">&#127919; Delta (方向敏感度)</div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <p>Delta代表股價每漲$1，期權漲多少。ITM接近1，OTM接近0。</p>
+        <div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;font-size:11px;">
+          <div style="padding:5px;background:rgba(34,197,94,.08);border-radius:5px;text-align:center;"><strong style="color:var(--green);">ITM</strong><br>Delta≈0.7+<br>較貴、較安全</div>
+          <div style="padding:5px;background:rgba(45,212,168,.08);border-radius:5px;text-align:center;"><strong style="color:var(--accent);">ATM</strong><br>Delta≈0.5<br>最常用</div>
+          <div style="padding:5px;background:rgba(239,68,68,.08);border-radius:5px;text-align:center;"><strong style="color:var(--red);">OTM</strong><br>Delta≈0.3-<br>便宜、高風險</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 組合策略 -->
+  <div style="margin-bottom:12px;font-size:18px;font-weight:700;display:flex;align-items:center;gap:10px;">
+    &#128279; 組合策略 (Spreads & Multi-leg)
+    <span style="font-size:13px;font-weight:400;color:var(--text-secondary);">限制最大風險·降低成本·鎖定獲利區間</span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;">
+
+    <!-- Bull Call Spread -->
+    <div style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:22px;border-left:4px solid var(--green);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="background:rgba(34,197,94,.15);border-radius:8px;padding:6px 14px;font-weight:800;color:var(--green);font-size:16px;">Bull Call Spread</div>
+        <span style="font-size:12px;color:var(--text-secondary);">多頭看漲價差</span>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px;">
+        <strong style="color:var(--text);">操作：</strong>Buy Call (低Strike) + Sell Call (高Strike)，相同到期日<br>
+        <strong style="color:var(--text);">邏輯：</strong>看多但不確定會大漲，Sell Call降低Buy Call成本，鎖定獲利上限
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:12px;margin-bottom:10px;">
+        <div style="padding:8px;background:rgba(34,197,94,.08);border-radius:8px;text-align:center;">
+          <div style="color:var(--green);font-weight:700;">最大獲利</div>
+          高Strike - 低Strike - 淨權利金
+        </div>
+        <div style="padding:8px;background:rgba(239,68,68,.08);border-radius:8px;text-align:center;">
+          <div style="color:var(--red);font-weight:700;">最大風險</div>
+          只限淨支付的權利金
+        </div>
+        <div style="padding:8px;background:rgba(45,212,168,.08);border-radius:8px;text-align:center;">
+          <div style="color:var(--accent);font-weight:700;">損益平衡</div>
+          低Strike + 淨權利金
+        </div>
+      </div>
+      <div style="padding:8px 12px;background:rgba(34,197,94,.06);border-radius:8px;font-size:12px;border-left:2px solid var(--green);">
+        <strong style="color:var(--green);">&#128161; 反馬丁最後一擊：</strong>確信趨勢延續但資金有限，用Bull Call Spread取代買Call，以確認突破的上方壓力為高Strike，成本大幅降低且風險可控
+      </div>
+    </div>
+
+    <!-- Bear Put Spread -->
+    <div style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:22px;border-left:4px solid var(--red);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="background:rgba(239,68,68,.15);border-radius:8px;padding:6px 14px;font-weight:800;color:var(--red);font-size:16px;">Bear Put Spread</div>
+        <span style="font-size:12px;color:var(--text-secondary);">空頭看跌價差</span>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px;">
+        <strong style="color:var(--text);">操作：</strong>Buy Put (高Strike) + Sell Put (低Strike)，相同到期日<br>
+        <strong style="color:var(--text);">邏輯：</strong>看空但不確定跌幅多大，Sell Put降低成本，鎖定保護上限
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:12px;margin-bottom:10px;">
+        <div style="padding:8px;background:rgba(34,197,94,.08);border-radius:8px;text-align:center;">
+          <div style="color:var(--green);font-weight:700;">最大獲利</div>
+          高Strike - 低Strike - 淨權利金
+        </div>
+        <div style="padding:8px;background:rgba(239,68,68,.08);border-radius:8px;text-align:center;">
+          <div style="color:var(--red);font-weight:700;">最大風險</div>
+          只限淨支付的權利金
+        </div>
+        <div style="padding:8px;background:rgba(45,212,168,.08);border-radius:8px;text-align:center;">
+          <div style="color:var(--accent);font-weight:700;">損益平衡</div>
+          高Strike - 淨權利金
+        </div>
+      </div>
+      <div style="padding:8px 12px;background:rgba(239,68,68,.06);border-radius:8px;font-size:12px;border-left:2px solid var(--red);">
+        <strong style="color:var(--red);">&#128161; 對沖應用：</strong>比單買Put更划算，以主要支撐下方為低Strike。VIX高時把Buy Put升級為Bear Put Spread降低成本
+      </div>
+    </div>
+
+    <!-- Iron Condor -->
+    <div style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:22px;border-left:4px solid var(--purple);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="background:rgba(139,92,246,.15);border-radius:8px;padding:6px 14px;font-weight:800;color:var(--purple);font-size:16px;">Iron Condor</div>
+        <span style="font-size:12px;color:var(--text-secondary);">鐵禿鷹·震盪盤首選</span>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px;">
+        <strong style="color:var(--text);">操作：</strong>Sell Put (低) + Buy Put (更低) + Sell Call (高) + Buy Call (更高)<br>
+        <strong style="color:var(--text);">邏輯：</strong>預期股價橫盤不大動，收取四腿淨權利金
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;margin-bottom:10px;">
+        <div style="padding:8px;background:rgba(34,197,94,.08);border-radius:8px;text-align:center;"><div style="color:var(--green);font-weight:700;">最大獲利</div>四腿淨收取的權利金</div>
+        <div style="padding:8px;background:rgba(239,68,68,.08);border-radius:8px;text-align:center;"><div style="color:var(--red);font-weight:700;">最大風險</div>Strike寬度 - 淨權利金</div>
+      </div>
+      <div style="padding:8px 12px;background:rgba(139,92,246,.06);border-radius:8px;font-size:12px;border-left:2px solid var(--purple);">
+        <strong style="color:var(--purple);">&#128161; 使用時機：</strong>震盪盤且IV偏高，財報後（IV崩潰期），大盤盤整未突破方向時。<strong style="color:var(--orange);">IV高才賣，IV低不適合用</strong>
+      </div>
+    </div>
+
+    <!-- Straddle / Strangle -->
+    <div style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:22px;border-left:4px solid var(--orange);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="background:rgba(245,158,11,.15);border-radius:8px;padding:6px 14px;font-weight:800;color:var(--orange);font-size:16px;">Long Straddle</div>
+        <span style="font-size:12px;color:var(--text-secondary);">跨式·押大波動</span>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px;">
+        <strong style="color:var(--text);">操作：</strong>Buy Call (ATM) + Buy Put (同Strike同到期)，或Strangle改用OTM降低成本<br>
+        <strong style="color:var(--text);">邏輯：</strong>不知方向但預期大波動（財報、重大事件前）
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;margin-bottom:10px;">
+        <div style="padding:8px;background:rgba(34,197,94,.08);border-radius:8px;text-align:center;"><div style="color:var(--green);font-weight:700;">最大獲利</div>理論無限（漲跌皆可）</div>
+        <div style="padding:8px;background:rgba(239,68,68,.08);border-radius:8px;text-align:center;"><div style="color:var(--red);font-weight:700;">最大風險</div>兩腿權利金之和</div>
+      </div>
+      <div style="padding:8px 12px;background:rgba(245,158,11,.06);border-radius:8px;font-size:12px;border-left:2px solid var(--orange);">
+        <strong style="color:var(--orange);">&#9888; 關鍵：</strong>財報前IV高，Straddle成本昂貴。若財報後股價動幅不夠大，即便方向對也可能虧損。<strong style="color:var(--red);">財報前IV已高時不建議用</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- 策略選擇決策樹 -->
+  <div class="card" style="margin-bottom:24px;">
+    <h3 style="margin-bottom:18px;font-size:17px;">&#127823; 策略選擇決策樹：我該用哪種？</h3>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;font-size:13px;">
+      <div style="padding:12px;background:rgba(255,255,255,.04);font-weight:700;border-bottom:1px solid var(--card-border);">你的判斷</div>
+      <div style="padding:12px;background:rgba(255,255,255,.04);font-weight:700;border-bottom:1px solid var(--card-border);">IV環境</div>
+      <div style="padding:12px;background:rgba(255,255,255,.04);font-weight:700;border-bottom:1px solid var(--card-border);">建議策略</div>
+      <div style="padding:12px;background:rgba(255,255,255,.04);font-weight:700;border-bottom:1px solid var(--card-border);">原因</div>
+
+      <td style="padding:12px;color:var(--green);border-bottom:1px solid rgba(255,255,255,.04);">強看多，會大漲</td>
+      <td style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);">IV低</td>
+      <td style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);font-weight:600;color:var(--green);">Buy Call</td>
+      <td style="padding:12px;color:var(--text-secondary);border-bottom:1px solid rgba(255,255,255,.04);">期權便宜，方向明確，潛在獲利無限</td>
+
+      <td style="padding:12px;color:var(--green);border-bottom:1px solid rgba(255,255,255,.04);">看多，但漲幅有限</td>
+      <td style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);">IV任意</td>
+      <td style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);font-weight:600;color:var(--green);">Bull Call Spread</td>
+      <td style="padding:12px;color:var(--text-secondary);border-bottom:1px solid rgba(255,255,255,.04);">降低成本，限制風險，知道壓力位在哪</td>
+
+      <td style="padding:12px;color:var(--blue);border-bottom:1px solid rgba(255,255,255,.04);">中性偏多，不會大跌</td>
+      <td style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);">IV高</td>
+      <td style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);font-weight:600;color:var(--blue);">Sell Put (CSP)</td>
+      <td style="padding:12px;color:var(--text-secondary);border-bottom:1px solid rgba(255,255,255,.04);">賺IV崩潰+時間值，在支撐位願意接股</td>
+
+      <td style="padding:12px;color:var(--orange);border-bottom:1px solid rgba(255,255,255,.04);">持有正股，壓力位不易突破</td>
+      <td style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);">IV高</td>
+      <td style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);font-weight:600;color:var(--orange);">Covered Call</td>
+      <td style="padding:12px;color:var(--text-secondary);border-bottom:1px solid rgba(255,255,255,.04);">每月收租，持股不動，壓力位以上都賺</td>
+
+      <td style="padding:12px;color:var(--red);border-bottom:1px solid rgba(255,255,255,.04);">強看空，會大跌</td>
+      <td style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);">IV低</td>
+      <td style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);font-weight:600;color:var(--red);">Buy Put</td>
+      <td style="padding:12px;color:var(--text-secondary);border-bottom:1px solid rgba(255,255,255,.04);">保護現股或做空，成本低，方向明確</td>
+
+      <td style="padding:12px;color:var(--red);border-bottom:1px solid rgba(255,255,255,.04);">看空對沖，保護現股</td>
+      <td style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);">IV高</td>
+      <td style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);font-weight:600;color:var(--red);">Bear Put Spread</td>
+      <td style="padding:12px;color:var(--text-secondary);border-bottom:1px solid rgba(255,255,255,.04);">比Buy Put便宜，限定保護區間成本降低</td>
+
+      <td style="padding:12px;color:var(--purple);border-bottom:1px solid rgba(255,255,255,.04);">方向不明，只知會大動</td>
+      <td style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);">IV低</td>
+      <td style="padding:12px;border-bottom:1px solid rgba(255,255,255,.04);font-weight:600;color:var(--purple);">Long Straddle</td>
+      <td style="padding:12px;color:var(--text-secondary);border-bottom:1px solid rgba(255,255,255,.04);">IV低時押波動，財報前提早布局</td>
+
+      <td style="padding:12px;color:var(--purple);">橫盤震盪，不會大動</td>
+      <td style="padding:12px;">IV高</td>
+      <td style="padding:12px;font-weight:600;color:var(--purple);">Iron Condor</td>
+      <td style="padding:12px;color:var(--text-secondary);">IV崩潰期或盤整期收取最大權利金</td>
+    </div>
+  </div>
+
+  <div class="footer">
+    選擇權核心：買方押方向+波動，賣方賺時間+IV崩。組合策略 = 限制風險 ＋ 降低成本 ＋ 鎖定目標區間。先搞懂四象限再做組合，才不會搞錯方向。
+  </div>
+</div>
+
+<script>
+// ========== DATA ==========
+let holdings = JSON.parse(localStorage.getItem('holdings') || '[]');
+let cash = parseFloat(localStorage.getItem('cash') || '0');
+
+function saveData() {
+  localStorage.setItem('holdings', JSON.stringify(holdings));
+  localStorage.setItem('cash', cash.toString());
+}
+
+// ========== TAB SWITCHING ==========
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+// ========== TAB 1: HOLDINGS ==========
+function addHolding() {
+  const ticker = document.getElementById('addTicker').value.trim().toUpperCase();
+  const price = parseFloat(document.getElementById('addPrice').value);
+  const shares = parseInt(document.getElementById('addShares').value);
+  const cost = parseFloat(document.getElementById('addCost').value);
+  if (!ticker || isNaN(price) || isNaN(shares) || isNaN(cost)) {
+    alert('請填寫完整資料'); return;
+  }
+  holdings.push({
+    ticker,
+    type: document.getElementById('addType').value,
+    sector: document.getElementById('addSector').value,
+    targetWeight: parseFloat(document.getElementById('addTargetWeight').value) || 0,
+    price, shares, cost
+  });
+  saveData();
+  renderHoldings();
+  // Clear form
+  ['addTicker','addPrice','addShares','addCost','addTargetWeight'].forEach(id => document.getElementById(id).value = '');
+}
+
+function deleteHolding(i) {
+  if (!confirm(`確定刪除 ${holdings[i].ticker}？`)) return;
+  holdings.splice(i, 1);
+  saveData();
+  renderHoldings();
+}
+
+function openEditModal(i) {
+  const h = holdings[i];
+  document.getElementById('editIndex').value = i;
+  document.getElementById('editTicker').value = h.ticker;
+  document.getElementById('editTargetWeight').value = h.targetWeight || '';
+  document.getElementById('editPrice').value = h.price;
+  document.getElementById('editShares').value = h.shares;
+  document.getElementById('editCost').value = h.cost;
+  document.getElementById('editModal').classList.add('show');
+}
+
+function closeEditModal() {
+  document.getElementById('editModal').classList.remove('show');
+}
+
+function saveEdit() {
+  const i = parseInt(document.getElementById('editIndex').value);
+  holdings[i].targetWeight = parseFloat(document.getElementById('editTargetWeight').value) || 0;
+  holdings[i].price = parseFloat(document.getElementById('editPrice').value);
+  holdings[i].shares = parseInt(document.getElementById('editShares').value);
+  holdings[i].cost = parseFloat(document.getElementById('editCost').value);
+  saveData();
+  renderHoldings();
+  closeEditModal();
+}
+
+function updateCash() {
+  cash = parseFloat(document.getElementById('cashInput').value) || 0;
+  saveData();
+  renderHoldings();
+}
+
+function renderHoldings() {
+  const tbody = document.getElementById('holdingsTable');
+  const totalMV = holdings.reduce((s, h) => s + h.price * h.shares, 0);
+  const totalCost = holdings.reduce((s, h) => s + h.cost * h.shares, 0);
+  const totalPnL = totalMV - totalCost;
+  const totalAssets = totalMV + cash;
+
+  document.getElementById('totalMarketValue').textContent = '$' + fmt(totalMV);
+  document.getElementById('totalPnL').textContent = (totalPnL >= 0 ? '+' : '') + '$' + fmt(Math.abs(totalPnL));
+  document.getElementById('totalPnL').className = 'value ' + (totalPnL >= 0 ? 'green' : 'red');
+  document.getElementById('cashDisplay').textContent = '$' + fmt(cash);
+  document.getElementById('holdingCount').textContent = holdings.length;
+
+  const pnlRate = totalCost > 0 ? ((totalPnL / totalCost) * 100).toFixed(1) : '0';
+  document.getElementById('totalPnLRate').textContent = pnlRate + '%';
+  document.getElementById('totalPnLRate').style.color = totalPnL >= 0 ? 'var(--green)' : 'var(--red)';
+
+  // Risk status
+  const drawdown = totalAssets > 0 ? (totalPnL / totalAssets * 100) : 0;
+  const riskDot = document.getElementById('riskDot');
+  const riskLabel = document.getElementById('riskLabel');
+  if (drawdown < -15) {
+    riskDot.className = 'dot red';
+    riskLabel.textContent = '防禦模式';
+    riskLabel.style.color = 'var(--red)';
+  } else {
+    riskDot.className = 'dot green';
+    riskLabel.textContent = '正常監控';
+    riskLabel.style.color = 'var(--green)';
+  }
+
+  // Auto-sync total capital to Tab 3
+  if (totalAssets > 0) {
+    document.getElementById('totalCapital').value = totalAssets.toFixed(2);
+  }
+
+  let html = '';
+  holdings.forEach((h, i) => {
+    const mv = h.price * h.shares;
+    const pnl = (h.price - h.cost) * h.shares;
+    const weight = totalAssets > 0 ? (mv / totalAssets * 100) : 0;
+    const target = h.targetWeight || 0;
+    let rebalance = '請設定目標';
+    let rebalanceClass = '';
+    if (target > 0) {
+      const diff = weight - target;
+      if (diff > 2) { rebalance = `賣出 (超出 ${diff.toFixed(1)}%)`; rebalanceClass = 'pnl-negative'; }
+      else if (diff < -2) { rebalance = `買入 (不足 ${Math.abs(diff).toFixed(1)}%)`; rebalanceClass = 'pnl-positive'; }
+      else { rebalance = '持有 ✓'; rebalanceClass = ''; }
+    }
+    html += `<tr>
+      <td class="ticker">${h.ticker}</td>
+      <td><div class="price-main">$${h.price}</div><div class="price-sub">$${h.cost}</div></td>
+      <td><div class="price-main">$${fmt(mv)}</div><div class="${pnl >= 0 ? 'pnl-positive' : 'pnl-negative'}">${pnl >= 0 ? '+' : ''}${fmt(pnl)}</div></td>
+      <td>${weight.toFixed(1)}%</td>
+      <td>${target > 0 ? target + '%' : '<span class="target-badge">-</span>'}</td>
+      <td class="${rebalanceClass}">${rebalance}</td>
+      <td class="action-btns">
+        <button class="action-btn" onclick="openEditModal(${i})" title="編輯">&#9998;</button>
+        <button class="action-btn delete" onclick="deleteHolding(${i})" title="刪除">&#128465;</button>
+      </td>
+    </tr>`;
+  });
+  tbody.innerHTML = html;
+}
+
+function fmt(n) {
+  return Math.round(n).toLocaleString('en-US');
+}
+
+// ========== EXPORT / IMPORT ==========
+function exportData() {
+  const data = { holdings, cash, exportDate: new Date().toISOString() };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `portfolio_backup_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+function importData(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (data.holdings) { holdings = data.holdings; }
+      if (data.cash !== undefined) { cash = data.cash; document.getElementById('cashInput').value = cash; }
+      saveData();
+      renderHoldings();
+      alert('匯入成功！');
+    } catch { alert('檔案格式錯誤'); }
+  };
+  reader.readAsText(file);
+}
+
+// ========== TAB 2: DIAGNOSIS ==========
+function updateValSlider() {
+  const val = document.getElementById('diagValuation').value;
+  document.getElementById('valSliderVal').textContent = val + '%';
+  const pct = val / 100;
+  document.getElementById('diagValuation').style.background =
+    `linear-gradient(to right, var(--accent) ${pct*100}%, #2a3a4a ${pct*100}%)`;
+}
+
+function runDiagnosis() {
+  const ticker = document.getElementById('diagTicker').value.trim().toUpperCase() || '---';
+  const price = document.getElementById('diagPrice').value || '-';
+  const ma10 = document.getElementById('diag10MA').value || '-';
+  const trend = document.getElementById('diagTrend').value;
+  const valuation = parseInt(document.getElementById('diagValuation').value);
+  const roic = document.getElementById('diagROIC').value;
+  const fcf = document.getElementById('diagFCF').value;
+  const margin = document.getElementById('diagMargin').value;
+
+  // Scoring
+  let qualityScore = 0;
+  let valScore = 0;
+  let trendScore = 0;
+
+  // Quality
+  if (roic.includes('高於')) qualityScore += 3;
+  else if (roic.includes('5%')) qualityScore += 2;
+  else qualityScore += 0;
+
+  if (fcf.includes('成長')) qualityScore += 3;
+  else if (fcf.includes('穩定')) qualityScore += 2;
+  else qualityScore += 0;
+
+  if (margin.includes('上升')) qualityScore += 2;
+  else if (margin.includes('小幅')) qualityScore += 1;
+  else qualityScore += 0;
+
+  const qualityMax = 8;
+  const qualityPct = (qualityScore / qualityMax * 100).toFixed(0);
+
+  // Valuation
+  if (valuation < 40) valScore = 3;
+  else if (valuation <= 70) valScore = 2;
+  else if (valuation <= 85) valScore = 1;
+  else valScore = 0;
+
+  // Trend
+  if (trend === '多頭趨勢') trendScore = 3;
+  else if (trend === '盤整') trendScore = 1;
+  else trendScore = 0;
+
+  // Price vs MA
+  let maSignal = '-';
+  if (price !== '-' && ma10 !== '-') {
+    const p = parseFloat(price);
+    const m = parseFloat(ma10);
+    if (p > m) maSignal = '價格在 10MA 之上 (偏多)';
+    else maSignal = '價格在 10MA 之下 (偏空)';
+  }
+
+  // Overall verdict
+  const totalScore = qualityScore + valScore + trendScore;
+  const maxScore = qualityMax + 3 + 3;
+  let verdict, verdictClass, verdictDesc;
+  if (totalScore >= 11) {
+    verdict = '強烈建議買入';
+    verdictClass = 'badge-green';
+    verdictDesc = '基本面品質優秀、估值合理、趨勢向上，符合機構配置標準。';
+  } else if (totalScore >= 8) {
+    verdict = '可考慮建倉';
+    verdictClass = 'badge-blue';
+    verdictDesc = '整體條件良好，但需留意部分指標偏弱，建議以較小倉位試單。';
+  } else if (totalScore >= 5) {
+    verdict = '觀望等待';
+    verdictClass = 'badge-orange';
+    verdictDesc = '條件尚未完全成熟，建議等待估值修正或趨勢確認後再介入。';
+  } else {
+    verdict = '不建議進場';
+    verdictClass = 'badge-red';
+    verdictDesc = '多項指標不佳，風險報酬比偏低，避免在此時點建倉。';
+  }
+
+  const valLabel = valuation > 85 ? '過熱' : valuation < 40 ? '便宜' : '合理';
+  const valBadge = valuation > 85 ? 'badge-red' : valuation < 40 ? 'badge-green' : 'badge-blue';
+
+  document.getElementById('diagResult').innerHTML = `
+    <div style="margin-bottom:20px;">
+      <h3 style="font-size:20px;margin-bottom:4px;">${ticker} 診斷報告</h3>
+      <span style="font-size:13px;color:var(--text-secondary)">生成時間：${new Date().toLocaleString('zh-TW')}</span>
+    </div>
+    <div style="background:rgba(45,212,168,.08);border-radius:10px;padding:16px;margin-bottom:20px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:4px;">綜合判定</div>
+          <span class="result-badge ${verdictClass}" style="font-size:16px;padding:6px 16px;">${verdict}</span>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:13px;color:var(--text-secondary);">綜合分數</div>
+          <div style="font-size:28px;font-weight:700;color:var(--accent);">${totalScore}/${maxScore}</div>
+        </div>
+      </div>
+      <p style="color:var(--text-secondary);font-size:13px;margin-top:10px;">${verdictDesc}</p>
+    </div>
+    <div class="result-section">
+      <h4>&#128200; 趨勢面</h4>
+      <div class="result-item"><span class="label">週線趨勢</span><span class="result-badge ${trend==='多頭趨勢'?'badge-green':trend==='盤整'?'badge-orange':'badge-red'}">${trend}</span></div>
+      <div class="result-item"><span class="label">價格 vs 10MA</span><span>${maSignal}</span></div>
+    </div>
+    <div class="result-section">
+      <h4>&#128176; 估值面</h4>
+      <div class="result-item"><span class="label">歷史估值百分位</span><span class="result-badge ${valBadge}">${valuation}% (${valLabel})</span></div>
+    </div>
+    <div class="result-section">
+      <h4>&#9733; 品質面 (${qualityPct}%)</h4>
+      <div class="result-item"><span class="label">ROIC 資本回報</span><span>${roic}</span></div>
+      <div class="result-item"><span class="label">FCF 自由現金流</span><span>${fcf}</span></div>
+      <div class="result-item"><span class="label">毛利率趨勢</span><span>${margin}</span></div>
+    </div>
+  `;
+}
+
+// ========== TAB 3: POSITION SIZING ==========
+function updateRiskSlider() {
+  const val = document.getElementById('riskTolerance').value;
+  document.getElementById('riskSliderVal').textContent = val + '%';
+  const pct = (val - 0.5) / 2.5;
+  document.getElementById('riskTolerance').style.background =
+    `linear-gradient(to right, var(--accent) ${pct*100}%, #2a3a4a ${pct*100}%)`;
+}
+
+function calcPosition() {
+  const capital = parseFloat(document.getElementById('totalCapital').value) || 0;
+  const riskPct = parseFloat(document.getElementById('riskTolerance').value) / 100;
+  const entry = parseFloat(document.getElementById('entryPrice').value) || 0;
+  const stop = parseFloat(document.getElementById('stopLoss').value) || 0;
+  const custom = parseFloat(document.getElementById('customAmount').value) || 0;
+
+  const maxRisk = capital * riskPct;
+  document.getElementById('riskCap').textContent = '$' + fmt(maxRisk);
+
+  if (entry <= 0 || stop <= 0 || entry <= stop) {
+    document.getElementById('actualRisk').innerHTML = '$0 <span style="font-size:14px;color:var(--text-secondary)">(0.00%)</span>';
+    document.getElementById('perShareRisk').textContent = '$0';
+    document.getElementById('totalSharesBuy').textContent = '0 股';
+    document.getElementById('actualInvest').innerHTML = '$0 <span style="font-size:14px;color:var(--text-secondary)">(0.0%)</span>';
+    document.getElementById('pyramidContent').innerHTML = '<div class="pyramid-empty">請在左側輸入預計買入價與停損價，系統將自動生成加倉計畫</div>';
+    return;
+  }
+
+  const riskPerShare = entry - stop;
+  let shares, actualRiskAmt, investAmt;
+
+  if (custom > 0) {
+    shares = Math.floor(custom / entry);
+    actualRiskAmt = shares * riskPerShare;
+    investAmt = shares * entry;
+  } else {
+    shares = Math.floor(maxRisk / riskPerShare);
+    actualRiskAmt = shares * riskPerShare;
+    investAmt = shares * entry;
+  }
+
+  const riskPctActual = capital > 0 ? (actualRiskAmt / capital * 100) : 0;
+  const weightPct = capital > 0 ? (investAmt / capital * 100) : 0;
+
+  document.getElementById('actualRisk').innerHTML = `$${fmt(actualRiskAmt)} <span style="font-size:14px;color:var(--text-secondary)">(${riskPctActual.toFixed(2)}%)</span>`;
+  document.getElementById('perShareRisk').textContent = '$' + riskPerShare.toFixed(2);
+  document.getElementById('totalSharesBuy').textContent = shares + ' 股';
+  document.getElementById('actualInvest').innerHTML = `$${fmt(investAmt)} <span style="font-size:14px;color:var(--text-secondary)">(${weightPct.toFixed(1)}%)</span>`;
+
+  // Pyramid
+  const s1 = Math.floor(shares * 0.5);
+  const s2 = Math.floor(shares * 0.3);
+  const s3 = shares - s1 - s2;
+
+  // Calculate pyramid entry prices (first at entry, others at ~+3% and ~+6%)
+  const p1 = entry;
+  const p2 = +(entry * 1.03).toFixed(2);
+  const p3 = +(entry * 1.06).toFixed(2);
+
+  // Stop losses move up
+  const sl1 = stop;
+  const sl2 = +(entry * 0.99).toFixed(2);
+  const sl3 = +(p2 * 0.99).toFixed(2);
+
+  document.getElementById('pyramidContent').innerHTML = `
+    <table class="pyramid-table">
+      <thead>
+        <tr>
+          <th>階段</th>
+          <th>比例</th>
+          <th>股數</th>
+          <th>進場價</th>
+          <th>停損價</th>
+          <th>投入金額</th>
+          <th>條件</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:700;color:var(--accent)">第一批</td>
+          <td>50%</td>
+          <td>${s1} 股</td>
+          <td>$${p1}</td>
+          <td style="color:var(--red)">$${sl1}</td>
+          <td>$${fmt(s1 * p1)}</td>
+          <td style="font-size:12px;color:var(--text-secondary)">右側突破確認</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;color:var(--blue)">第二批</td>
+          <td>30%</td>
+          <td>${s2} 股</td>
+          <td>$${p2}</td>
+          <td style="color:var(--red)">$${sl2}</td>
+          <td>$${fmt(s2 * p2)}</td>
+          <td style="font-size:12px;color:var(--text-secondary)">趨勢延續 +3%</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;color:var(--purple)">第三批</td>
+          <td>20%</td>
+          <td>${s3} 股</td>
+          <td>$${p3}</td>
+          <td style="color:var(--red)">$${sl3}</td>
+          <td>$${fmt(s3 * p3)}</td>
+          <td style="font-size:12px;color:var(--text-secondary)">主升段確認 +6%</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top:16px;padding:12px 16px;background:rgba(45,212,168,.06);border-radius:8px;">
+      <div style="font-size:13px;color:var(--text-secondary);">
+        <strong style="color:var(--accent)">加倉紀律提醒：</strong>
+        每次加碼後，停損點必須上移。只有在獲利且趨勢延續時才能加碼，絕不左側攤平。
+      </div>
+    </div>
+  `;
+}
+
+// ========== TAB 5: RR CALCULATOR ==========
+function calcRR() {
+  const entry = parseFloat(document.getElementById('rrEntry').value) || 0;
+  const profit = parseFloat(document.getElementById('rrProfit').value) || 0;
+  const stop = parseFloat(document.getElementById('rrStop').value) || 0;
+  const shares = parseInt(document.getElementById('rrShares').value) || 0;
+
+  const display = document.getElementById('rrRatioDisplay');
+  const verdict = document.getElementById('rrVerdict');
+  const barContainer = document.getElementById('rrBarContainer');
+  const partialCard = document.getElementById('rrPartialCard');
+
+  if (entry <= 0 || profit <= 0 || stop <= 0 || profit <= entry || stop >= entry) {
+    display.textContent = '—';
+    display.style.color = 'var(--text-secondary)';
+    verdict.textContent = '請輸入交易參數';
+    verdict.style.color = 'var(--text-secondary)';
+    barContainer.style.display = 'none';
+    partialCard.style.display = 'none';
+    document.getElementById('rrPerShareProfit').textContent = '—';
+    document.getElementById('rrPerShareLoss').textContent = '—';
+    document.getElementById('rrProfitPct').textContent = '—';
+    document.getElementById('rrLossPct').textContent = '—';
+    document.getElementById('rrAmountRow').style.display = 'none';
+    document.getElementById('rrLossAmountRow').style.display = 'none';
+    return;
+  }
+
+  const reward = profit - entry;
+  const risk = entry - stop;
+  const rr = reward / risk;
+
+  // Display RR
+  display.textContent = rr.toFixed(2);
+  if (rr >= 3) {
+    display.style.color = 'var(--green)';
+    verdict.textContent = '極佳交易機會';
+    verdict.style.color = 'var(--green)';
+    verdict.innerHTML = '<span class="result-badge badge-green" style="font-size:16px;padding:6px 20px;">&#9733; 極佳交易機會 (R:R ≥ 3)</span>';
+  } else if (rr >= 2) {
+    display.style.color = 'var(--accent)';
+    verdict.innerHTML = '<span class="result-badge badge-green" style="font-size:16px;padding:6px 20px;">&#10003; 符合進場標準 (R:R ≥ 2)</span>';
+  } else if (rr >= 1.5) {
+    display.style.color = 'var(--orange)';
+    verdict.innerHTML = '<span class="result-badge badge-orange" style="font-size:16px;padding:6px 20px;">&#9888; 勉強可接受，需高勝率配合</span>';
+  } else {
+    display.style.color = 'var(--red)';
+    verdict.innerHTML = '<span class="result-badge badge-red" style="font-size:16px;padding:6px 20px;">&#10007; 不建議進場 (R:R < 1.5)</span>';
+  }
+
+  // RR Bar
+  barContainer.style.display = 'block';
+  const totalRange = profit - stop;
+  const lossWidth = (risk / totalRange * 100).toFixed(1);
+  const profitWidth = (reward / totalRange * 100).toFixed(1);
+  const entryPos = (risk / totalRange * 100).toFixed(1);
+  document.getElementById('rrBarLoss').style.width = lossWidth + '%';
+  document.getElementById('rrBarProfit').style.width = profitWidth + '%';
+  document.getElementById('rrBarEntry').style.left = 'calc(' + entryPos + '% - 1.5px)';
+
+  const profitPct = (reward / entry * 100).toFixed(2);
+  const lossPct = (risk / entry * 100).toFixed(2);
+  document.getElementById('rrLossLabel').textContent = '-$' + risk.toFixed(2) + ' (' + lossPct + '%)';
+  document.getElementById('rrProfitLabel').textContent = '+$' + reward.toFixed(2) + ' (' + profitPct + '%)';
+
+  // Details
+  document.getElementById('rrPerShareProfit').textContent = '+$' + reward.toFixed(2);
+  document.getElementById('rrPerShareLoss').textContent = '-$' + risk.toFixed(2);
+  document.getElementById('rrProfitPct').innerHTML = '<span class="result-badge badge-green">+' + profitPct + '%</span>';
+  document.getElementById('rrLossPct').innerHTML = '<span class="result-badge badge-red">-' + lossPct + '%</span>';
+
+  if (shares > 0) {
+    document.getElementById('rrAmountRow').style.display = 'flex';
+    document.getElementById('rrLossAmountRow').style.display = 'flex';
+    document.getElementById('rrTotalProfit').textContent = '+$' + fmt(reward * shares);
+    document.getElementById('rrTotalLoss').textContent = '-$' + fmt(risk * shares);
+  } else {
+    document.getElementById('rrAmountRow').style.display = 'none';
+    document.getElementById('rrLossAmountRow').style.display = 'none';
+  }
+
+  // Partial Profit Plan (only if RR >= 1.5)
+  if (rr >= 1.5) {
+    partialCard.style.display = 'block';
+    const p1 = entry + reward * 0.382;
+    const p2 = entry + reward * 0.618;
+    const p3 = profit;
+    const pct1 = ((p1 - entry) / entry * 100).toFixed(1);
+    const pct2 = ((p2 - entry) / entry * 100).toFixed(1);
+    const pct3 = ((p3 - entry) / entry * 100).toFixed(1);
+
+    document.getElementById('rrPartialTable').innerHTML = `
+      <tr>
+        <td style="font-weight:700;color:var(--accent);">第一批</td>
+        <td>30%</td>
+        <td>$${p1.toFixed(2)}</td>
+        <td style="color:var(--green);">+${pct1}%</td>
+        <td style="font-size:12px;color:var(--text-secondary);">獲利 38.2% 位置先鎖定部分利潤，停損上移至成本價</td>
+      </tr>
+      <tr>
+        <td style="font-weight:700;color:var(--blue);">第二批</td>
+        <td>40%</td>
+        <td>$${p2.toFixed(2)}</td>
+        <td style="color:var(--green);">+${pct2}%</td>
+        <td style="font-size:12px;color:var(--text-secondary);">獲利 61.8% 位置落袋為安，停損上移至第一批停利價</td>
+      </tr>
+      <tr>
+        <td style="font-weight:700;color:var(--purple);">第三批</td>
+        <td>30%</td>
+        <td>$${p3.toFixed(2)}</td>
+        <td style="color:var(--green);">+${pct3}%</td>
+        <td style="font-size:12px;color:var(--text-secondary);">目標價全數出場，或用移動止盈讓利潤奔跑</td>
+      </tr>
+    `;
+  } else {
+    partialCard.style.display = 'none';
+  }
+}
+
+// ========== TAB 7: AVWAP CALCULATOR ==========
+let avwapRows = [];
+
+function addAvwapRow() {
+  const tbody = document.getElementById('avwapInputBody');
+  const dayNum = tbody.rows.length + 1;
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td style="padding:4px;text-align:center;color:var(--text-secondary);font-size:12px;">D+${dayNum}</td>
+    <td style="padding:4px;"><input type="number" step="0.01" placeholder="High" style="width:72px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:6px;color:var(--text);padding:6px 8px;font-size:12px;outline:none;" class="avwap-high"></td>
+    <td style="padding:4px;"><input type="number" step="0.01" placeholder="Low" style="width:72px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:6px;color:var(--text);padding:6px 8px;font-size:12px;outline:none;" class="avwap-low"></td>
+    <td style="padding:4px;"><input type="number" step="0.01" placeholder="Close" style="width:72px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:6px;color:var(--text);padding:6px 8px;font-size:12px;outline:none;" class="avwap-close"></td>
+    <td style="padding:4px;"><input type="number" step="0.01" placeholder="成交量" style="width:80px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:6px;color:var(--text);padding:6px 8px;font-size:12px;outline:none;" class="avwap-vol"></td>
+  `;
+  tbody.appendChild(tr);
+}
+
+function removeAvwapRow() {
+  const tbody = document.getElementById('avwapInputBody');
+  if (tbody.rows.length > 1) tbody.deleteRow(tbody.rows.length - 1);
+}
+
+function calcAVWAP() {
+  const ticker = (document.getElementById('avwapTicker').value.trim().toUpperCase()) || '---';
+  const earningsDate = document.getElementById('avwapEarningsDate').value || '財報日';
+  const preClose = parseFloat(document.getElementById('avwapPreClose').value) || 0;
+  const gapDir = document.getElementById('avwapGapDir').value;
+
+  const tbody = document.getElementById('avwapInputBody');
+  const rows = tbody.rows;
+
+  if (rows.length === 0) {
+    alert('請先新增至少一天的K線數據'); return;
+  }
+
+  let cumTPV = 0; // Σ(TP × Vol)
+  let cumVol = 0; // Σ(Vol)
+  let tableRows = [];
+  let hasError = false;
+
+  for (let i = 0; i < rows.length; i++) {
+    const high = parseFloat(rows[i].querySelector('.avwap-high').value) || 0;
+    const low = parseFloat(rows[i].querySelector('.avwap-low').value) || 0;
+    const close = parseFloat(rows[i].querySelector('.avwap-close').value) || 0;
+    const vol = parseFloat(rows[i].querySelector('.avwap-vol').value) || 0;
+    if (high === 0 || low === 0 || close === 0 || vol === 0) { hasError = true; break; }
+    const tp = (high + low + close) / 3;
+    cumTPV += tp * vol;
+    cumVol += vol;
+    const avwap = cumTPV / cumVol;
+    const deviation = ((close - avwap) / avwap * 100);
+    tableRows.push({ day: i + 1, high, low, close, vol, tp: tp.toFixed(2), avwap: avwap.toFixed(2), deviation: deviation.toFixed(2) });
+  }
+
+  if (hasError || tableRows.length === 0) {
+    alert('請確認所有欄位均有輸入數值'); return;
+  }
+
+  const finalAVWAP = parseFloat(tableRows[tableRows.length - 1].avwap);
+  const lastClose = tableRows[tableRows.length - 1].close;
+  const lastDev = parseFloat(tableRows[tableRows.length - 1].deviation);
+
+  // Verdict
+  let verdict, verdictClass, verdictDesc, verdictColor;
+  if (lastDev > 5) {
+    verdict = '&#9650; 強勢多頭（超 AVWAP +5%）';
+    verdictClass = 'badge-green';
+    verdictColor = 'var(--green)';
+    verdictDesc = '股價大幅站上 AVWAP，機構平均大幅獲利，趨勢強勁。回測 AVWAP 量縮不破是最佳加碼位，突破新高可續抱。';
+  } else if (lastDev > 2) {
+    verdict = '&#9651; 偏多（站上 AVWAP）';
+    verdictClass = 'badge-green';
+    verdictColor = 'var(--green)';
+    verdictDesc = '股價站上 AVWAP，機構獲利中。持多等待量能放大突破確認，同時上移停損至 AVWAP 下方保護利潤。';
+  } else if (lastDev >= -2) {
+    verdict = '&#9644; 中性震盪（貼 AVWAP）';
+    verdictClass = 'badge-orange';
+    verdictColor = 'var(--orange)';
+    verdictDesc = '股價在 AVWAP 附近震盪，多空未明。等待放量明確突破 AVWAP 上方或下方，確認方向後再進場。';
+  } else if (lastDev > -5) {
+    verdict = '&#9661; 偏空（跌破 AVWAP）';
+    verdictClass = 'badge-red';
+    verdictColor = 'var(--red)';
+    verdictDesc = '股價跌破 AVWAP，機構處於小幅虧損狀態。不宜追多，反彈至 AVWAP 下方是出場/放空機會。';
+  } else {
+    verdict = '&#9660; 強勢空頭（跌破 AVWAP -5%）';
+    verdictClass = 'badge-red';
+    verdictColor = 'var(--red)';
+    verdictDesc = '股價大幅跌破 AVWAP，機構大幅虧損。財報後上揚劇本已失敗，謹慎操作，等待新的支撐確認。';
+  }
+
+  // Gap analysis
+  let gapHtml = '';
+  if (preClose > 0 && tableRows.length > 0) {
+    const day1Close = tableRows[0].close;
+    const gapPct = ((day1Close - preClose) / preClose * 100).toFixed(1);
+    const gapAbs = (day1Close - preClose).toFixed(2);
+    const isGapUp = gapDir === 'up' || parseFloat(gapPct) > 0;
+    gapHtml = `
+      <div class="result-item">
+        <span class="label">跳空幅度（財報日 D+1）</span>
+        <span class="result-badge ${isGapUp ? 'badge-green' : 'badge-red'}">${isGapUp ? '+' : ''}${gapPct}% ($${gapAbs})</span>
+      </div>
+    `;
+  }
+
+  // Build result HTML
+  document.getElementById('avwapEmptyState').style.display = 'none';
+  const resultDiv = document.getElementById('avwapResultContent');
+  resultDiv.style.display = 'block';
+
+  resultDiv.innerHTML = `
+    <div style="margin-bottom:20px;">
+      <h3 style="font-size:20px;margin-bottom:4px;">${ticker} 財報後 AVWAP 分析</h3>
+      <span style="font-size:13px;color:var(--text-secondary)">財報日：${earningsDate}｜觀察天數：${tableRows.length} 個交易日</span>
+    </div>
+
+    <!-- Big AVWAP Display -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+      <div style="background:rgba(45,212,168,.08);border-radius:12px;padding:20px;text-align:center;">
+        <div style="font-size:13px;color:var(--text-secondary);margin-bottom:4px;">當前 AVWAP</div>
+        <div style="font-size:40px;font-weight:800;color:var(--accent);">$${finalAVWAP.toFixed(2)}</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">機構累計平均成本線</div>
+      </div>
+      <div style="background:${lastDev >= -2 ? 'rgba(34,197,94,.08)' : 'rgba(239,68,68,.08)'};border-radius:12px;padding:20px;text-align:center;">
+        <div style="font-size:13px;color:var(--text-secondary);margin-bottom:4px;">偏差率</div>
+        <div style="font-size:40px;font-weight:800;color:${verdictColor};">${lastDev > 0 ? '+' : ''}${lastDev}%</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">收盤 $${lastClose} vs AVWAP $${finalAVWAP.toFixed(2)}</div>
+      </div>
+    </div>
+
+    <!-- Verdict -->
+    <div style="background:rgba(255,255,255,.04);border-radius:10px;padding:16px;margin-bottom:20px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <span class="result-badge ${verdictClass}" style="font-size:15px;padding:6px 18px;">${verdict}</span>
+        <span style="font-size:13px;color:var(--text-secondary);">D+${tableRows.length}</span>
+      </div>
+      <p style="color:var(--text-secondary);font-size:13px;line-height:1.7;">${verdictDesc}</p>
+    </div>
+
+    <!-- Key Levels -->
+    <div class="result-section">
+      <h4>&#127919; 關鍵價位分析</h4>
+      ${gapHtml}
+      <div class="result-item"><span class="label">AVWAP 當前值（機構成本線）</span><span style="color:var(--accent);font-weight:700;">$${finalAVWAP.toFixed(2)}</span></div>
+      <div class="result-item"><span class="label">最新收盤價</span><span>$${lastClose}</span></div>
+      <div class="result-item"><span class="label">偏差幅度</span><span class="result-badge ${verdictClass}">${lastDev > 0 ? '+' : ''}${lastDev}%</span></div>
+      <div class="result-item"><span class="label">AVWAP +5% 上軌（機構高點出貨區）</span><span style="color:var(--green);">$${(finalAVWAP * 1.05).toFixed(2)}</span></div>
+      <div class="result-item"><span class="label">AVWAP -5% 下軌（止損警戒線）</span><span style="color:var(--red);">$${(finalAVWAP * 0.95).toFixed(2)}</span></div>
+    </div>
+
+    <!-- AVWAP Table -->
+    <div class="result-section">
+      <h4>&#128200; 逐日 AVWAP 計算明細</h4>
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:12px;">
+          <thead>
+            <tr>
+              <th style="padding:8px 10px;color:var(--text-secondary);border-bottom:1px solid var(--card-border);text-align:left;">天</th>
+              <th style="padding:8px 10px;color:var(--text-secondary);border-bottom:1px solid var(--card-border);">典型價(TP)</th>
+              <th style="padding:8px 10px;color:var(--text-secondary);border-bottom:1px solid var(--card-border);">收盤</th>
+              <th style="padding:8px 10px;color:var(--text-secondary);border-bottom:1px solid var(--card-border);">成交量</th>
+              <th style="padding:8px 10px;color:var(--text-secondary);border-bottom:1px solid var(--card-border);">累積AVWAP</th>
+              <th style="padding:8px 10px;color:var(--text-secondary);border-bottom:1px solid var(--card-border);">偏差率</th>
+              <th style="padding:8px 10px;color:var(--text-secondary);border-bottom:1px solid var(--card-border);">訊號</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${tableRows.map(r => {
+              const dev = parseFloat(r.deviation);
+              let sig, sigClass;
+              if (dev > 5) { sig = '&#9733; 強多'; sigClass = 'badge-green'; }
+              else if (dev > 2) { sig = '&#9651; 偏多'; sigClass = 'badge-green'; }
+              else if (dev >= -2) { sig = '&#9644; 中性'; sigClass = 'badge-orange'; }
+              else if (dev > -5) { sig = '&#9661; 偏空'; sigClass = 'badge-red'; }
+              else { sig = '&#9660; 強空'; sigClass = 'badge-red'; }
+              return `<tr>
+                <td style="padding:8px 10px;color:var(--text-secondary);">D+${r.day}</td>
+                <td style="padding:8px 10px;text-align:center;">$${r.tp}</td>
+                <td style="padding:8px 10px;text-align:center;">$${r.close}</td>
+                <td style="padding:8px 10px;text-align:center;">${r.vol.toLocaleString()}</td>
+                <td style="padding:8px 10px;text-align:center;font-weight:700;color:var(--accent);">$${r.avwap}</td>
+                <td style="padding:8px 10px;text-align:center;color:${dev >= -2 ? 'var(--green)' : 'var(--red)'}">${dev > 0 ? '+' : ''}${r.deviation}%</td>
+                <td style="padding:8px 10px;text-align:center;"><span class="result-badge ${sigClass}" style="font-size:11px;">${sig}</span></td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+// Initialize with 5 empty rows
+(function initAvwapRows() {
+  for (let i = 0; i < 5; i++) addAvwapRow();
+})();
+
+// ========== INIT ==========
+document.getElementById('cashInput').value = cash || '';
+renderHoldings();
+updateValSlider();
+updateRiskSlider();
+</script>
+
+<!-- TAB 9: 型態操作指南 -->
+<div id="tab9" class="page">
+  <div class="banner">
+    <h2>型態操作指南 — 美股機構策略系統</h2>
+    <p>四大市場型態完整辨識邏輯與實戰 SOP。止跌不等於見底，滯漲不等於轉空，突破不等於真突破。每一個型態都有明確的確認條件、進場點、止損線與獲利目標。</p>
+  </div>
+
+  <!-- 型態導覽標籤 -->
+  <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
+    <button onclick="showPattern('bottom')" id="btn-bottom" style="padding:8px 18px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:var(--green);color:#0f1923;">&#128200; 底部型態</button>
+    <button onclick="showPattern('stagnation')" id="btn-stagnation" style="padding:8px 18px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:var(--card-border);color:var(--text);">&#9203; 滯漲型態</button>
+    <button onclick="showPattern('breakout')" id="btn-breakout" style="padding:8px 18px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:var(--card-border);color:var(--text);">&#9889; 突破型態</button>
+    <button onclick="showPattern('top')" id="btn-top" style="padding:8px 18px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:var(--card-border);color:var(--text);">&#128308; 頂部型態</button>
+  </div>
+
+  <!-- ===== 底部型態 ===== -->
+  <div id="pattern-bottom">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div class="strategy-card" style="grid-column:1/-1;">
+        <div class="card-icon icon-green">&#128200;</div>
+        <h3>底部型態 — 核心定義</h3>
+        <p>底部型態是市場從劇烈下跌轉為主力完成吸籌、發出轉強訊號的完整結構。<strong>止跌 ≠ 見底</strong>：止跌只是拋壓減輕的過渡期；真正的底部是套牢籌碼沉澱、主力接籌後發出確認突破訊號。重點不在尋找最低點，而是等待「確認轉強」的右側進場訊號。</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div class="strategy-card">
+        <div class="card-icon icon-blue">&#128270;</div>
+        <h3>前期觀察：7大止跌訊號</h3>
+        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">出現 1～2 個即代表拋壓減輕</p>
+        <ol style="padding-left:16px;line-height:2;">
+          <li><strong>三天不創新低</strong> — 股價連續幾天不再破底</li>
+          <li><strong>長陽K線拔起</strong> — 大跌後首次出現明顯長紅K</li>
+          <li><strong>走勢轉橫盤震盪</strong> — 從溜滑梯下跌轉為左右震盪</li>
+          <li><strong>低檔量增不跌</strong> — 成交量增多但價格未跌破</li>
+          <li><strong>支撐處反彈加快</strong> — 跌到特定位置買盤迅速出手</li>
+          <li><strong>下影線變長</strong> — 盤中下殺但收盤被拉回</li>
+          <li><strong>利空測底不跌</strong> — 壞消息出現股價反而撐住（利空出盡）</li>
+        </ol>
+      </div>
+      <div class="strategy-card">
+        <div class="card-icon icon-accent">&#9989;</div>
+        <h3>右側確認：底部三部曲</h3>
+        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">三個條件缺一不可，確認後才是真底部</p>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+          <div style="background:var(--input-bg);border-radius:8px;padding:10px;border-left:3px solid var(--green);">
+            <div style="font-weight:700;color:var(--green);margin-bottom:4px;">① 突破下降趨勢線</div>
+            <div style="font-size:13px;color:var(--text-secondary);">股價向上穿透壓制的下坡線，空頭失去主導權</div>
+          </div>
+          <div style="background:var(--input-bg);border-radius:8px;padding:10px;border-left:3px solid var(--accent);">
+            <div style="font-weight:700;color:var(--accent);margin-bottom:4px;">② 重新站上關鍵均線</div>
+            <div style="font-size:13px;color:var(--text-secondary);">收復 20MA / 60MA 或 200MA 年線並能撐住</div>
+          </div>
+          <div style="background:var(--input-bg);border-radius:8px;padding:10px;border-left:3px solid var(--blue);">
+            <div style="font-weight:700;color:var(--blue);margin-bottom:4px;">③ 放量長紅K創短期新高</div>
+            <div style="font-size:13px;color:var(--text-secondary);">帶大成交量實體紅K突破震盪區間，市場信心真實回籠</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div class="strategy-card">
+        <div class="card-icon icon-purple">&#128202;</div>
+        <h3>特殊底部結構</h3>
+        <ul style="padding-left:16px;line-height:2;font-size:13px;">
+          <li><strong>底底高、頭頭高</strong> — 每次回檔低點墊高，漲有力跌無力</li>
+          <li><strong>破底翻（2B做多法）</strong> — 主力砸穿前低爆大量後迅速拉回，RSI/MACD底背離</li>
+          <li><strong>IPO底部</strong> — 新股震盪清洗後的杯形/碗形結構，量縮時跌漲時放</li>
+          <li><strong>籌碼鐵底(VRVP)</strong> — 底部落在 POC/HVN 節點，機構建倉大本營</li>
+        </ul>
+      </div>
+      <div class="strategy-card">
+        <div class="card-icon icon-green">&#128073;</div>
+        <h3>進場策略 Entry</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;">
+          <div style="background:var(--input-bg);border-radius:6px;padding:8px;">
+            <div style="color:var(--green);font-weight:600;margin-bottom:3px;">右側確認進場</div>
+            等底部三部曲訊號出現後，等待回踩量縮不破再買入，勝率最高。
+          </div>
+          <div style="background:var(--input-bg);border-radius:6px;padding:8px;">
+            <div style="color:var(--accent);font-weight:600;margin-bottom:3px;">最佳進場時機</div>
+            第一次「量縮回踩 → 再度放量上攻」時，是最穩健且確認度最高的買點。
+          </div>
+        </div>
+      </div>
+      <div class="strategy-card">
+        <div class="card-icon icon-red">&#128737;</div>
+        <h3>止損 &amp; 目標</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;">
+          <div style="background:var(--input-bg);border-radius:6px;padding:8px;border-left:3px solid var(--red);">
+            <div style="color:var(--red);font-weight:600;margin-bottom:3px;">止損設定</div>
+            設在突破 K 線最低點下方，或回踩支撐節點（POC/HVN）下方 + 0.5～1倍 ATR 緩衝
+          </div>
+          <div style="background:var(--input-bg);border-radius:6px;padding:8px;border-left:3px solid var(--green);">
+            <div style="color:var(--green);font-weight:600;margin-bottom:3px;">目標設定</div>
+            前波高點 / VRVP 阻力區 HVN。達第一目標後分批減倉，剩餘部位用 10MA/21EMA 移動防守
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 滯漲型態 ===== -->
+  <div id="pattern-stagnation" style="display:none;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div class="strategy-card" style="grid-column:1/-1;">
+        <div class="card-icon icon-orange">&#9203;</div>
+        <h3>滯漲型態 — 核心定義</h3>
+        <p>股價上漲一段時間後到達相對高點，無法繼續創新高，轉為水平橫向整理。<strong>滯漲 ≠ 轉空</strong>：可能是主力短暫休息等待題材，或是鎖碼護盤（中小型股常見）。必須視為「黃色警戒」，雙手準備：帶量突破箱頂 → 繼續做多；跌破箱底 → 確認頂部，離場。</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div class="strategy-card">
+        <div class="card-icon icon-orange">&#128270;</div>
+        <h3>辨識訊號</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;">
+          <div style="background:var(--input-bg);border-radius:6px;padding:8px;">
+            <div style="color:var(--orange);font-weight:600;margin-bottom:3px;">K線特徵</div>
+            連續 3 個交易日以上無法突破前高；K 線頻繁出現上影線、十字線、流星線；高點越來越低（Divergence）
+          </div>
+          <div style="background:var(--input-bg);border-radius:6px;padding:8px;">
+            <div style="color:var(--orange);font-weight:600;margin-bottom:3px;">技術指標轉弱</div>
+            RSI 從高檔鈍化後下彎（從 70/80 回落）；MACD 死叉或柱狀體縮小；K 棒跌破 10MA 且無法快速站回
+          </div>
+          <div style="background:var(--input-bg);border-radius:6px;padding:8px;">
+            <div style="color:var(--orange);font-weight:600;margin-bottom:3px;">量價背離 / 籌碼異常</div>
+            高檔量增價不漲（主力在賣散戶在接）；暗池資金流入急降；散戶大量買 OTM Call 但股價橫盤不動
+          </div>
+        </div>
+      </div>
+      <div class="strategy-card">
+        <div class="card-icon icon-blue">&#9878;</div>
+        <h3>操作 SOP</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;">
+          <div style="background:var(--input-bg);border-radius:6px;padding:8px;border-left:3px solid var(--orange);">
+            <div style="color:var(--orange);font-weight:600;margin-bottom:3px;">防守：降倉降槓桿</div>
+            倉位比重降至 70% 以下；K 線出現轉弱（黑K/長上影/跌破 5MA），短線分批止盈；長線掛好對沖（買 Put）
+          </div>
+          <div style="background:var(--input-bg);border-radius:6px;padding:8px;border-left:3px solid var(--red);">
+            <div style="color:var(--red);font-weight:600;margin-bottom:3px;">止損：預設防守線</div>
+            在前一波低點或箱型下緣設定價格警報；跌破頸線/20MA → 確認頂部，<strong>必須果斷離場</strong>
+          </div>
+          <div style="background:var(--input-bg);border-radius:6px;padding:8px;border-left:3px solid var(--green);">
+            <div style="color:var(--green);font-weight:600;margin-bottom:3px;">進場：等待右側突破</div>
+            <strong>穩健型</strong>：等帶量突破箱頂 + 量縮回踩不破再進場<br>
+            <strong>激進型</strong>：箱底支撐試單，停損設在箱底下方，目標看回箱頂
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 突破型態 ===== -->
+  <div id="pattern-breakout" style="display:none;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div class="strategy-card" style="grid-column:1/-1;">
+        <div class="card-icon icon-accent">&#9889;</div>
+        <h3>突破型態 — 核心定義</h3>
+        <p>股價在盤整或面臨關鍵壓力時向上穿透阻力，代表多方取得壓倒性優勢，準備開啟新一段上漲趨勢。市場充斥主力用來誘多的「假突破」，真突破必須同時滿足三大核心條件。</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div class="strategy-card">
+        <div class="card-icon icon-green">&#9989;</div>
+        <h3>真突破三大必要條件</h3>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+          <div style="background:var(--input-bg);border-radius:8px;padding:10px;border-left:3px solid var(--green);">
+            <div style="font-weight:700;color:var(--green);margin-bottom:4px;">① 實體K線收盤站上壓力位</div>
+            <div style="font-size:13px;color:var(--text-secondary);">盤中穿過不算，必須「實體」明確收在壓力位之上（收盤價 = 市場共識）</div>
+          </div>
+          <div style="background:var(--input-bg);border-radius:8px;padding:10px;border-left:3px solid var(--accent);">
+            <div style="font-weight:700;color:var(--accent);margin-bottom:4px;">② 成交量明顯放大（推升量）</div>
+            <div style="font-size:13px;color:var(--text-secondary);">突破當天成交量 ≥ 過去 20～30 天均量的 1.5～2 倍，有真金白銀的新資金追買</div>
+          </div>
+          <div style="background:var(--input-bg);border-radius:8px;padding:10px;border-left:3px solid var(--blue);">
+            <div style="font-weight:700;color:var(--blue);margin-bottom:4px;">③ 回測有撐 + 三日法則</div>
+            <div style="font-size:13px;color:var(--text-secondary);">放量上漲 → 量縮回踩不破 → 再放量過關；股價連續 2～3 天收在壓力位之上才確立</div>
+          </div>
+        </div>
+      </div>
+      <div class="strategy-card">
+        <div class="card-icon icon-red">&#9888;</div>
+        <h3>假突破警示（致命陷阱）</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;">
+          <div style="background:rgba(239,68,68,0.08);border-radius:6px;padding:10px;border-left:3px solid var(--red);">
+            <div style="color:var(--red);font-weight:600;margin-bottom:3px;">假突破（多頭陷阱）特徵</div>
+            突破瞬間爆大量（是停損量非推升量），股價衝高後立刻卡住，1～2 根 K 線直接砸回盤整區間內
+          </div>
+          <div style="background:rgba(239,68,68,0.08);border-radius:6px;padding:10px;border-left:3px solid var(--red);">
+            <div style="color:var(--red);font-weight:600;margin-bottom:3px;">頂部 2B 法則（動能衰竭）</div>
+            股價創新高（High 2）但站不穩，極短時間內跌回前一波高點（High 1）之下 → 多方力竭，準備反轉向空
+          </div>
+          <div style="background:var(--input-bg);border-radius:6px;padding:10px;">
+            <div style="color:var(--orange);font-weight:600;margin-bottom:3px;">輔助工具</div>
+            達瓦斯箱型（Darvas Box）：帶量突破箱頂 = 明確看漲進場訊號
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div class="strategy-card">
+        <div class="card-icon icon-green">&#128073;</div>
+        <h3>進場策略 Entry</h3>
+        <p style="font-size:13px;">拒絕無腦追高。最佳右側進場點 = 突破後第一次<strong>量縮回測支撐不破</strong>，再度放量上攻時買入。避開假突破風險，勝率最高。</p>
+      </div>
+      <div class="strategy-card">
+        <div class="card-icon icon-red">&#128737;</div>
+        <h3>止損設定 Stop-Loss</h3>
+        <p style="font-size:13px;">停損設在<strong>突破 K 線最低點下方</strong>，或箱體上緣（新支撐）下方一點點。收盤跌回箱型整理區間內 = 突破失敗，<strong>果斷停損，不硬凹</strong>。</p>
+      </div>
+      <div class="strategy-card">
+        <div class="card-icon icon-accent">&#128200;</div>
+        <h3>目標 &amp; 移動止盈</h3>
+        <p style="font-size:13px;">突破成功後進入主升段，<strong>不預設天花板</strong>。改用移動止盈：沿 5MA / 10MA 防守，每天收盤守在均線上就抱住，帶量跌破均線才分批獲利了結。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 頂部型態 ===== -->
+  <div id="pattern-top" style="display:none;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div class="strategy-card" style="grid-column:1/-1;">
+        <div class="card-icon icon-red">&#128308;</div>
+        <h3>頂部型態 — 核心定義</h3>
+        <p>股價在上漲一段時間後到達高點，無法繼續創新高並轉而反轉下跌的結構。圖形如「山」形，代表買盤力道無法延續、資金逐漸撤出，是趨勢由多頭轉空頭的關鍵轉折。通常在頂部形成前，會先出現一段「滯漲型態」。<strong>看到頂部確立，操作核心只有一個字：跑。</strong></p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div class="strategy-card">
+        <div class="card-icon icon-red">&#128270;</div>
+        <h3>四大頂部圖形</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;">
+          <div style="background:var(--input-bg);border-radius:6px;padding:8px;">
+            <div style="color:var(--red);font-weight:600;margin-bottom:3px;">M 頭型態（雙頂）</div>
+            高檔出現兩次高點，第二次上攻無法突破前高，隨後跌破兩峰間的頸線支撐，圖形像「M」
+          </div>
+          <div style="background:var(--input-bg);border-radius:6px;padding:8px;">
+            <div style="color:var(--red);font-weight:600;margin-bottom:3px;">頭肩頂型態</div>
+            左肩 → 頭部（最高點）→ 右肩（低於頭部）→ 跌破頸線。中長期轉空最具參考價值的型態
+          </div>
+          <div style="background:var(--input-bg);border-radius:6px;padding:8px;">
+            <div style="color:var(--red);font-weight:600;margin-bottom:3px;">箱型整理後破底</div>
+            高檔失去動能進入橫向震盪，長時間無法突破箱頂，最終向下跌破箱底 → 頂部觸發
+          </div>
+          <div style="background:var(--input-bg);border-radius:6px;padding:8px;">
+            <div style="color:var(--red);font-weight:600;margin-bottom:3px;">頂部 2B 法則（假突破/多頭陷阱）</div>
+            短暫突破前高吸引散戶追買，1～2 根K線後迅速跌回前高之下。機構倒貨的強烈轉折訊號
+          </div>
+        </div>
+      </div>
+      <div class="strategy-card">
+        <div class="card-icon icon-red">&#9998;</div>
+        <h3>確認條件 &amp; 操作 SOP</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;">
+          <div style="background:rgba(239,68,68,0.08);border-radius:6px;padding:8px;border-left:3px solid var(--red);">
+            <div style="color:var(--red);font-weight:600;margin-bottom:3px;">確認條件（兩個必要）</div>
+            ① 高點降低，反彈無法突破前高<br>
+            ② 跌破關鍵支撐（頸線或前波低點）
+          </div>
+          <div style="background:var(--input-bg);border-radius:6px;padding:8px;border-left:3px solid var(--orange);">
+            <div style="color:var(--orange);font-weight:600;margin-bottom:3px;">提前防守</div>
+            疑似頂部（右肩形成中/高檔滯漲）→ 降槓桿，倉位降至 70% 以下；長線持股掛對沖保護（買 Put）
+          </div>
+          <div style="background:rgba(239,68,68,0.08);border-radius:6px;padding:8px;border-left:3px solid var(--red);">
+            <div style="color:var(--red);font-weight:600;margin-bottom:3px;">嚴格停損（最重要）</div>
+            支撐線下方設價格警報，跌破頸線/關鍵點位 → <strong>果斷停損或清倉，絕不凹單等解套</strong>
+          </div>
+          <div style="background:var(--input-bg);border-radius:6px;padding:8px;border-left:3px solid var(--purple);">
+            <div style="color:var(--purple);font-weight:600;margin-bottom:3px;">激進者：反手做空</div>
+            2B假突破確認後進場做空，停損設在假突破最高點 + 1倍 ATR，盈虧比極佳
+          </div>
+          <div style="background:var(--input-bg);border-radius:6px;padding:8px;border-left:3px solid var(--accent);">
+            <div style="color:var(--accent);font-weight:600;margin-bottom:3px;">離場後策略</div>
+            出場後耐心等待，沒出現明確底部訊號 / 均線轉強前，<strong>絕不急著買回</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 四型態速覽對照表 -->
+  <div class="strategy-card" style="margin-top:8px;">
+    <div class="card-icon icon-blue">&#128196;</div>
+    <h3>四大型態快速對照表</h3>
+    <div style="overflow-x:auto;margin-top:12px;">
+      <table style="width:100%;border-collapse:collapse;font-size:13px;">
+        <thead>
+          <tr style="background:var(--input-bg);">
+            <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);border-bottom:1px solid var(--card-border);">型態</th>
+            <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);border-bottom:1px solid var(--card-border);">市場含義</th>
+            <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);border-bottom:1px solid var(--card-border);">核心確認訊號</th>
+            <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);border-bottom:1px solid var(--card-border);">進場時機</th>
+            <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);border-bottom:1px solid var(--card-border);">止損位置</th>
+            <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);border-bottom:1px solid var(--card-border);">操作偏向</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--card-border);">
+            <td style="padding:10px 12px;"><span style="color:var(--green);font-weight:700;">&#128200; 底部型態</span></td>
+            <td style="padding:10px 12px;color:var(--text-secondary);">下跌結束，主力完成吸籌，準備轉強</td>
+            <td style="padding:10px 12px;">突破趨勢線 + 站上均線 + 放量長紅創新高</td>
+            <td style="padding:10px 12px;color:var(--green);">回踩量縮不破後放量</td>
+            <td style="padding:10px 12px;color:var(--red);">突破K最低點 / 支撐節點下方</td>
+            <td style="padding:10px 12px;"><span style="color:var(--green);font-weight:600;">做多 ▲</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--card-border);">
+            <td style="padding:10px 12px;"><span style="color:var(--orange);font-weight:700;">&#9203; 滯漲型態</span></td>
+            <td style="padding:10px 12px;color:var(--text-secondary);">主力休息或出貨中，趨勢未定</td>
+            <td style="padding:10px 12px;">三天無法創新高 + RSI 下彎 + 量增價不漲</td>
+            <td style="padding:10px 12px;color:var(--orange);">等帶量突破箱頂確認</td>
+            <td style="padding:10px 12px;color:var(--red);">箱型下緣 / 頸線</td>
+            <td style="padding:10px 12px;"><span style="color:var(--orange);font-weight:600;">觀望 ◼ / 降倉</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--card-border);">
+            <td style="padding:10px 12px;"><span style="color:var(--accent);font-weight:700;">&#9889; 突破型態</span></td>
+            <td style="padding:10px 12px;color:var(--text-secondary);">多方壓倒性優勢，主升段啟動</td>
+            <td style="padding:10px 12px;">實體收盤站上 + 1.5x 均量 + 三日法則</td>
+            <td style="padding:10px 12px;color:var(--accent);">第一次量縮回踩不破後</td>
+            <td style="padding:10px 12px;color:var(--red);">突破K最低點 / 箱頂下方</td>
+            <td style="padding:10px 12px;"><span style="color:var(--green);font-weight:600;">積極做多 ▲▲</span></td>
+          </tr>
+          <tr>
+            <td style="padding:10px 12px;"><span style="color:var(--red);font-weight:700;">&#128308; 頂部型態</span></td>
+            <td style="padding:10px 12px;color:var(--text-secondary);">多頭力竭，主力出貨，趨勢反轉向空</td>
+            <td style="padding:10px 12px;">高點降低 + 跌破頸線/前波低點</td>
+            <td style="padding:10px 12px;color:var(--red);">（做空）2B假突破確認後</td>
+            <td style="padding:10px 12px;color:var(--red);">假突破最高點 + 1x ATR</td>
+            <td style="padding:10px 12px;"><span style="color:var(--red);font-weight:600;">離場 / 做空 ▼</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPattern(type) {
+  const patterns = ['bottom','stagnation','breakout','top'];
+  const colors = {bottom:'var(--green)',stagnation:'var(--orange)',breakout:'var(--accent)',top:'var(--red)'};
+  patterns.forEach(p => {
+    document.getElementById('pattern-'+p).style.display = p===type ? '' : 'none';
+    const btn = document.getElementById('btn-'+p);
+    btn.style.background = p===type ? colors[p] : 'var(--card-border)';
+    btn.style.color = p===type ? '#0f1923' : 'var(--text)';
+  });
+}
+</script>
+</body>
+</html>
