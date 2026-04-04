@@ -747,9 +747,168 @@
       </div>
     </div>
 
+  <!-- 長線投資決策系統 (第三階段) -->
+  <div class="strategy-card" style="grid-column: 1 / -1; margin-top:24px;">
+    <div class="card-icon icon-blue">&#127760;</div>
+    <h3>長線投資決策系統（投資心理學的終點）</h3>
+    <p style="margin-bottom:20px;color:var(--text-secondary);">將交易心理學、投資紀律與行為金融學落實到長期資產配置。用條件式規則取代主觀判斷，設計一套「自動幫你做對決策」的系統。</p>
+
+    <!-- 四大支柱 -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;">
+      <div style="background:rgba(45,212,168,.07);border-radius:10px;padding:16px;border-top:3px solid var(--accent);text-align:center;">
+        <div style="font-size:22px;margin-bottom:6px;">&#127963;</div>
+        <div style="font-weight:700;font-size:13px;color:var(--accent);margin-bottom:4px;">核心-衛星架構</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.6;">核心 70%<br>穩健穿越週期<br>衛星 30%<br>輪動動能機會</div>
+      </div>
+      <div style="background:rgba(59,130,246,.07);border-radius:10px;padding:16px;border-top:3px solid var(--blue);text-align:center;">
+        <div style="font-size:22px;margin-bottom:6px;">&#9881;</div>
+        <div style="font-weight:700;font-size:13px;color:var(--blue);margin-bottom:4px;">定期再平衡</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.6;">每季財報後<br>汰弱留強<br>減漲多→補低估<br>複利效應</div>
+      </div>
+      <div style="background:rgba(245,158,11,.07);border-radius:10px;padding:16px;border-top:3px solid var(--orange);text-align:center;">
+        <div style="font-size:22px;margin-bottom:6px;">&#128273;</div>
+        <div style="font-weight:700;font-size:13px;color:var(--orange);margin-bottom:4px;">估值護欄</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.6;">P/E · EV/EBITDA · P/S<br>&gt;80% 分位 → 過熱<br>&lt;40% 分位 → 低估<br>系統自動標記</div>
+      </div>
+      <div style="background:rgba(239,68,68,.07);border-radius:10px;padding:16px;border-top:3px solid var(--red);text-align:center;">
+        <div style="font-size:22px;margin-bottom:6px;">&#128683;</div>
+        <div style="font-weight:700;font-size:13px;color:var(--red);margin-bottom:4px;">曝險上限</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.6;">單一個股上限<br>10%～15%<br>觸及紅燈強制<br>降倉 / 限制買入</div>
+      </div>
+    </div>
+
+    <!-- 自動決策規則 -->
+    <div style="background:var(--surface);border-radius:12px;padding:20px;margin-bottom:18px;">
+      <div style="font-weight:700;font-size:15px;margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+        <span style="color:var(--accent);">&#9654;</span> 盈利品質 × 估值 → 自動決策矩陣
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div style="padding:14px;border-radius:10px;background:rgba(45,212,168,.08);border-left:3px solid var(--accent);">
+          <div style="font-weight:700;color:var(--accent);margin-bottom:6px;">&#10003; 估值便宜 + 盈利品質改善</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;">→ 逢低加碼良機，長線價值浮現<br><span style="font-size:11px;opacity:.8;">ROIC&#8599; · FCF Margin&#8599; · 毛利率穩</span></div>
+        </div>
+        <div style="padding:14px;border-radius:10px;background:rgba(59,130,246,.08);border-left:3px solid var(--blue);">
+          <div style="font-weight:700;color:var(--blue);margin-bottom:6px;">&#128338; 估值高 + 盈利品質優</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;">→ 持續持有，暫不調整<br><span style="font-size:11px;opacity:.8;">ROIC&gt;10%且&gt;WACC · FCF Margin&gt;10%</span></div>
+        </div>
+        <div style="padding:14px;border-radius:10px;background:rgba(245,158,11,.08);border-left:3px solid var(--orange);">
+          <div style="font-weight:700;color:var(--orange);margin-bottom:6px;">&#9888; 估值高 + 任一品質惡化</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;">→ 提高風險警覺，逐步降權<br><span style="font-size:11px;opacity:.8;">毛利下滑 / ROIC轉弱 / FCF縮減</span></div>
+        </div>
+        <div style="padding:14px;border-radius:10px;background:rgba(239,68,68,.08);border-left:3px solid var(--red);">
+          <div style="font-weight:700;color:var(--red);margin-bottom:6px;">&#128721; 估值高 + 多項品質同步惡化</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;">→ 基本面轉折警訊，結構性減碼退出<br><span style="font-size:11px;opacity:.8;">毛利&#8600; + ROIC轉弱 + FCF轉負</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 盈利品質篩選門檻 -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px;">
+      <div style="background:rgba(45,212,168,.06);border-radius:10px;padding:14px;text-align:center;">
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px;">ROIC 最低門檻</div>
+        <div style="font-size:22px;font-weight:800;color:var(--accent);">&gt;10%</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">且遠高於 WACC<br>代表有效率創造價值</div>
+      </div>
+      <div style="background:rgba(59,130,246,.06);border-radius:10px;padding:14px;text-align:center;">
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px;">FCF Margin 門檻</div>
+        <div style="font-size:22px;font-weight:800;color:var(--blue);">&gt;10%</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">自由現金流利潤率<br>代表營運體質強健</div>
+      </div>
+      <div style="background:rgba(139,92,246,.06);border-radius:10px;padding:14px;text-align:center;">
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px;">毛利率要求</div>
+        <div style="font-size:22px;font-weight:800;color:var(--purple);">持平↑</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">定價能力與護城河<br>成長中不能下滑</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 景氣循環配置 + 長線佈局SOP -->
+  <div class="strategy-card" style="grid-column: 1 / -1; margin-top:16px;">
+    <div class="card-icon icon-accent">&#128197;</div>
+    <h3>景氣循環配置 + 長線佈局 SOP</h3>
+
+    <!-- 景氣四階段 -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+      <div style="background:rgba(45,212,168,.07);border-radius:10px;padding:14px;border-top:3px solid var(--accent);">
+        <div style="font-weight:700;color:var(--accent);font-size:13px;margin-bottom:8px;">&#127774; 復甦期</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;">利率低、資金寬鬆<br>→ 高Beta成長股<br>→ 科技、週期股<br><span style="opacity:.7;">Industrials / Materials</span></div>
+      </div>
+      <div style="background:rgba(59,130,246,.07);border-radius:10px;padding:14px;border-top:3px solid var(--blue);">
+        <div style="font-weight:700;color:var(--blue);font-size:13px;margin-bottom:8px;">&#128200; 擴張期</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;">獲利成長、消費強勁<br>→ 核心龍頭股<br>→ 金融股<br><span style="opacity:.7;">加碼核心部位</span></div>
+      </div>
+      <div style="background:rgba(245,158,11,.07);border-radius:10px;padding:14px;border-top:3px solid var(--orange);">
+        <div style="font-weight:700;color:var(--orange);font-size:13px;margin-bottom:8px;">&#128293; 高峰期</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;">通膨升溫、利率走高<br>→ 防禦性股票<br>→ 提高現金比例<br><span style="opacity:.7;">保護利潤優先</span></div>
+      </div>
+      <div style="background:rgba(239,68,68,.07);border-radius:10px;padding:14px;border-top:3px solid var(--red);">
+        <div style="font-weight:700;color:var(--red);font-size:13px;margin-bottom:8px;">&#128308; 衰退期</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;">獲利下滑、就業疲軟<br>→ 現金 / 短債<br>→ 抗景氣循環股<br><span style="opacity:.7;">等待復甦訊號</span></div>
+      </div>
+    </div>
+
+    <!-- 長線佈局SOP -->
+    <div style="background:var(--surface);border-radius:12px;padding:20px;margin-bottom:16px;">
+      <div style="font-weight:700;font-size:15px;margin-bottom:14px;">&#128203; 長線建倉 SOP（左側交易 × 分批進場）</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+        <div style="padding:14px;border-radius:10px;background:rgba(239,68,68,.07);border-left:3px solid var(--red);">
+          <div style="font-weight:700;color:var(--red);font-size:13px;margin-bottom:8px;">&#9312; 恐慌條件觸發</div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+            &#8226; VIX &gt;35 → 左側窗口開啟<br>
+            &#8226; VIX &gt;40 → 波動性投降<br>
+            &#8226; CNN 恐懼指數 &lt;10<br>
+            &#8226; P/C Ratio &gt;1.2
+          </div>
+        </div>
+        <div style="padding:14px;border-radius:10px;background:rgba(245,158,11,.07);border-left:3px solid var(--orange);">
+          <div style="font-weight:700;color:var(--orange);font-size:13px;margin-bottom:8px;">&#9313; 籌碼/技術確認</div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+            &#8226; 爆量長黑 → 散戶投降訊號<br>
+            &#8226; 偏離 200MA &gt;10%<br>
+            &#8226; 融資餘額大幅下滑<br>
+            &#8226; ETF(SPY/QQQ) 百億淨流出
+          </div>
+        </div>
+        <div style="padding:14px;border-radius:10px;background:rgba(45,212,168,.07);border-left:3px solid var(--accent);">
+          <div style="font-weight:700;color:var(--accent);font-size:13px;margin-bottom:8px;">&#9314; 分批建倉執行</div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+            &#8226; 第一批 10-20%<br>
+            &#8226; 加碼 10-20%<br>
+            &#8226; 再加碼 10-20%<br>
+            &#8226; 剩餘等底部訊號確認
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 組合建構規則 -->
+    <div style="padding:16px 20px;background:rgba(45,212,168,.06);border-radius:10px;display:grid;grid-template-columns:repeat(2,1fr);gap:16px;">
+      <div>
+        <div style="font-weight:700;font-size:13px;color:var(--accent);margin-bottom:8px;">&#128218; 組合建構規則</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+          &#8226; 8～12 檔跨越完整產業週期<br>
+          &#8226; 70% 成長型 / 30% 配息型<br>
+          &#8226; 單一產業權重上限 30%<br>
+          &#8226; 2～3 個產業輪動配置<br>
+          &#8226; 加入防禦型部位對抗系統風險
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:700;font-size:13px;color:var(--blue);margin-bottom:8px;">&#128260; 每季再平衡檢核</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+          &#8226; 財報後檢視整體報酬率與風險比<br>
+          &#8226; 減碼過熱 → 轉入低估標的<br>
+          &#8226; EPS連兩季遞減 → 降低比重<br>
+          &#8226; 基本面 / 技術面破底 → 汰弱留強<br>
+          &#8226; 單一個股觸及15%上限 → 強制降倉
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="footer">
     此工具基於機構再平衡、1%風控公式與反馬丁策略設計。<br>
-    核心概念：70% 核心配置 + 30% 動能衛星部位 | 右側交易 | 嚴格停損
+    核心概念：核心-衛星架構（70%+30%）| 估值護欄 | 盈利品質篩選 | 景氣循環輪動 | 嚴格曝險上限
   </div>
 </div>
 
