@@ -1269,8 +1269,22 @@ QLD(55-65%)：提供基本的槓桿beta收益，確保能跑贏SSO
           <span class="slider-label">單筆最大風險容忍度 (%)</span>
           <span class="slider-value" id="riskSliderVal" style="color:var(--accent)">1%</span>
         </div>
+        <!-- 盤型選擇 -->
+        <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;padding:6px 14px;border-radius:20px;border:1.5px solid var(--card-border);transition:all .2s;" id="trendLabel">
+            <input type="checkbox" id="chkTrend" onchange="onMarketTypeChange('trend')" style="accent-color:var(--accent);width:15px;height:15px;">
+            <span>&#128200; 趨勢盤</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;padding:6px 14px;border-radius:20px;border:1.5px solid var(--card-border);transition:all .2s;" id="rangeLabel">
+            <input type="checkbox" id="chkRange" onchange="onMarketTypeChange('range')" style="accent-color:var(--orange);width:15px;height:15px;">
+            <span>&#11835; 震盪盤</span>
+          </label>
+        </div>
         <input type="range" id="riskTolerance" min="0.5" max="3" step="0.1" value="1" oninput="updateRiskSlider();calcPosition()">
-        <div class="slider-hint">機構標準：單筆交易虧損不超過總資金的 1%~2%</div>
+        <div id="riskHint" class="slider-hint" style="display:flex;align-items:center;gap:6px;margin-top:6px;">
+          <span id="riskHintText">機構標準：單筆交易虧損不超過總資金的 1%~2%</span>
+        </div>
+        <div id="riskWarning" style="display:none;margin-top:8px;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;"></div>
       </div>
       <div class="form-row">
         <div class="form-group">
@@ -3673,11 +3687,84 @@ function runDiagnosis() {
 
 // ========== TAB 3: POSITION SIZING ==========
 function updateRiskSlider() {
-  const val = document.getElementById('riskTolerance').value;
-  document.getElementById('riskSliderVal').textContent = val + '%';
+  const val = parseFloat(document.getElementById('riskTolerance').value);
+  document.getElementById('riskSliderVal').textContent = val.toFixed(1) + '%';
   const pct = (val - 0.5) / 2.5;
   document.getElementById('riskTolerance').style.background =
     `linear-gradient(to right, var(--accent) ${pct*100}%, #2a3a4a ${pct*100}%)`;
+  checkRiskRange(val);
+}
+
+function onMarketTypeChange(type) {
+  const chkTrend = document.getElementById('chkTrend');
+  const chkRange = document.getElementById('chkRange');
+  const trendLabel = document.getElementById('trendLabel');
+  const rangeLabel = document.getElementById('rangeLabel');
+  const hintText = document.getElementById('riskHintText');
+  const slider = document.getElementById('riskTolerance');
+
+  // Mutually exclusive
+  if (type === 'trend') {
+    chkRange.checked = false;
+    rangeLabel.style.borderColor = 'var(--card-border)';
+    rangeLabel.style.background = '';
+  } else {
+    chkTrend.checked = false;
+    trendLabel.style.borderColor = 'var(--card-border)';
+    trendLabel.style.background = '';
+  }
+
+  if (chkTrend.checked) {
+    trendLabel.style.borderColor = 'var(--accent)';
+    trendLabel.style.background = 'rgba(45,212,168,.08)';
+    hintText.innerHTML = '&#128200; <strong style="color:var(--accent)">趨勢盤建議：1%～2%</strong>（趨勢明確，可承受較高風險換取大波段獲利）';
+    slider.value = Math.max(1, Math.min(slider.value, 2)) || 1;
+  } else if (chkRange.checked) {
+    rangeLabel.style.borderColor = 'var(--orange)';
+    rangeLabel.style.background = 'rgba(245,158,11,.08)';
+    hintText.innerHTML = '&#11835; <strong style="color:var(--orange)">震盪盤建議：0.5%～1%</strong>（方向不明，嚴格控制風險，避免來回挨打）';
+    slider.value = Math.max(0.5, Math.min(slider.value, 1)) || 0.75;
+  } else {
+    hintText.textContent = '機構標準：單筆交易虧損不超過總資金的 1%~2%';
+  }
+
+  updateRiskSlider();
+  calcPosition();
+}
+
+function checkRiskRange(val) {
+  const chkTrend = document.getElementById('chkTrend');
+  const chkRange = document.getElementById('chkRange');
+  const warning = document.getElementById('riskWarning');
+
+  if (!chkTrend.checked && !chkRange.checked) {
+    warning.style.display = 'none';
+    return;
+  }
+
+  let inRange, min, max, label, color, bg;
+  if (chkTrend.checked) {
+    min = 1; max = 2; label = '趨勢盤'; color = 'var(--accent)'; bg = 'rgba(45,212,168,.1)';
+    inRange = val >= 1 && val <= 2;
+  } else {
+    min = 0.5; max = 1; label = '震盪盤'; color = 'var(--orange)'; bg = 'rgba(245,158,11,.1)';
+    inRange = val >= 0.5 && val <= 1;
+  }
+
+  if (inRange) {
+    warning.style.display = 'flex';
+    warning.style.background = bg;
+    warning.style.color = color;
+    warning.style.border = `1px solid ${color}`;
+    warning.innerHTML = `&#9989; ${val.toFixed(1)}% 符合${label}建議範圍（${min}%～${max}%）`;
+  } else {
+    warning.style.display = 'flex';
+    warning.style.background = 'rgba(239,68,68,.1)';
+    warning.style.color = 'var(--red)';
+    warning.style.border = '1px solid var(--red)';
+    const dir = val < min ? '偏低' : '偏高';
+    warning.innerHTML = `&#9888; ${val.toFixed(1)}% ${dir}！${label}建議 ${min}%～${max}%`;
+  }
 }
 
 function calcPosition() {
