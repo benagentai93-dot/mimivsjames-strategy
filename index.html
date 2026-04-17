@@ -638,9 +638,12 @@
     </div>
     <!-- RIGHT: Holdings table -->
     <div class="card table-card">
-      <div class="table-header">
+      <div class="table-header" style="flex-wrap:wrap;gap:8px;">
         <div class="table-title">&#9878; 持股再平衡檢查表</div>
-        <div class="tolerance">容許誤差: ±2% (機構標準)</div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <div class="tolerance">容許誤差: ±2% (機構標準)</div>
+          <button class="btn-secondary" style="font-size:12px;padding:5px 12px;" onclick="openPasteModal()">&#128203; 貼上截圖資料</button>
+        </div>
       </div>
       <table>
         <thead>
@@ -5420,6 +5423,122 @@ function showStage(n, btn) {
   btn.classList.add('active');
 }
 
+
+// ========== PASTE IMPORT FROM SCREENSHOT ==========
+let _parsedPasteRows = [];
+
+function openPasteModal() {
+  document.getElementById('pasteModal').style.display = 'block';
+  document.getElementById('pastePreview').style.display = 'none';
+  document.getElementById('pasteArea').value = '';
+}
+
+function closePasteModal() {
+  document.getElementById('pasteModal').style.display = 'none';
+}
+
+function cleanNum(s) {
+  if (!s) return NaN;
+  return parseFloat(String(s).replace(/[,+$%s]/g, '').replace(/\s/g, ''));
+}
+
+function parsePasteData() {
+  const raw = document.getElementById('pasteArea').value.trim();
+  if (!raw) { alert('請先貼入資料'); return; }
+
+  const lines = raw.split('\n').map(l => l.trim()).filter(l => l);
+  _parsedPasteRows = [];
+
+  for (const line of lines) {
+    // Split by tab or multiple spaces
+    const cols = line.split(/\t|  +/).map(c => c.trim()).filter(c => c);
+    if (cols.length < 4) continue;
+
+    // Detect header row
+    const first = cols[0].toUpperCase();
+    if (first === '代號' || first === 'TICKER' || first === 'SYMBOL') continue;
+
+    // Try to parse: ticker shares costPerShare price [totalCost] [marketValue] ...
+    // Handle various column orders
+    let ticker = '', shares = NaN, costPerShare = NaN, price = NaN, mv = NaN, pnlPct = NaN;
+
+    // Check if first col is ticker (non-numeric)
+    if (isNaN(parseFloat(cols[0]))) {
+      ticker = cols[0].replace(/[^A-Z0-9.\-]/gi, '').toUpperCase();
+    } else continue;
+
+    // Try to find numeric values - handle 3+ column formats
+    const nums = cols.slice(1).map(cleanNum);
+
+    if (nums.length >= 3) {
+      shares = nums[0];
+      costPerShare = nums[1];
+      price = nums[2];
+      // If 4th num exists: could be totalCost or marketValue
+      if (nums.length >= 5) {
+        mv = nums[4]; // totalCost, marketValue would be 3rd and 4th
+      } else if (nums.length >= 4) {
+        mv = nums[3];
+      }
+      // Find pnlPct - look for percentage in original cols
+      const pctCol = cols.find(c => c.includes('%'));
+      if (pctCol) pnlPct = cleanNum(pctCol);
+    }
+
+    if (!ticker || isNaN(shares) || isNaN(costPerShare) || isNaN(price)) continue;
+
+    _parsedPasteRows.push({ ticker, shares: Math.round(shares), cost: costPerShare, price, mv: mv || price * shares, pnlPct });
+  }
+
+  if (_parsedPasteRows.length === 0) {
+    alert('無法解析資料，請確認格式：代號(Tab)股數(Tab)單位成本(Tab)價格...');
+    return;
+  }
+
+  // Render preview
+  const tbody = document.getElementById('pastePreviewBody');
+  tbody.innerHTML = _parsedPasteRows.map(r => {
+    const pnl = r.pnlPct;
+    const pnlColor = pnl >= 0 ? 'var(--green)' : 'var(--red)';
+    return `<tr>
+      <td style="padding:7px 8px;border-bottom:1px solid var(--card-border);font-weight:700;">${r.ticker}</td>
+      <td style="padding:7px 8px;border-bottom:1px solid var(--card-border);text-align:right;">${r.shares}</td>
+      <td style="padding:7px 8px;border-bottom:1px solid var(--card-border);text-align:right;">$${r.cost.toFixed(3)}</td>
+      <td style="padding:7px 8px;border-bottom:1px solid var(--card-border);text-align:right;">$${r.price.toFixed(2)}</td>
+      <td style="padding:7px 8px;border-bottom:1px solid var(--card-border);text-align:right;">$${Math.round(r.mv).toLocaleString()}</td>
+      <td style="padding:7px 8px;border-bottom:1px solid var(--card-border);text-align:right;color:${pnlColor};">${isNaN(pnl)?'-':((pnl>=0?'+':'')+pnl.toFixed(1)+'%')}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('pastePreview').style.display = 'block';
+}
+
+function confirmPasteImport() {
+  if (_parsedPasteRows.length === 0) return;
+  const keepTarget = document.getElementById('keepTargetWeight').checked;
+
+  // Build a map of existing target weights if keeping
+  const existingTargets = {};
+  if (keepTarget) {
+    holdings.forEach(h => { if (h.targetWeight) existingTargets[h.ticker] = h.targetWeight; });
+  }
+
+  holdings = _parsedPasteRows.map(r => ({
+    ticker: r.ticker,
+    type: 'stock',
+    sector: '',
+    targetWeight: (keepTarget && existingTargets[r.ticker]) || 0,
+    price: r.price,
+    shares: r.shares,
+    cost: r.cost
+  }));
+
+  saveData();
+  renderHoldings();
+  closePasteModal();
+  alert(`✅ 成功匯入 ${holdings.length} 筆持股資料`);
+}
+
 </script>
 <div id="tab12" class="page">
   <div class="banner"><h2>&#128221; 學習心得</h2><p>70 篇文章學習心得，依階段分類，可搜尋關鍵字。</p></div>
@@ -5947,6 +6066,53 @@ Stage 1 — 願景/畫大餅階段，市場看的是 TAM（市場規模）、創
 Stage 2 — 訂單/營收爆發階段，市場看的是營收成長率（YoY）、訂單 Backlog。估值用 P/S（股價營收比），成長率愈高、倍數愈高。虧損和負現金流都可以被容忍，因為市場相信「規模起來後利潤自然會來」。
 Stage 3 — 獲利驗證階段（最危險），當營收基數大了、成長率放緩，市場會突然切換標準，開始問：「這套商業模式運作下來，到底能不能賺到錢？」這時評估重點變成 EPS 趨勢、毛利率、自由現金流（FCF）。用 Stage 2 的舊框架看這個階段的公司，就會誤判「營收成長為何股價卻跌」。
 Stage 4 — 成熟獲利階段，公司已證明獲利能力，市場才回歸傳統的 P/E、DCF 估值。如 META、GOOG、MSFT，看的是「賺錢速度能不能維持或擴張」。</div>
+    </div>
+  </div>
+</div>
+
+<!-- 貼上截圖資料 Modal -->
+<div id="pasteModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;overflow-y:auto;">
+  <div style="background:var(--card);max-width:700px;margin:40px auto;border-radius:16px;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.4);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+      <h2 style="font-size:17px;color:var(--text);margin:0;">&#128203; 貼上截圖持倉資料</h2>
+      <button onclick="closePasteModal()" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;">&#10005;</button>
+    </div>
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+      從券商頁面複製持倉資料後貼入下方。支援格式：<br>
+      <code style="background:rgba(45,212,168,.1);padding:2px 6px;border-radius:4px;font-size:12px;">代號 &nbsp;股數 &nbsp;單位成本 &nbsp;價格 &nbsp;成本 &nbsp;市值 &nbsp;盈虧$ &nbsp;盈虧% &nbsp;持倉佔比</code>
+    </p>
+    <textarea id="pasteArea" style="width:100%;height:220px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;padding:12px;font-size:12px;color:var(--text);font-family:monospace;resize:vertical;box-sizing:border-box;" placeholder="在此貼上資料（Tab 分隔或從截圖複製的文字）&#10;&#10;範例：&#10;AVGO&#9;55&#9;201.665&#9;403.75&#9;11,091.57&#9;22,206.25&#9;+11,114.68&#9;+100.21&#9;10.34%&#10;NVDA&#9;200&#9;132.327&#9;200.74&#9;26,465.34&#9;40,148.00&#9;+13,682.66&#9;+51.70&#9;18.69%"></textarea>
+    <div style="margin-top:12px;display:flex;gap:10px;">
+      <button class="btn-primary" onclick="parsePasteData()">&#128269; 解析並預覽</button>
+      <button class="btn-secondary" onclick="closePasteModal()">取消</button>
+    </div>
+    <!-- Preview area -->
+    <div id="pastePreview" style="display:none;margin-top:20px;">
+      <div style="font-size:13px;color:var(--accent);font-weight:700;margin-bottom:10px;">&#9989; 解析結果預覽</div>
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:12px;">
+          <thead>
+            <tr style="background:rgba(45,212,168,.08);">
+              <th style="padding:8px;text-align:left;border-bottom:1px solid var(--card-border);">代號</th>
+              <th style="padding:8px;text-align:right;border-bottom:1px solid var(--card-border);">股數</th>
+              <th style="padding:8px;text-align:right;border-bottom:1px solid var(--card-border);">成本價</th>
+              <th style="padding:8px;text-align:right;border-bottom:1px solid var(--card-border);">現價</th>
+              <th style="padding:8px;text-align:right;border-bottom:1px solid var(--card-border);">市值</th>
+              <th style="padding:8px;text-align:right;border-bottom:1px solid var(--card-border);">損益%</th>
+            </tr>
+          </thead>
+          <tbody id="pastePreviewBody"></tbody>
+        </table>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:10px;align-items:center;">
+        <label style="font-size:12px;color:var(--text-secondary);">
+          <input type="checkbox" id="keepTargetWeight" checked> 保留已設定的目標權重
+        </label>
+      </div>
+      <div style="margin-top:10px;display:flex;gap:10px;">
+        <button class="btn-primary" onclick="confirmPasteImport()" style="background:var(--accent);">&#10003; 確認匯入 (覆蓋現有資料)</button>
+        <button class="btn-secondary" onclick="document.getElementById('pastePreview').style.display='none'">重新貼上</button>
+      </div>
     </div>
   </div>
 </div>
