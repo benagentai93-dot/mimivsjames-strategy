@@ -1732,6 +1732,26 @@ QLD(55-65%)：提供基本的槓桿beta收益，確保能跑贏SSO
     </div>
   </div>
 
+
+  <div class="card" style="margin-bottom:24px;border:2px solid var(--blue);background:rgba(59,130,246,.04);">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px;">
+      <h3 style="font-size:17px;margin:0;">&#127938; 震盪盤今日屬於哪種盤？</h3>
+      <div style="font-size:12px;color:var(--muted);">選日子操作，不是每天操作</div>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;">
+      <button class="osc-btn" data-type="A" onclick="showOsc('A',this)" style="flex:1;min-width:120px;padding:12px;border-radius:10px;border:2px solid var(--card-border);background:var(--card-bg);cursor:pointer;font-size:14px;font-weight:700;color:var(--muted);transition:all .2s;">
+        A&nbsp;&nbsp;幾乎不能動
+      </button>
+      <button class="osc-btn" data-type="B" onclick="showOsc('B',this)" style="flex:1;min-width:120px;padding:12px;border-radius:10px;border:2px solid var(--card-border);background:var(--card-bg);cursor:pointer;font-size:14px;font-weight:700;color:var(--muted);transition:all .2s;">
+        B&nbsp;&nbsp;可以小動
+      </button>
+      <button class="osc-btn" data-type="C" onclick="showOsc('C',this)" style="flex:1;min-width:120px;padding:12px;border-radius:10px;border:2px solid var(--card-border);background:var(--card-bg);cursor:pointer;font-size:14px;font-weight:700;color:var(--muted);transition:all .2s;">
+        C&nbsp;&nbsp;可以重押
+      </button>
+    </div>
+    <div id="oscPanel" style="display:none;"></div>
+  </div>
+
   <div class="footer">
     交易系統 SOP：選股 &rarr; 大週期找趨勢 &rarr; 量穩結構 &rarr; 進場 &rarr; 設停損 &rarr; 加碼/停利 &rarr; 檢討復盤<br>
     核心心法：賺大賠小、先想風險再想獲利、別對股票有感情、空手也是倉位
@@ -5245,24 +5265,6 @@ RSI(輔助指標)在喇叭口上向開的趨勢大行情中，RSI &gt; 70 ，代
     <div class="section-title">&#128221; 相關學習心得</div>
 
   <!-- 震盪盤 A/B/C 盤勢判斷 -->
-  <div class="card" style="margin-bottom:24px;border:2px solid var(--blue);background:rgba(59,130,246,.04);">
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px;">
-      <h3 style="font-size:17px;margin:0;">&#127938; 震盪盤今日屬於哪種盤？</h3>
-      <div style="font-size:12px;color:var(--muted);">選日子操作，不是每天操作</div>
-    </div>
-    <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;">
-      <button class="osc-btn" data-type="A" onclick="showOsc('A',this)" style="flex:1;min-width:120px;padding:12px;border-radius:10px;border:2px solid var(--card-border);background:var(--card-bg);cursor:pointer;font-size:14px;font-weight:700;color:var(--muted);transition:all .2s;">
-        A&nbsp;&nbsp;幾乎不能動
-      </button>
-      <button class="osc-btn" data-type="B" onclick="showOsc('B',this)" style="flex:1;min-width:120px;padding:12px;border-radius:10px;border:2px solid var(--card-border);background:var(--card-bg);cursor:pointer;font-size:14px;font-weight:700;color:var(--muted);transition:all .2s;">
-        B&nbsp;&nbsp;可以小動
-      </button>
-      <button class="osc-btn" data-type="C" onclick="showOsc('C',this)" style="flex:1;min-width:120px;padding:12px;border-radius:10px;border:2px solid var(--card-border);background:var(--card-bg);cursor:pointer;font-size:14px;font-weight:700;color:var(--muted);transition:all .2s;">
-        C&nbsp;&nbsp;可以重押
-      </button>
-    </div>
-    <div id="oscPanel" style="display:none;"></div>
-  </div>
 
     <div style="margin-bottom:12px;"><input type="text" class="hd-search-inline" data-target="tab11-hdlist" placeholder="&#128269; 搜尋心得…" oninput="filterHdInline(this)" autocomplete="off"></div>
     <div id="tab11-hdlist">
