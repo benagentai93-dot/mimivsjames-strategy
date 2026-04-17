@@ -422,6 +422,39 @@
     .nav-tab { font-size: 12px; padding: 8px 12px; }
     .grid-4 { grid-template-columns: 1fr 1fr; }
     .grid-cards-2 { grid-template-columns: 1fr; }
+
+    /* 手機全域卡片優化 */
+    .page { padding: 12px !important; }
+    .banner { padding: 18px !important; margin-bottom: 16px !important; }
+    .banner h2 { font-size: 18px !important; }
+    .banner p { font-size: 13px !important; }
+    .strategy-card { padding: 16px !important; }
+    .strategy-card h3 { font-size: 15px !important; margin-bottom: 10px !important; }
+    .card { padding: 16px !important; }
+    .card h3 { font-size: 15px !important; }
+    .grid-2 { gap: 14px !important; }
+    .grid-cards-2 { gap: 14px !important; }
+
+    /* 強制折疊卡片內超過 2 欄的 inline grid */
+    .strategy-card div[style*="repeat(3"],
+    .strategy-card div[style*="repeat(4"],
+    .card div[style*="repeat(3"],
+    .card div[style*="repeat(4"],
+    .banner div[style*="repeat(3"],
+    .banner div[style*="repeat(4"] {
+      grid-template-columns: 1fr !important;
+    }
+
+    /* 表格水平滾動 */
+    .table-card, .card table { overflow-x: auto; display: block; }
+    table { font-size: 12px !important; }
+    th, td { padding: 6px 8px !important; white-space: nowrap; }
+
+    /* 長文字換行 */
+    .strategy-card, .card, .hd-body {
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
   }
   /* Prevent price input spinner */
   input[type="number"]::-webkit-inner-spin-button,
