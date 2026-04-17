@@ -508,7 +508,10 @@
   .stage-sel-btn { font-size:12px; padding:6px 12px; }
 }
 
+
+@keyframes spin { to { transform: rotate(360deg); } }
 </style>
+  <script src="https://unpkg.com/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 <body>
 
@@ -5539,6 +5542,83 @@ function confirmPasteImport() {
   alert(`✅ 成功匯入 ${holdings.length} 筆持股資料`);
 }
 
+
+// ========== IMAGE OCR IMPORT ==========
+function switchImportTab(tab) {
+  const isImg = tab === 'img';
+  document.getElementById('importPanelImg').style.display = isImg ? '' : 'none';
+  document.getElementById('importPanelPaste').style.display = isImg ? 'none' : '';
+  document.getElementById('importTabImg').style.background = isImg ? 'var(--accent)' : 'var(--card)';
+  document.getElementById('importTabImg').style.color = isImg ? '#000' : 'var(--text-secondary)';
+  document.getElementById('importTabImg').style.fontWeight = isImg ? '700' : '400';
+  document.getElementById('importTabPaste').style.background = isImg ? 'var(--card)' : 'var(--accent)';
+  document.getElementById('importTabPaste').style.color = isImg ? 'var(--text-secondary)' : '#000';
+  document.getElementById('importTabPaste').style.fontWeight = isImg ? '400' : '700';
+}
+
+function handleImgDrop(e) {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) processImgFile(file);
+}
+
+function handleImgUpload(e) {
+  const file = e.target.files[0];
+  if (file) processImgFile(file);
+}
+
+function processImgFile(file) {
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    document.getElementById('imgPreviewEl').src = ev.target.result;
+    document.getElementById('imgPreviewWrap').style.display = '';
+    document.getElementById('ocrStatus').style.display = 'flex';
+    document.getElementById('ocrRawWrap').style.display = 'none';
+    document.getElementById('ocrSpinner').style.display = 'inline-block';
+    document.getElementById('ocrStatusText').textContent = '正在辨識圖片...';
+    runTesseract(ev.target.result);
+  };
+  reader.readAsDataURL(file);
+}
+
+async function runTesseract(imgSrc) {
+  try {
+    const { createWorker } = Tesseract;
+    const worker = await createWorker('eng', 1, {
+      logger: m => {
+        if (m.status === 'recognizing text') {
+          const pct = Math.round(m.progress * 100);
+          document.getElementById('ocrStatusText').textContent = `辨識中… ${pct}%`;
+        }
+      }
+    });
+    await worker.setParameters({
+      tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,+-$%()/ ',
+    });
+    const { data: { text } } = await worker.recognize(imgSrc);
+    await worker.terminate();
+
+    document.getElementById('ocrSpinner').style.display = 'none';
+    document.getElementById('ocrStatusText').textContent = `✅ 辨識完成，請確認並解析`;
+    document.getElementById('ocrStatusText').style.color = 'var(--green)';
+    document.getElementById('ocrRawText').value = text.trim();
+    document.getElementById('ocrRawWrap').style.display = '';
+  } catch(err) {
+    document.getElementById('ocrSpinner').style.display = 'none';
+    document.getElementById('ocrStatusText').textContent = '❌ 辨識失敗：' + err.message;
+    document.getElementById('ocrStatusText').style.color = 'var(--red)';
+  }
+}
+
+function parseOcrText() {
+  const text = document.getElementById('ocrRawText').value;
+  document.getElementById('pasteArea').value = text;
+  // Switch to paste tab so parsePasteData works
+  switchImportTab('paste');
+  parsePasteData();
+  switchImportTab('img'); // switch back after parse to keep image visible
+}
+
 </script>
 <div id="tab12" class="page">
   <div class="banner"><h2>&#128221; 學習心得</h2><p>70 篇文章學習心得，依階段分類，可搜尋關鍵字。</p></div>
@@ -6073,18 +6153,52 @@ Stage 4 — 成熟獲利階段，公司已證明獲利能力，市場才回歸�
 <!-- 貼上截圖資料 Modal -->
 <div id="pasteModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;overflow-y:auto;">
   <div style="background:var(--card);max-width:700px;margin:40px auto;border-radius:16px;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.4);">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-      <h2 style="font-size:17px;color:var(--text);margin:0;">&#128203; 貼上截圖持倉資料</h2>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h2 style="font-size:17px;color:var(--text);margin:0;">&#128203; 匯入持倉資料</h2>
       <button onclick="closePasteModal()" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;">&#10005;</button>
     </div>
-    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
-      從券商頁面複製持倉資料後貼入下方。支援格式：<br>
-      <code style="background:rgba(45,212,168,.1);padding:2px 6px;border-radius:4px;font-size:12px;">代號 &nbsp;股數 &nbsp;單位成本 &nbsp;價格 &nbsp;成本 &nbsp;市值 &nbsp;盈虧$ &nbsp;盈虧% &nbsp;持倉佔比</code>
-    </p>
-    <textarea id="pasteArea" style="width:100%;height:220px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;padding:12px;font-size:12px;color:var(--text);font-family:monospace;resize:vertical;box-sizing:border-box;" placeholder="在此貼上資料（Tab 分隔或從截圖複製的文字）&#10;&#10;範例：&#10;AVGO&#9;55&#9;201.665&#9;403.75&#9;11,091.57&#9;22,206.25&#9;+11,114.68&#9;+100.21&#9;10.34%&#10;NVDA&#9;200&#9;132.327&#9;200.74&#9;26,465.34&#9;40,148.00&#9;+13,682.66&#9;+51.70&#9;18.69%"></textarea>
-    <div style="margin-top:12px;display:flex;gap:10px;">
-      <button class="btn-primary" onclick="parsePasteData()">&#128269; 解析並預覽</button>
-      <button class="btn-secondary" onclick="closePasteModal()">取消</button>
+
+    <!-- Tab switcher -->
+    <div style="display:flex;gap:0;margin-bottom:18px;border:1px solid var(--card-border);border-radius:8px;overflow:hidden;">
+      <button id="importTabImg" onclick="switchImportTab('img')" style="flex:1;padding:9px;font-size:13px;background:var(--accent);color:#000;border:none;cursor:pointer;font-weight:700;">&#128247; 上傳截圖</button>
+      <button id="importTabPaste" onclick="switchImportTab('paste')" style="flex:1;padding:9px;font-size:13px;background:var(--card);color:var(--text-secondary);border:none;cursor:pointer;">&#128203; 貼上文字</button>
+    </div>
+
+    <!-- Image upload panel -->
+    <div id="importPanelImg">
+      <div id="imgDropZone" onclick="document.getElementById('imgUploadInput').click()" ondragover="event.preventDefault()" ondrop="handleImgDrop(event)"
+        style="border:2px dashed var(--card-border);border-radius:12px;padding:32px;text-align:center;cursor:pointer;transition:border-color .2s;"
+        onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--card-border)'">
+        <div style="font-size:40px;margin-bottom:10px;">&#128247;</div>
+        <div style="font-size:14px;color:var(--text);font-weight:600;">點擊或拖曳截圖至此</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px;">支援 PNG / JPG / WebP｜建議截取整個持倉表格區域</div>
+        <input type="file" id="imgUploadInput" accept="image/*" style="display:none" onchange="handleImgUpload(event)">
+      </div>
+      <!-- OCR preview -->
+      <div id="imgPreviewWrap" style="display:none;margin-top:14px;">
+        <img id="imgPreviewEl" style="max-width:100%;border-radius:8px;border:1px solid var(--card-border);">
+        <div id="ocrStatus" style="margin-top:10px;font-size:13px;color:var(--accent);display:flex;align-items:center;gap:8px;">
+          <span id="ocrSpinner" style="display:inline-block;width:14px;height:14px;border:2px solid var(--accent);border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite;"></span>
+          <span id="ocrStatusText">正在辨識圖片...</span>
+        </div>
+        <div id="ocrRawWrap" style="display:none;margin-top:10px;">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">OCR 原始文字（可手動修正後再解析）：</div>
+          <textarea id="ocrRawText" style="width:100%;height:140px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;padding:10px;font-size:11px;color:var(--text);font-family:monospace;resize:vertical;box-sizing:border-box;"></textarea>
+          <button class="btn-primary" style="margin-top:8px;" onclick="parseOcrText()">&#128269; 解析 OCR 結果</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paste text panel -->
+    <div id="importPanelPaste" style="display:none;">
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:10px;">
+        從券商頁面複製持倉資料後貼入下方。欄位順序：<br>
+        <code style="background:rgba(45,212,168,.1);padding:2px 6px;border-radius:4px;font-size:12px;">代號 &nbsp;股數 &nbsp;單位成本 &nbsp;價格 &nbsp;成本 &nbsp;市值 &nbsp;盈虧$ &nbsp;盈虧% &nbsp;持倉佔比</code>
+      </p>
+      <textarea id="pasteArea" style="width:100%;height:200px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;padding:12px;font-size:12px;color:var(--text);font-family:monospace;resize:vertical;box-sizing:border-box;" placeholder="在此貼上資料（Tab 分隔）&#10;&#10;AVGO&#9;55&#9;201.665&#9;403.75&#9;11,091.57&#9;22,206.25&#9;+11,114.68&#9;+100.21&#9;10.34%&#10;NVDA&#9;200&#9;132.327&#9;200.74&#9;26,465.34&#9;40,148.00&#9;+13,682.66&#9;+51.70&#9;18.69%"></textarea>
+      <div style="margin-top:10px;display:flex;gap:10px;">
+        <button class="btn-primary" onclick="parsePasteData()">&#128269; 解析並預覽</button>
+      </div>
     </div>
     <!-- Preview area -->
     <div id="pastePreview" style="display:none;margin-top:20px;">
