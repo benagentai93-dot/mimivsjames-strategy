@@ -490,6 +490,24 @@
   #trkSummary > div:nth-child(2) { grid-template-columns:repeat(2,1fr) !important; }
 }
 
+
+/* K線劇本按鈕 */
+.kline-btn { padding:10px 8px; border-radius:8px; border:1px solid var(--card-border); background:var(--card-bg); color:var(--text); cursor:pointer; font-size:12px; line-height:1.6; text-align:center; transition:all .2s; width:100%; }
+.kline-btn span { display:block; font-size:11px; color:var(--muted); margin-top:2px; }
+.kline-btn:hover { border-color:var(--accent); }
+.kline-btn[data-type="attack"]:hover, .kline-btn[data-type="attack"].active { background:rgba(34,197,94,.1); border-color:var(--green); }
+.kline-btn[data-type="range"]:hover, .kline-btn[data-type="range"].active { background:rgba(245,158,11,.1); border-color:var(--orange); }
+.kline-btn[data-type="dist"]:hover, .kline-btn[data-type="dist"].active { background:rgba(239,68,68,.1); border-color:var(--red); }
+.kline-btn[data-type="neutral"]:hover, .kline-btn[data-type="neutral"].active { background:rgba(255,255,255,.06); border-color:var(--muted); }
+/* 估值階段按鈕 */
+.stage-sel-btn { padding:7px 16px; border-radius:20px; border:1px solid var(--card-border); background:var(--card-bg); color:var(--text); cursor:pointer; font-size:13px; transition:all .2s; }
+.stage-sel-btn:hover { border-color:var(--purple); color:var(--purple); }
+.stage-sel-btn.active { background:var(--purple); color:#fff; border-color:var(--purple); }
+@media (max-width:640px) {
+  #klineSelector { grid-template-columns:repeat(2,1fr) !important; }
+  .stage-sel-btn { font-size:12px; padding:6px 12px; }
+}
+
 </style>
 </head>
 <body>
@@ -993,6 +1011,112 @@
     此工具基於機構再平衡、1%風控公式與反馬丁策略設計。<br>
     核心概念：核心-衛星架構（70%+30%）| 估值護欄 | 盈利品質篩選 | 景氣循環輪動 | 嚴格曝險上限
   </div>
+
+  <!-- 估值四階段判斷 -->
+  <div class="card" style="margin-top:24px;border:2px solid rgba(139,92,246,.3);">
+    <div style="margin-bottom:16px;">
+      <h3 style="font-size:17px;margin:0 0 6px 0;">&#128202; 估值四階段判斷框架</h3>
+      <div style="font-size:12px;color:var(--muted);">先判斷公司處於哪個成長階段，再用對應的估值指標評估——用錯框架是散戶最常犯的錯誤</div>
+    </div>
+
+    <!-- 階段選擇按鈕 -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;" id="stageSelector">
+      <button class="stage-sel-btn active" onclick="showStage(1,this)">Stage 1 願景期</button>
+      <button class="stage-sel-btn" onclick="showStage(2,this)">Stage 2 營收爆發</button>
+      <button class="stage-sel-btn" onclick="showStage(3,this)">Stage 3 獲利驗證 ⚠️</button>
+      <button class="stage-sel-btn" onclick="showStage(4,this)">Stage 4 成熟獲利</button>
+    </div>
+
+    <!-- 各階段詳情 -->
+    <div id="stageDetail">
+      <!-- Stage 1 -->
+      <div id="stagePanel1" class="stage-panel">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:13px;">
+          <div style="padding:14px;border-radius:8px;background:rgba(59,130,246,.07);border-left:3px solid var(--blue);">
+            <div style="font-weight:700;color:var(--blue);margin-bottom:8px;">&#127775; 市場看什麼</div>
+            <div style="color:var(--text-secondary);line-height:1.8;">TAM（市場規模）<br>創辦人背景<br>技術可行性<br>「想像力定價」（本夢比）</div>
+          </div>
+          <div style="padding:14px;border-radius:8px;background:rgba(255,255,255,.03);border-left:3px solid var(--card-border);">
+            <div style="font-weight:700;margin-bottom:8px;">&#128240; 重要指標</div>
+            <div style="color:var(--text-secondary);line-height:1.8;">沒有營收也可以<br>EPS、現金流完全不重要<br>關注：市場空間、技術護城河<br>本夢比（P/Dream）</div>
+          </div>
+          <div style="padding:14px;border-radius:8px;background:rgba(239,68,68,.05);border-left:3px solid var(--red);">
+            <div style="font-weight:700;color:var(--red);margin-bottom:8px;">&#9888;&#65039; 風險</div>
+            <div style="color:var(--text-secondary);line-height:1.8;">純靠故事、估值無底線<br>適合小資金試探性持有<br>停損要設緊，別重押</div>
+          </div>
+        </div>
+      </div>
+      <!-- Stage 2 -->
+      <div id="stagePanel2" class="stage-panel" style="display:none;">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:13px;">
+          <div style="padding:14px;border-radius:8px;background:rgba(45,212,168,.07);border-left:3px solid var(--accent);">
+            <div style="font-weight:700;color:var(--accent);margin-bottom:8px;">&#127775; 市場看什麼</div>
+            <div style="color:var(--text-secondary);line-height:1.8;">營收成長率 YoY<br>訂單 Backlog<br>市佔率擴張速度<br>用 <strong>P/S</strong>（股價營收比）估值</div>
+          </div>
+          <div style="padding:14px;border-radius:8px;background:rgba(255,255,255,.03);border-left:3px solid var(--card-border);">
+            <div style="font-weight:700;margin-bottom:8px;">&#128240; 重要指標</div>
+            <div style="color:var(--text-secondary);line-height:1.8;">成長率愈高、P/S 倍數愈高<br>虧損和負現金流可容忍<br>關注：YoY 是否加速<br>成長來自本業 or 一次性？</div>
+          </div>
+          <div style="padding:14px;border-radius:8px;background:rgba(239,68,68,.05);border-left:3px solid var(--red);">
+            <div style="font-weight:700;color:var(--red);margin-bottom:8px;">&#9888;&#65039; 常見陷阱</div>
+            <div style="color:var(--text-secondary);line-height:1.8;">YoY 連兩季遞減 → 警戒訊號<br>QoQ 明顯轉負 → 週期拐點<br>市佔被侵蝕 → 換強勢同類股<br>主動下修預測 → 降持股</div>
+          </div>
+        </div>
+      </div>
+      <!-- Stage 3 -->
+      <div id="stagePanel3" class="stage-panel" style="display:none;">
+        <div style="padding:10px 14px;border-radius:8px;background:rgba(245,158,11,.08);border-left:3px solid var(--orange);margin-bottom:12px;font-size:13px;">
+          <strong style="color:var(--orange);">⚠️ 最危險的階段！</strong> 營收基數大了、成長率放緩，市場「突然切換評估標準」——散戶還用 Stage 2 框架看，就會誤判「為何營收成長股價卻跌」。
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:13px;">
+          <div style="padding:14px;border-radius:8px;background:rgba(245,158,11,.07);border-left:3px solid var(--orange);">
+            <div style="font-weight:700;color:var(--orange);margin-bottom:8px;">&#127775; 市場看什麼</div>
+            <div style="color:var(--text-secondary);line-height:1.8;">EPS 趨勢（是否轉正？）<br>毛利率（護城河驗證）<br>自由現金流 FCF<br>商業模式能否獲利？</div>
+          </div>
+          <div style="padding:14px;border-radius:8px;background:rgba(255,255,255,.03);border-left:3px solid var(--card-border);">
+            <div style="font-weight:700;margin-bottom:8px;">&#128240; 核心指標</div>
+            <div style="color:var(--text-secondary);line-height:1.8;">EPS 是否由負轉正<br>毛利率變化率（QoQ/YoY）<br>FCF Margin &gt; 10%？<br>資本支出佔比合理？</div>
+          </div>
+          <div style="padding:14px;border-radius:8px;background:rgba(239,68,68,.05);border-left:3px solid var(--red);">
+            <div style="font-weight:700;color:var(--red);margin-bottom:8px;">&#9888;&#65039; 出場訊號</div>
+            <div style="color:var(--text-secondary);line-height:1.8;">毛利率下滑 + ROIC 轉弱<br>+ FCF 轉負 → <strong style="color:var(--red);">基本面轉折</strong><br>應優先結構性減碼或退出</div>
+          </div>
+        </div>
+      </div>
+      <!-- Stage 4 -->
+      <div id="stagePanel4" class="stage-panel" style="display:none;">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:13px;">
+          <div style="padding:14px;border-radius:8px;background:rgba(34,197,94,.07);border-left:3px solid var(--green);">
+            <div style="font-weight:700;color:var(--green);margin-bottom:8px;">&#127775; 市場看什麼</div>
+            <div style="color:var(--text-secondary);line-height:1.8;">P/E、DCF 傳統估值<br>「賺錢速度能否維持或擴張？」<br>股息政策 / 回購能力<br>如 META、GOOG、MSFT</div>
+          </div>
+          <div style="padding:14px;border-radius:8px;background:rgba(255,255,255,.03);border-left:3px solid var(--card-border);">
+            <div style="font-weight:700;margin-bottom:8px;">&#128240; 核心指標</div>
+            <div style="color:var(--text-secondary);line-height:1.8;">
+              <strong>PEG &lt; 1</strong> 便宜 ｜ ≈1 合理 ｜ &gt;2 過熱<br>
+              <strong>ROE</strong> 高 → 有效替股東創造回報<br>
+              <strong>ROIC &gt; 10%</strong>（且 &gt; WACC）<br>
+              <strong>FCF Yield</strong> 穩定成長
+            </div>
+          </div>
+          <div style="padding:14px;border-radius:8px;background:rgba(139,92,246,.05);border-left:3px solid var(--purple);">
+            <div style="font-weight:700;color:var(--purple);margin-bottom:8px;">&#9989; 長線持有條件</div>
+            <div style="color:var(--text-secondary);line-height:1.8;">估值百分位 &lt; 80%<br>ROIC &gt; WACC 持續<br>FCF Margin &gt; 10%<br>毛利率持平或上升</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 估值護欄提醒 -->
+    <div style="margin-top:14px;padding:12px;border-radius:8px;background:rgba(255,255,255,.03);font-size:12px;color:var(--muted);line-height:1.8;">
+      &#128161; <strong style="color:var(--text);">估值護欄：</strong>
+      P/E、EV/EBITDA、P/S 高於近十年 80% 分位 → 估值過熱，停止加碼。
+      低於 40% 分位 + 基本面穩健 → 逢低加碼良機。
+      <strong style="color:var(--orange);">EPS 可被「會計處理、股份回購」操控，必須搭配 PEG、ROE、ROIC 進階指標驗證。</strong>
+    </div>
+  </div>
+
+
 </div>
 
 <!-- TAB 3: 部位與停損計算 -->
@@ -2218,6 +2342,128 @@
     <h2>&#128200; 財報後 AVWAP 應用 (Anchored VWAP)</h2>
     <p>財報公布後的第一週是機構「定錨成本」的關鍵時間窗口。<strong style="color:var(--accent)">Anchored VWAP（錨定成交量加權均價）</strong>以財報日為起點，計算機構平均進場成本線，是判斷「多空防線」最精準的工具。股價站上 AVWAP = 機構獲利 = 強多頭；跌破 AVWAP = 機構虧損 = 多頭潰散。</p>
   </div>
+
+  <!-- 財報四象限 + PEAD 時間軸 -->
+  <div class="card" style="margin-bottom:24px;border:2px solid rgba(45,212,168,.3);">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px;">
+      <h3 style="font-size:17px;margin:0;">&#127919; 財報四象限篩選 + PEAD 操作時間軸</h3>
+      <div style="font-size:12px;color:var(--muted);">打破「利多出盡」迷思：EPS 上修速度快於股價漲幅時，跳空大漲是「估值修復」的開始</div>
+    </div>
+
+    <!-- 四象限篩選 -->
+    <div style="margin-bottom:20px;">
+      <div style="font-weight:700;font-size:14px;margin-bottom:12px;">&#9633; SUE × RVol 四象限篩選</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">
+        <strong style="color:var(--text);">SUE</strong>（標準化預期外盈餘）= 財報驚喜強度 ｜
+        <strong style="color:var(--text);">RVol</strong>（相對成交量）= 機構參與度，財報日成交量 ÷ 30日均量（目標 &gt; 3×）
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;border:1px solid var(--card-border);border-radius:10px;overflow:hidden;">
+        <!-- Header row -->
+        <div style="grid-column:1/-1;display:grid;grid-template-columns:120px 1fr 1fr;background:rgba(255,255,255,.04);">
+          <div style="padding:10px 12px;font-size:12px;color:var(--muted);border-right:1px solid var(--card-border);display:flex;align-items:center;">SUE \ RVol</div>
+          <div style="padding:10px 12px;text-align:center;font-weight:700;font-size:13px;border-right:1px solid var(--card-border);color:var(--green);">高 RVol (&gt; 3×)</div>
+          <div style="padding:10px 12px;text-align:center;font-weight:700;font-size:13px;color:var(--muted);">低 RVol (&lt; 3×)</div>
+        </div>
+        <!-- Row 1: 高 SUE -->
+        <div style="grid-column:1/-1;display:grid;grid-template-columns:120px 1fr 1fr;border-top:1px solid var(--card-border);">
+          <div style="padding:14px 12px;font-weight:700;font-size:13px;color:var(--green);border-right:1px solid var(--card-border);display:flex;align-items:center;">高 SUE<br><span style="font-weight:400;font-size:11px;color:var(--muted);">EPS 大幅超預期</span></div>
+          <div style="padding:14px 12px;border-right:1px solid var(--card-border);background:rgba(34,197,94,.06);">
+            <div style="font-weight:700;color:var(--green);margin-bottom:6px;">&#127881; 強力買進</div>
+            <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;">最佳 PEAD 候選。機構大量進場，動能強。Day 2-5 等 AVWAP 回測不破即進場。</div>
+          </div>
+          <div style="padding:14px 12px;">
+            <div style="font-weight:700;color:var(--accent);margin-bottom:6px;">&#128064; 觀察等補量</div>
+            <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;">財報好但機構未大量進場。耐心等量能放大，再確認進場。</div>
+          </div>
+        </div>
+        <!-- Row 2: 低 SUE -->
+        <div style="grid-column:1/-1;display:grid;grid-template-columns:120px 1fr 1fr;border-top:1px solid var(--card-border);">
+          <div style="padding:14px 12px;font-weight:700;font-size:13px;color:var(--red);border-right:1px solid var(--card-border);display:flex;align-items:center;">低 SUE<br><span style="font-weight:400;font-size:11px;color:var(--muted);">EPS 符合或未達預期</span></div>
+          <div style="padding:14px 12px;border-right:1px solid var(--card-border);background:rgba(239,68,68,.04);">
+            <div style="font-weight:700;color:var(--orange);margin-bottom:6px;">&#9888;&#65039; 誘多陷阱</div>
+            <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;">財報差但量大，可能是主力借消息出貨。量大價跌 = 主力砸盤，別接刀。</div>
+          </div>
+          <div style="padding:14px 12px;">
+            <div style="font-weight:700;color:var(--muted);margin-bottom:6px;">&#10060; 忽略</div>
+            <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;">財報差又沒量，無操作價值，直接跳過。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 進場三重確認 -->
+      <div style="margin-top:14px;padding:12px;border-radius:8px;background:rgba(45,212,168,.06);border-left:3px solid var(--accent);font-size:13px;line-height:1.8;">
+        <strong style="color:var(--accent);">進場三重確認（同時滿足才進）：</strong>
+        財報驚喜度高（高 SUE）<span style="color:var(--muted);margin:0 6px;">+</span>
+        機構參與度高（RVol &gt; 3×）<span style="color:var(--muted);margin:0 6px;">+</span>
+        缺口未補（結構強勢）
+      </div>
+    </div>
+
+    <!-- PEAD 操作時間軸 -->
+    <div>
+      <div style="font-weight:700;font-size:14px;margin-bottom:14px;">&#128336; PEAD 操作時間軸（財報後漂移行情）</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+        <!-- Day 0 -->
+        <div style="padding:14px;border-radius:10px;border:1px solid var(--card-border);border-top:3px solid var(--muted);">
+          <div style="font-weight:700;font-size:13px;color:var(--muted);margin-bottom:8px;">Day 0　財報日</div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+            &#10006; <strong>不追價</strong><br>
+            這是提前承擔風險者的獲利日。<br>
+            空手者先觀察：<br>
+            &#8226; 跳空幅度 &gt; 2× ATR？<br>
+            &#8226; RVol &gt; 3×？<br>
+            &#8226; 收在 K 棒上 1/3？<br>
+            &#8226; 缺口守住？
+          </div>
+        </div>
+        <!-- Day 2-5 -->
+        <div style="padding:14px;border-radius:10px;border:1px solid var(--card-border);border-top:3px solid var(--blue);">
+          <div style="font-weight:700;font-size:13px;color:var(--blue);margin-bottom:8px;">Day 2–5　埋伏期</div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+            等待籌碼清洗訊號：<br>
+            &#8226; 量能收斂（D0爆量的 1/2~1/3）<br>
+            &#8226; K棒實體縮小、ATR 收斂<br>
+            &#8226; 形成「高位旗型」或「杯形」<br>
+            &#8226; 缺口未補（最重要！）
+          </div>
+        </div>
+        <!-- 狙擊期 -->
+        <div style="padding:14px;border-radius:10px;border:1px solid rgba(45,212,168,.4);border-top:3px solid var(--accent);background:rgba(45,212,168,.04);">
+          <div style="font-weight:700;font-size:13px;color:var(--accent);margin-bottom:8px;">狙擊期　進場點</div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+            <strong style="color:var(--accent);">保守型：</strong>量縮回測 AVWAP 中線不破，出現長下影線<br><br>
+            <strong style="color:var(--accent);">積極型：</strong>帶量突破整理區間高點（旗型上緣）<br><br>
+            初始倉位 <strong>50%</strong>
+          </div>
+        </div>
+        <!-- 風控 + 加碼 -->
+        <div style="padding:14px;border-radius:10px;border:1px solid var(--card-border);border-top:3px solid var(--purple);">
+          <div style="font-weight:700;font-size:13px;color:var(--purple);margin-bottom:8px;">加碼 &amp; 風控</div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+            <strong>金字塔加倉：</strong><br>
+            50% → 突破新高 +30% → +20%<br><br>
+            <strong style="color:var(--red);">停損：</strong><br>
+            跌破 AVWAP × 0.97（3%濾網）<br>或跌破跳空當日低點<br><br>
+            <strong>移動停損：</strong><br>
+            漲幅 &gt; 10% 後改用 8/10 EMA
+          </div>
+        </div>
+      </div>
+
+      <!-- 市場環境判斷 -->
+      <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;">
+        <div style="padding:12px;border-radius:8px;background:rgba(34,197,94,.07);border-left:3px solid var(--green);">
+          <strong style="color:var(--green);">&#9989; 最佳環境（PEAD 勝率 &gt; 80%）</strong><br>
+          <span style="color:var(--text-secondary);">SPY / QQQ 都在 20MA 之上，市場寬度健康 → 可重倉出擊，積極追價</span>
+        </div>
+        <div style="padding:12px;border-radius:8px;background:rgba(239,68,68,.07);border-left:3px solid var(--red);">
+          <strong style="color:var(--red);">&#9888;&#65039; 熊市/震盪市（PEAD 勝率 &lt; 40%）</strong><br>
+          <span style="color:var(--text-secondary);">SPY 跌破均線，VIX 飆高 → 部位縮至 1/3，嚴格風控，寧願少賺不要多賠</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <div class="grid-2">
     <!-- LEFT: 輸入 -->
@@ -4213,6 +4459,59 @@ updateRiskSlider();
     <p>1~7天短線系統化操作流程。以動能（勢）為核心，量價結構為依據，嚴守R:R≥2:1，每筆最多虧損總資金1~2%。短線重「勢」不重「質」，不用情緒，用系統。</p>
   </div>
 
+  <!-- 開盤三根K線劇本判斷 -->
+  <div class="card" style="margin-bottom:24px;border:2px solid rgba(59,130,246,.35);">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px;">
+      <h3 style="font-size:17px;margin:0;">&#127932; 開盤三根 K 線劇本判斷</h3>
+      <div style="font-size:12px;color:var(--muted);">開盤後第一根5分K = 情緒試探｜第二根 = 修正對抗｜第三根 = 共識確認</div>
+    </div>
+
+    <!-- K線選擇器 -->
+    <div style="margin-bottom:16px;">
+      <div style="font-size:13px;font-weight:700;margin-bottom:10px;">選擇觀察到的K線顏色組合：</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;" id="klineSelector">
+        <!-- 進攻盤 (3組) -->
+        <button class="kline-btn" onclick="showPlaybook('rrrr')" data-type="attack">&#128308; &#128308; &#128308;<br><span>強勢單邊</span></button>
+        <button class="kline-btn" onclick="showPlaybook('brrr')" data-type="attack">&#9899; &#128308; &#128308;<br><span>測試後推升</span></button>
+        <!-- 震盪盤 (4組) -->
+        <button class="kline-btn" onclick="showPlaybook('brbr')" data-type="range">&#9899; &#128308; &#9899;<br><span>來回測試</span></button>
+        <button class="kline-btn" onclick="showPlaybook('rbrr')" data-type="range">&#128308; &#9899; &#128308;<br><span>假轉強站不回</span></button>
+        <button class="kline-btn" onclick="showPlaybook('bbrr')" data-type="range">&#9899; &#9899; &#128308;<br><span>跌後承接測試</span></button>
+        <!-- 出貨盤 (3組) -->
+        <button class="kline-btn" onclick="showPlaybook('rbbr')" data-type="dist">&#128308; &#9899; &#9899;<br><span>高位震盪出貨</span></button>
+        <button class="kline-btn" onclick="showPlaybook('rrbr')" data-type="dist">&#128308; &#128308; &#9899;<br><span>漲後高檔轉弱</span></button>
+        <!-- 無方向 (1組) -->
+        <button class="kline-btn" onclick="showPlaybook('orbr')" data-type="neutral">&#9898; &#128308;/&#9899; &#9898;<br><span>ORH/ORL 雙掃</span></button>
+      </div>
+    </div>
+
+    <!-- 劇本結果顯示 -->
+    <div id="playbookResult" style="display:none;padding:16px;border-radius:10px;border:1px solid var(--card-border);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+        <span id="playbookTag" style="font-size:12px;font-weight:700;padding:4px 12px;border-radius:12px;"></span>
+        <span id="playbookTitle" style="font-size:16px;font-weight:700;"></span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;font-size:13px;">
+        <div>
+          <div style="font-weight:700;color:var(--accent);margin-bottom:6px;">&#127919; 操作策略</div>
+          <div id="playbookStrategy" style="color:var(--text-secondary);line-height:1.8;"></div>
+        </div>
+        <div>
+          <div style="font-weight:700;color:var(--red);margin-bottom:6px;">&#128721; 停損位置</div>
+          <div id="playbookStop" style="color:var(--text-secondary);line-height:1.8;"></div>
+        </div>
+      </div>
+      <div id="playbookNote" style="margin-top:12px;padding:10px;border-radius:8px;font-size:12px;line-height:1.7;"></div>
+    </div>
+
+    <!-- ORB 說明 -->
+    <div style="margin-top:14px;padding:12px;border-radius:8px;background:rgba(255,255,255,.03);font-size:12px;color:var(--muted);line-height:1.8;">
+      <strong style="color:var(--text);">ORB（Opening Range Breakout）</strong>：開盤後 30 分鐘形成的價格區間。
+      有效突破 = K線實體站上/跌破 ORH/ORL <strong>+</strong> 量能帶動前進（非卡在邊界）。<br>
+      影線掃到 ORH/ORL 但收回區間 = 流動性獵殺，無方向共識，<strong>禁止留倉隔日沖</strong>。
+    </div>
+  </div>
+
   <!-- 盤前準備 -->
   <div class="card" style="margin-bottom:20px;">
     <h3 style="margin-bottom:16px;font-size:17px;">&#9728; 盤前準備清單（每日必做）</h3>
@@ -4875,6 +5174,73 @@ function trkCalc() {
   } else {
     summary.style.display = 'none';
   }
+}
+
+
+/* ── 開盤K線劇本 ── */
+var PLAYBOOKS = {
+  rrrr: { type:'attack', title:'強勢單邊推升', tag:'進攻盤', tagBg:'rgba(34,197,94,.15)', tagColor:'var(--green)',
+    strategy:'等第一次回踩做順勢交易。不要開盤就追，等短暫整理或 VWAP 回測不破後進場。',
+    stop:'最近一次回踩低點 或 趨勢結構的關鍵支撐。',
+    note:'典型主力劇本：強開強走。風險在開盤乖離過大，等回踩才是高勝率切入點。', noteBg:'rgba(34,197,94,.06)' },
+  brrr: { type:'attack', title:'測試後再推升', tag:'進攻盤', tagBg:'rgba(34,197,94,.15)', tagColor:'var(--green)',
+    strategy:'第一根陰線是洗盤，第二、三根紅 K 確認多頭接管。等第三根站穩後跟進。',
+    stop:'第一根陰線的低點下方 0.5% 或 ORB 區間下緣。',
+    note:'黑→紅→紅 是經典的「洗盤後啟動」，進場點在第二根紅K收盤或第三根放量突破前高。', noteBg:'rgba(34,197,94,.06)' },
+  brbr: { type:'range', title:'來回測試（震盪盤）', tag:'震盪盤', tagBg:'rgba(245,158,11,.15)', tagColor:'var(--orange)',
+    strategy:'上緣偏空，下緣偏多。只做邊緣，不做中間。量小、快進快出。',
+    stop:'區間上緣外側（做空）/ 區間下緣外側（做多）。',
+    note:'震盪盤訊號失真，技術指標容易假交叉。少做、用箱型戰法，不加碼。', noteBg:'rgba(245,158,11,.06)' },
+  rbrr: { type:'range', title:'假轉強站不回（震盪盤）', tag:'震盪盤', tagBg:'rgba(245,158,11,.15)', tagColor:'var(--orange)',
+    strategy:'開高走低後反彈，但站不回前高，警惕假多頭。輕倉或觀望，等方向明確。',
+    stop:'跌破當日最高點對應的回踩低點。',
+    note:'紅→黑→紅，第二根大黑K是主力出貨訊號。等第三根真站回前高再決定方向。', noteBg:'rgba(245,158,11,.06)' },
+  bbrr: { type:'range', title:'跌後承接測試（震盪盤）', tag:'震盪盤', tagBg:'rgba(245,158,11,.15)', tagColor:'var(--orange)',
+    strategy:'連兩根陰後出現紅K，測試承接是否成立。等第三根紅K放量確認後輕倉。',
+    stop:'兩根陰K的最低點下方。',
+    note:'黑→黑→紅 不確定性高，必須等量能配合，不宜重押。', noteBg:'rgba(245,158,11,.06)' },
+  rbbr: { type:'dist', title:'高位震盪出貨', tag:'出貨盤，不做', tagBg:'rgba(239,68,68,.15)', tagColor:'var(--red)',
+    strategy:'不做多。若有持倉考慮減碼或出清。',
+    stop:'N/A — 出貨盤不進場。若已持有：跌破突破K低點出清。',
+    note:'紅→黑→黑 是主力在高位派發，散戶追高接盤的訊號。避免進場，有倉位要減。', noteBg:'rgba(239,68,68,.06)' },
+  rrbr: { type:'dist', title:'漲後高檔轉弱', tag:'出貨盤，不做', tagBg:'rgba(239,68,68,.15)', tagColor:'var(--red)',
+    strategy:'不做多。最後一根大陰K確認動能耗竭，空手等待。',
+    stop:'N/A — 出貨盤不進場。若已持有：第三根陰K實體收盤即出清。',
+    note:'紅→紅→黑 是「兩段拉升後獲利了結」，開盤強勢為誘多，第三根轉弱確認。', noteBg:'rgba(239,68,68,.06)' },
+  orbr: { type:'neutral', title:'ORH/ORL 雙掃（無方向）', tag:'無方向，禁止留倉', tagBg:'rgba(255,255,255,.08)', tagColor:'var(--muted)',
+    strategy:'禁止進場！等待方向確認後再決策。改看日線或四小時線大方向。',
+    stop:'N/A — 無方向盤禁止操作。',
+    note:'上下影線都很長，收在中間 = 主力多空雙巴獵殺流動性。嚴禁留倉隔日沖，等市場表態。', noteBg:'rgba(255,255,255,.04)' }
+};
+function showPlaybook(key) {
+  var p = PLAYBOOKS[key];
+  if (!p) return;
+  document.querySelectorAll('.kline-btn').forEach(function(b) { b.classList.remove('active'); });
+  event.currentTarget.classList.add('active');
+  var res = document.getElementById('playbookResult');
+  var tag = document.getElementById('playbookTag');
+  tag.textContent = p.tag;
+  tag.style.background = p.tagBg;
+  tag.style.color = p.tagColor;
+  document.getElementById('playbookTitle').textContent = p.title;
+  document.getElementById('playbookStrategy').innerHTML = p.strategy;
+  document.getElementById('playbookStop').innerHTML = p.stop;
+  var note = document.getElementById('playbookNote');
+  note.textContent = p.note;
+  note.style.background = p.noteBg;
+  note.style.color = 'var(--text-secondary)';
+  res.style.borderColor = p.tagColor;
+  res.style.background = p.noteBg;
+  res.style.display = '';
+}
+
+/* ── 估值四階段 ── */
+function showStage(n, btn) {
+  for (var i = 1; i <= 4; i++) {
+    document.getElementById('stagePanel'+i).style.display = i===n ? '' : 'none';
+  }
+  document.querySelectorAll('.stage-sel-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
 }
 
 </script>
