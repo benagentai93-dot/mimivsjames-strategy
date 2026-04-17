@@ -474,6 +474,22 @@
 .hd-search-inline { width:100%; padding:9px 13px; font-size:14px; border-radius:8px; border:1px solid var(--card-border); background:var(--card-bg); color:var(--text); box-sizing:border-box; outline:none; }
 .hd-search-inline:focus { border-color:var(--accent); }
 
+
+/* 進場前清單 */
+.chk-row { display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:8px; cursor:pointer; border:1px solid var(--card-border); background:var(--card-bg); transition:background .15s,border-color .15s; font-size:13px; }
+.chk-row:hover { background:rgba(255,255,255,.04); }
+.chk-row:has(.chk-box:checked) { background:rgba(45,212,168,.08); border-color:rgba(45,212,168,.4); }
+.chk-box { accent-color:var(--accent); width:15px; height:15px; flex-shrink:0; cursor:pointer; }
+.chk-label { line-height:1.4; }
+/* ATR + Tracker */
+.trk-stage { transition:opacity .3s,border-color .3s; }
+.trk-stage.active { opacity:1 !important; border-color:var(--accent) !important; }
+@media (max-width:640px) {
+  #checklistItems { grid-template-columns:1fr !important; }
+  #trkStages { grid-template-columns:1fr !important; }
+  #trkSummary > div:nth-child(2) { grid-template-columns:repeat(2,1fr) !important; }
+}
+
 </style>
 </head>
 <body>
@@ -1039,6 +1055,48 @@
         <p>可使用前一波低點、重要均線(10MA/20MA) 或使用 ATR × 1~1.5 倍來設定你的容忍波動區間。</p>
       </div>
     </div>
+      <!-- ATR 停損計算 -->
+      <div style="margin-top:18px;border-top:1px solid var(--card-border);padding-top:16px;">
+        <div class="form-title" style="margin-bottom:12px;"><span class="icon">&#9889;</span> ATR 自動計算停損價</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>ATR 值（14日平均波動）</label>
+            <input type="number" id="atrValue" placeholder="如 3.5" step="0.01" oninput="calcATRStop()">
+          </div>
+          <div class="form-group">
+            <label>ATR 倍數</label>
+            <select id="atrMult" onchange="calcATRStop()" style="background:var(--card-bg);color:var(--text);border:1px solid var(--card-border);border-radius:6px;padding:8px 10px;width:100%;font-size:14px;">
+              <option value="0.5">0.5× （保守，箱型整理）</option>
+              <option value="1" selected>1×（標準波段）</option>
+              <option value="1.5">1.5×（給市場空間）</option>
+              <option value="2">2×（寬鬆，大波動股）</option>
+            </select>
+          </div>
+        </div>
+        <div id="atrResult" style="display:none;margin-top:10px;padding:12px;border-radius:8px;background:rgba(45,212,168,.08);border:1px solid rgba(45,212,168,.25);">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;font-size:13px;">
+            <div>
+              <div style="color:var(--muted);margin-bottom:3px;">計算停損價</div>
+              <div id="atrStopPrice" style="font-size:17px;font-weight:700;color:var(--red);">—</div>
+            </div>
+            <div>
+              <div style="color:var(--muted);margin-bottom:3px;">停損幅度</div>
+              <div id="atrStopPct" style="font-size:17px;font-weight:700;color:var(--orange);">—</div>
+            </div>
+            <div>
+              <div style="color:var(--muted);margin-bottom:3px;">股性判斷</div>
+              <div id="atrVolTag" style="font-size:13px;font-weight:700;padding:3px 8px;border-radius:12px;display:inline-block;">—</div>
+            </div>
+          </div>
+          <button onclick="applyATRStop()" style="margin-top:10px;width:100%;padding:8px;background:var(--accent);color:#0f1923;border:none;border-radius:6px;font-weight:700;cursor:pointer;font-size:13px;">
+            &#8595; 套用此停損價至計算機
+          </button>
+        </div>
+        <div style="margin-top:8px;font-size:12px;color:var(--muted);">
+          波動分類：ATR/股價 &gt; 3% = 大波動（縮小倉位）｜1-3% = 標準｜&lt; 1% = 低波動（可放大倉位）
+        </div>
+      </div>
+
     <div class="pyramid-card">
       <div class="pyramid-title">&#127760; 反馬丁金字塔加倉計畫 (50-30-20)</div>
       <div id="pyramidContent">
@@ -1047,7 +1105,126 @@
         </div>
       </div>
     </div>
+
+  <!-- 反馬丁加倉追蹤器 -->
+  <div class="card" style="margin-top:20px;">
+    <div class="form-title"><span class="icon">&#127919;</span> 反馬丁四階段加倉追蹤器</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">依據心得 SOP：試單40% → 加倉30% → 補倉20% → 最後10%（行情強時）</div>
+
+    <div class="form-row" style="margin-bottom:12px;">
+      <div class="form-group">
+        <label>總預計投入資金 ($)</label>
+        <input type="number" id="trk_total" placeholder="如 10000" step="0.01" oninput="trkCalc()">
+      </div>
+      <div class="form-group">
+        <label>股票代號（選填）</label>
+        <input type="text" id="trk_ticker" placeholder="如 NVDA" style="text-transform:uppercase">
+      </div>
+    </div>
+
+    <div class="form-row" style="margin-bottom:16px;">
+      <div class="form-group">
+        <label>第一筆買入價 ($)</label>
+        <input type="number" id="trk_entry1" placeholder="如 100" step="0.01" oninput="trkCalc()">
+      </div>
+      <div class="form-group">
+        <label>初始停損價 ($)</label>
+        <input type="number" id="trk_stop1" placeholder="如 97" step="0.01" style="border-color:var(--red)" oninput="trkCalc()">
+      </div>
+    </div>
+
+    <!-- 四階段卡片 -->
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px;" id="trkStages">
+      <!-- Stage 1 -->
+      <div class="trk-stage" id="trkS1" style="border-radius:10px;border:1px solid var(--card-border);padding:14px;opacity:1;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div style="font-weight:700;font-size:14px;">&#9312; 試單 <span style="color:var(--accent);">40%</span></div>
+          <div id="trkS1badge" style="font-size:11px;padding:2px 8px;border-radius:10px;background:rgba(45,212,168,.15);color:var(--accent);">待進場</div>
+        </div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.9;" id="trkS1detail">輸入參數後自動計算</div>
+        <div style="margin-top:8px;font-size:12px;color:var(--text-secondary);">
+          <strong>觸發條件：</strong>股價站回關鍵線，停損設在線下 1%
+        </div>
+      </div>
+      <!-- Stage 2 -->
+      <div class="trk-stage" id="trkS2" style="border-radius:10px;border:1px solid var(--card-border);padding:14px;opacity:0.5;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div style="font-weight:700;font-size:14px;">&#9313; 加倉 <span style="color:var(--blue);">30%</span></div>
+          <div id="trkS2badge" style="font-size:11px;padding:2px 8px;border-radius:10px;background:rgba(59,130,246,.12);color:var(--blue);">等訊號</div>
+        </div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.9;" id="trkS2detail">需輸入第二次買入價</div>
+        <div style="margin-top:6px;">
+          <input type="number" id="trk_entry2" placeholder="第二次買入價 $" step="0.01" oninput="trkCalc()" style="width:100%;padding:6px 8px;font-size:12px;border-radius:6px;border:1px solid var(--card-border);background:var(--card-bg);color:var(--text);">
+        </div>
+        <div style="margin-top:6px;font-size:12px;color:var(--text-secondary);">
+          <strong>觸發條件：</strong>有效突破，成交量配合，停損上移至新支撐
+        </div>
+      </div>
+      <!-- Stage 3 -->
+      <div class="trk-stage" id="trkS3" style="border-radius:10px;border:1px solid var(--card-border);padding:14px;opacity:0.5;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div style="font-weight:700;font-size:14px;">&#9314; 補倉 <span style="color:var(--orange);">20%</span></div>
+          <div id="trkS3badge" style="font-size:11px;padding:2px 8px;border-radius:10px;background:rgba(245,158,11,.12);color:var(--orange);">等訊號</div>
+        </div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.9;" id="trkS3detail">需輸入第三次買入價</div>
+        <div style="margin-top:6px;">
+          <input type="number" id="trk_entry3" placeholder="第三次買入價 $" step="0.01" oninput="trkCalc()" style="width:100%;padding:6px 8px;font-size:12px;border-radius:6px;border:1px solid var(--card-border);background:var(--card-bg);color:var(--text);">
+        </div>
+        <div style="margin-top:6px;font-size:12px;color:var(--text-secondary);">
+          <strong>觸發條件：</strong>回踩支撐不破，量縮再上攻，停損抬至回踩低點下方
+        </div>
+      </div>
+      <!-- Stage 4 -->
+      <div class="trk-stage" id="trkS4" style="border-radius:10px;border:1px solid var(--card-border);padding:14px;opacity:0.5;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div style="font-weight:700;font-size:14px;">&#9315; 最後一擊 <span style="color:var(--purple);">10%</span></div>
+          <div id="trkS4badge" style="font-size:11px;padding:2px 8px;border-radius:10px;background:rgba(139,92,246,.12);color:var(--purple);">等訊號</div>
+        </div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.9;" id="trkS4detail">需輸入第四次買入價</div>
+        <div style="margin-top:6px;">
+          <input type="number" id="trk_entry4" placeholder="第四次買入價 $" step="0.01" oninput="trkCalc()" style="width:100%;padding:6px 8px;font-size:12px;border-radius:6px;border:1px solid var(--card-border);background:var(--card-bg);color:var(--text);">
+        </div>
+        <div style="margin-top:6px;font-size:12px;color:var(--text-secondary);">
+          <strong>觸發條件：</strong>行情強，四關全過（趨勢/量/強弱/環境）。可改用 Call Option
+        </div>
+      </div>
+    </div>
+
+    <!-- 彙總面板 -->
+    <div id="trkSummary" style="display:none;padding:14px;border-radius:10px;background:rgba(45,212,168,.07);border:1px solid rgba(45,212,168,.2);">
+      <div style="font-weight:700;font-size:14px;margin-bottom:12px;color:var(--accent);">&#128202; 加倉彙總</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:13px;">
+        <div>
+          <div style="color:var(--muted);margin-bottom:3px;">目前總倉位</div>
+          <div id="trkTotalPct" style="font-size:18px;font-weight:700;color:var(--accent);">—</div>
+        </div>
+        <div>
+          <div style="color:var(--muted);margin-bottom:3px;">加權平均成本</div>
+          <div id="trkAvgCost" style="font-size:18px;font-weight:700;">—</div>
+        </div>
+        <div>
+          <div style="color:var(--muted);margin-bottom:3px;">總投入金額</div>
+          <div id="trkTotalInvested" style="font-size:18px;font-weight:700;">—</div>
+        </div>
+        <div>
+          <div style="color:var(--muted);margin-bottom:3px;">現價輸入（查P&L）</div>
+          <input type="number" id="trk_current" placeholder="當前價 $" step="0.01" oninput="trkCalc()" style="padding:6px 8px;font-size:13px;border-radius:6px;border:1px solid var(--card-border);background:var(--card-bg);color:var(--text);width:100%;">
+        </div>
+        <div>
+          <div style="color:var(--muted);margin-bottom:3px;">未實現損益</div>
+          <div id="trkPnL" style="font-size:18px;font-weight:700;">—</div>
+        </div>
+        <div>
+          <div style="color:var(--muted);margin-bottom:3px;">損益率</div>
+          <div id="trkPnLPct" style="font-size:18px;font-weight:700;">—</div>
+        </div>
+      </div>
+      <div style="margin-top:10px;padding:8px;border-radius:6px;background:rgba(239,68,68,.07);font-size:12px;color:var(--text-secondary);">
+        &#128681; <strong>紀律提醒：</strong>加碼前必須確認「有賺錢、技術面有新訊號、資金有餘裕」三件事都成立。嚴禁虧損時向下攤平。
+      </div>
+    </div>
   </div>
+
 </div>
 
 <!-- TAB 6: 交易SOP -->
@@ -1055,6 +1232,70 @@
   <div class="banner">
     <h2>&#128203; 完整交易SOP流程</h2>
     <p>從選股、進場到出場的系統化操作流程。每筆交易都依循這套 SOP，用紀律取代情緒，用系統取代直覺。先問長線或短線？再決定週期與策略。</p>
+
+  <!-- 進場前自我審問清單 -->
+  <div class="card" style="margin-bottom:24px;border:2px solid var(--accent);background:rgba(45,212,168,.04);">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+      <h3 style="font-size:17px;margin:0;">&#128064; 進場前自我審問清單</h3>
+      <div id="checklistStatus" style="font-size:13px;font-weight:700;padding:6px 14px;border-radius:20px;background:rgba(239,68,68,.12);color:var(--red);">
+        &#10060; 尚未完成所有檢核
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;" id="checklistItems">
+      <!-- Row 1 -->
+      <label class="chk-row" onclick="updateChecklist()">
+        <input type="checkbox" class="chk-box" id="chk1">
+        <span class="chk-label">&#128200; 日線趨勢向上（均線多頭排列）</span>
+      </label>
+      <label class="chk-row" onclick="updateChecklist()">
+        <input type="checkbox" class="chk-box" id="chk2">
+        <span class="chk-label">&#128293; 突破有量能確認（≥ 1~1.5倍均量）</span>
+      </label>
+      <!-- Row 2 -->
+      <label class="chk-row" onclick="updateChecklist()">
+        <input type="checkbox" class="chk-box" id="chk3">
+        <span class="chk-label">&#9878;&#65039; 盈虧比 ≥ 2:1（先算才進）</span>
+      </label>
+      <label class="chk-row" onclick="updateChecklist()">
+        <input type="checkbox" class="chk-box" id="chk4">
+        <span class="chk-label">&#128737;&#65039; 單筆風險 ≤ 總資金 1~2%</span>
+      </label>
+      <!-- Row 3 -->
+      <label class="chk-row" onclick="updateChecklist()">
+        <input type="checkbox" class="chk-box" id="chk5">
+        <span class="chk-label">&#128203; 停損位置已確定（進場前就設好）</span>
+      </label>
+      <label class="chk-row" onclick="updateChecklist()">
+        <input type="checkbox" class="chk-box" id="chk6">
+        <span class="chk-label">&#127919; 進場理由 = 出場邏輯（不打架）</span>
+      </label>
+      <!-- Row 4 -->
+      <label class="chk-row" onclick="updateChecklist()">
+        <input type="checkbox" class="chk-box" id="chk7">
+        <span class="chk-label">&#127774; VIX &lt; 25 或已確認市場方向</span>
+      </label>
+      <label class="chk-row" onclick="updateChecklist()">
+        <input type="checkbox" class="chk-box" id="chk8">
+        <span class="chk-label">&#128683; 今日累計虧損未超過總資金 3~5%</span>
+      </label>
+    </div>
+    <!-- 長線/短線 選擇 -->
+    <div style="border-top:1px solid var(--card-border);padding-top:12px;margin-bottom:12px;">
+      <div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--text);">&#127759; 這筆是：</div>
+      <div style="display:flex;gap:10px;">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;padding:8px 16px;border-radius:20px;border:1px solid var(--card-border);transition:all .2s;" id="lblLong">
+          <input type="radio" name="tradeDir" value="long" onchange="updateChecklist()" style="accent-color:var(--blue);">
+          &#128200; 長線重「質」（護城河、估值）
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;padding:8px 16px;border-radius:20px;border:1px solid var(--card-border);transition:all .2s;" id="lblShort">
+          <input type="radio" name="tradeDir" value="short" onchange="updateChecklist()" style="accent-color:var(--accent);">
+          &#9889; 短線重「勢」（動能、量價、催化劑）
+        </label>
+      </div>
+    </div>
+    <div id="checklistNote" style="font-size:12px;color:var(--muted);line-height:1.6;display:none;padding:10px;border-radius:6px;background:rgba(45,212,168,.06);">
+      空手也是一種倉位——它讓你隨時擁有「進場權」。找不到 R:R &gt; 2 的機會就等待，不要硬進。
+    </div>
   </div>
 
   <!-- STEP FLOW -->
@@ -4325,6 +4566,150 @@ function filterHdInline(input) {
                 card.querySelector('.hd-title').textContent.toLowerCase().includes(q);
     card.style.display = match ? '' : 'none';
   });
+}
+
+
+/* ── ATR 停損計算 ── */
+function calcATRStop() {
+  var entry = parseFloat(document.getElementById('entryPrice').value);
+  var atr = parseFloat(document.getElementById('atrValue').value);
+  var mult = parseFloat(document.getElementById('atrMult').value);
+  var res = document.getElementById('atrResult');
+  if (!atr || atr <= 0) { res.style.display = 'none'; return; }
+  var stop = entry > 0 ? (entry - atr * mult) : null;
+  var stopPrice = stop ? stop.toFixed(2) : '—';
+  var stopPct = (entry > 0 && stop) ? ((entry - stop) / entry * 100).toFixed(1) + '%' : '—';
+  var atrPct = entry > 0 ? (atr / entry * 100) : 0;
+  var volTag = document.getElementById('atrVolTag');
+  if (atrPct > 3) {
+    volTag.textContent = '大波動 >3%'; volTag.style.background = 'rgba(239,68,68,.15)'; volTag.style.color = 'var(--red)';
+  } else if (atrPct >= 1) {
+    volTag.textContent = '標準 1-3%'; volTag.style.background = 'rgba(245,158,11,.15)'; volTag.style.color = 'var(--orange)';
+  } else {
+    volTag.textContent = '低波動 <1%'; volTag.style.background = 'rgba(45,212,168,.15)'; volTag.style.color = 'var(--accent)';
+  }
+  document.getElementById('atrStopPrice').textContent = stop ? '$' + stopPrice : '—';
+  document.getElementById('atrStopPct').textContent = stopPct;
+  res.style.display = atr > 0 ? '' : 'none';
+}
+function applyATRStop() {
+  var entry = parseFloat(document.getElementById('entryPrice').value);
+  var atr = parseFloat(document.getElementById('atrValue').value);
+  var mult = parseFloat(document.getElementById('atrMult').value);
+  if (!entry || !atr) return;
+  var stop = (entry - atr * mult).toFixed(2);
+  document.getElementById('stopLoss').value = stop;
+  document.getElementById('stopLoss').dispatchEvent(new Event('input'));
+  calcPosition();
+}
+
+/* ── 進場前清單 ── */
+function updateChecklist() {
+  setTimeout(function() {
+    var boxes = document.querySelectorAll('.chk-box');
+    var allChecked = true;
+    boxes.forEach(function(b) { if (!b.checked) allChecked = false; });
+    var dir = document.querySelector('input[name="tradeDir"]:checked');
+    var status = document.getElementById('checklistStatus');
+    var note = document.getElementById('checklistNote');
+    var unchecked = 0;
+    boxes.forEach(function(b) { if (!b.checked) unchecked++; });
+    if (allChecked && dir) {
+      status.innerHTML = '&#9989; 可以進場！紀律完整';
+      status.style.background = 'rgba(45,212,168,.15)';
+      status.style.color = 'var(--accent)';
+      note.style.display = '';
+    } else {
+      var msg = '&#10060; 還有 ' + (unchecked + (dir ? 0 : 1)) + ' 項未完成';
+      status.innerHTML = msg;
+      status.style.background = 'rgba(239,68,68,.12)';
+      status.style.color = 'var(--red)';
+      note.style.display = 'none';
+    }
+    // Direction label highlight
+    var lblL = document.getElementById('lblLong');
+    var lblS = document.getElementById('lblShort');
+    if (lblL && lblS && dir) {
+      var val = dir.value;
+      lblL.style.borderColor = val === 'long' ? 'var(--blue)' : 'var(--card-border)';
+      lblL.style.background = val === 'long' ? 'rgba(59,130,246,.1)' : '';
+      lblS.style.borderColor = val === 'short' ? 'var(--accent)' : 'var(--card-border)';
+      lblS.style.background = val === 'short' ? 'rgba(45,212,168,.08)' : '';
+    }
+  }, 10);
+}
+
+/* ── 反馬丁追蹤器 ── */
+function trkCalc() {
+  var total = parseFloat(document.getElementById('trk_total').value) || 0;
+  var e1 = parseFloat(document.getElementById('trk_entry1').value) || 0;
+  var s1 = parseFloat(document.getElementById('trk_stop1').value) || 0;
+  var e2 = parseFloat(document.getElementById('trk_entry2').value) || 0;
+  var e3 = parseFloat(document.getElementById('trk_entry3').value) || 0;
+  var e4 = parseFloat(document.getElementById('trk_entry4').value) || 0;
+  var cur = parseFloat(document.getElementById('trk_current').value) || 0;
+
+  var pcts = [0.4, 0.3, 0.2, 0.1];
+  var entries = [e1, e2, e3, e4];
+  var labels = ['trkS1','trkS2','trkS3','trkS4'];
+  var details = ['trkS1detail','trkS2detail','trkS3detail','trkS4detail'];
+  var badges = ['trkS1badge','trkS2badge','trkS3badge','trkS4badge'];
+  var badgeCols = ['var(--accent)','var(--blue)','var(--orange)','var(--purple)'];
+  var badgeBg = ['rgba(45,212,168,.15)','rgba(59,130,246,.12)','rgba(245,158,11,.12)','rgba(139,92,246,.12)'];
+  var stageNames = ['試單','加倉','補倉','最後一擊'];
+
+  var totalShares = 0, totalCost = 0, totalInvested = 0;
+  var activePct = 0;
+
+  for (var i = 0; i < 4; i++) {
+    var stageFund = total * pcts[i];
+    var el = document.getElementById(labels[i]);
+    var det = document.getElementById(details[i]);
+    var badge = document.getElementById(badges[i]);
+    if (entries[i] > 0 && total > 0) {
+      var shares = Math.floor(stageFund / entries[i]);
+      var cost = shares * entries[i];
+      totalShares += shares;
+      totalCost += cost;
+      totalInvested += cost;
+      activePct += pcts[i] * 100;
+      el.style.opacity = '1';
+      el.style.borderColor = badgeCols[i];
+      badge.textContent = '已進場';
+      badge.style.background = badgeBg[i];
+      badge.style.color = badgeCols[i];
+      var stopInfo = i === 0 && s1 > 0 ? '<br>停損價：<strong style="color:var(--red);">$' + s1.toFixed(2) + '</strong>（入價下 ' + ((entries[i]-s1)/entries[i]*100).toFixed(1) + '%）' : '';
+      det.innerHTML = '買入資金：$' + stageFund.toFixed(0) + '<br>買入價：<strong>$' + entries[i].toFixed(2) + '</strong><br>股數：<strong>' + shares + ' 股</strong>' + stopInfo;
+    } else {
+      el.style.opacity = i === 0 ? '1' : '0.4';
+      badge.textContent = i === 0 ? '待進場' : '等訊號';
+      if (total > 0 && !entries[i]) {
+        var stageFund2 = total * pcts[i];
+        det.innerHTML = '預計資金：$' + stageFund2.toFixed(0) + '<br>等待進場訊號...';
+      }
+    }
+  }
+
+  var summary = document.getElementById('trkSummary');
+  if (totalShares > 0) {
+    summary.style.display = '';
+    var avgCost = totalShares > 0 ? totalCost / totalShares : 0;
+    document.getElementById('trkTotalPct').textContent = activePct.toFixed(0) + '%';
+    document.getElementById('trkAvgCost').textContent = '$' + avgCost.toFixed(2);
+    document.getElementById('trkTotalInvested').textContent = '$' + totalInvested.toFixed(0);
+    if (cur > 0) {
+      var pnl = (cur - avgCost) * totalShares;
+      var pnlPct = ((cur - avgCost) / avgCost * 100);
+      var pnlEl = document.getElementById('trkPnL');
+      var pnlPctEl = document.getElementById('trkPnLPct');
+      pnlEl.textContent = (pnl >= 0 ? '+$' : '-$') + Math.abs(pnl).toFixed(0);
+      pnlEl.style.color = pnl >= 0 ? 'var(--green)' : 'var(--red)';
+      pnlPctEl.textContent = (pnlPct >= 0 ? '+' : '') + pnlPct.toFixed(1) + '%';
+      pnlPctEl.style.color = pnlPct >= 0 ? 'var(--green)' : 'var(--red)';
+    }
+  } else {
+    summary.style.display = 'none';
+  }
 }
 
 </script>
