@@ -2951,35 +2951,108 @@ function toggleHd(header) {
   var isOpen = body.classList.toggle('open');
   header.querySelector('.hd-toggle').innerHTML = isOpen ? '&#9650;' : '&#9660;';
 }
+/* ── Search helpers ── */
+function _escHtml(t) {
+  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function _hlText(text, q) {
+  if (!q) return _escHtml(text);
+  var esc = _escHtml(text);
+  var re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
+  return esc.replace(re, '<mark style="background:rgba(45,212,168,.35);color:inherit;border-radius:2px;padding:0 1px;">$1</mark>');
+}
+function _applyHl(card, q) {
+  var t = card.querySelector('.hd-title');
+  var b = card.querySelector('.hd-body');
+  if (t) t.innerHTML = _hlText(t.textContent, q);
+  if (b) b.innerHTML = _hlText(b.textContent, q);
+}
+function _clearHl(card) {
+  var t = card.querySelector('.hd-title');
+  var b = card.querySelector('.hd-body');
+  if (t) t.textContent = t.textContent;
+  if (b) b.textContent = b.textContent;
+}
+
+/* ── tab12 全部學習心得搜尋 ── */
 function filterHd() {
-  var q = document.getElementById('hdSearch').value.toLowerCase();
-  document.querySelectorAll('.hd-card').forEach(function(card) {
-    var bodyEl = card.querySelector('.hd-body');
-    var match = card.dataset.text.toLowerCase().includes(q) ||
-                card.querySelector('.hd-title').textContent.toLowerCase().includes(q) ||
-                (bodyEl && bodyEl.textContent.toLowerCase().includes(q));
+  var q = document.getElementById('hdSearch').value.trim().toLowerCase();
+  var tab12 = document.getElementById('tab12');
+  tab12.querySelectorAll('.hd-card').forEach(function(card) {
+    var t = card.querySelector('.hd-title');
+    var b = card.querySelector('.hd-body');
+    if (!q) {
+      card.style.display = '';
+      if (t) t.textContent = t.textContent;
+      if (b) b.textContent = b.textContent;
+      return;
+    }
+    var match = (t && t.textContent.toLowerCase().includes(q)) ||
+                (b && b.textContent.toLowerCase().includes(q));
     card.style.display = match ? '' : 'none';
+    if (match) _applyHl(card, q);
+    else { if (t) t.textContent = t.textContent; if (b) b.textContent = b.textContent; }
   });
 }
 function filterStage(stage, btn) {
   document.querySelectorAll('.hd-stage-btn').forEach(function(b) { b.classList.remove('active'); });
   if (btn) btn.classList.add('active');
-  document.querySelectorAll('.hd-card').forEach(function(card) {
+  document.getElementById('tab12').querySelectorAll('.hd-card').forEach(function(card) {
     card.style.display = (stage === 'all' || card.dataset.stage === stage) ? '' : 'none';
   });
 }
 
-
+/* ── 各分頁相關學習心得搜尋（全 70 篇）── */
 function filterHdInline(input) {
-  var q = input.value.toLowerCase();
+  var q = input.value.trim().toLowerCase();
   var listId = input.dataset.target;
-  document.getElementById(listId).querySelectorAll('.hd-card').forEach(function(card) {
-    var bodyEl = card.querySelector('.hd-body');
-    var match = card.dataset.text.toLowerCase().includes(q) ||
-                card.querySelector('.hd-title').textContent.toLowerCase().includes(q) ||
-                (bodyEl && bodyEl.textContent.toLowerCase().includes(q));
-    card.style.display = match ? '' : 'none';
+  var container = document.getElementById(listId);
+
+  /* 清除上次搜尋結果 */
+  container.querySelectorAll('.hd-sr').forEach(function(el) { el.remove(); });
+
+  if (!q) {
+    /* 空搜尋：還原預設顯示、清除反白 */
+    container.querySelectorAll('.hd-card').forEach(function(card) {
+      card.style.display = '';
+      var t = card.querySelector('.hd-title');
+      var b = card.querySelector('.hd-body');
+      if (t) t.textContent = t.textContent;
+      if (b) b.textContent = b.textContent;
+    });
+    return;
+  }
+
+  /* 隱藏預設卡片 */
+  container.querySelectorAll('.hd-card').forEach(function(c) { c.style.display = 'none'; });
+
+  /* 搜尋全部 70 篇（來源：tab12）*/
+  var hits = 0;
+  document.getElementById('tab12').querySelectorAll('.hd-card').forEach(function(src) {
+    var t = src.querySelector('.hd-title');
+    var b = src.querySelector('.hd-body');
+    var tText = t ? t.textContent.toLowerCase() : '';
+    var bText = b ? b.textContent.toLowerCase() : '';
+    if (!tText.includes(q) && !bText.includes(q)) return;
+    hits++;
+    var clone = src.cloneNode(true);
+    clone.classList.add('hd-sr');
+    clone.style.display = '';
+    var cb = clone.querySelector('.hd-body');
+    if (cb) cb.classList.remove('open');
+    var ct = clone.querySelector('.hd-toggle');
+    if (ct) ct.textContent = '▼';
+    _applyHl(clone, q);
+    container.appendChild(clone);
   });
+
+  if (!hits) {
+    var empty = document.createElement('div');
+    empty.className = 'hd-sr';
+    empty.style.cssText = 'padding:14px;color:var(--text-secondary);text-align:center;font-size:13px;';
+    empty.textContent = '找不到符合「' + input.value.trim() + '」的心得';
+    container.appendChild(empty);
+  }
 }
 
 
