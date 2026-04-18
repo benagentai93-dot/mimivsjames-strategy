@@ -2954,7 +2954,10 @@ function toggleHd(header) {
 function filterHd() {
   var q = document.getElementById('hdSearch').value.toLowerCase();
   document.querySelectorAll('.hd-card').forEach(function(card) {
-    var match = card.dataset.text.toLowerCase().includes(q) || card.querySelector('.hd-title').textContent.toLowerCase().includes(q);
+    var bodyEl = card.querySelector('.hd-body');
+    var match = card.dataset.text.toLowerCase().includes(q) ||
+                card.querySelector('.hd-title').textContent.toLowerCase().includes(q) ||
+                (bodyEl && bodyEl.textContent.toLowerCase().includes(q));
     card.style.display = match ? '' : 'none';
   });
 }
@@ -2971,8 +2974,10 @@ function filterHdInline(input) {
   var q = input.value.toLowerCase();
   var listId = input.dataset.target;
   document.getElementById(listId).querySelectorAll('.hd-card').forEach(function(card) {
+    var bodyEl = card.querySelector('.hd-body');
     var match = card.dataset.text.toLowerCase().includes(q) ||
-                card.querySelector('.hd-title').textContent.toLowerCase().includes(q);
+                card.querySelector('.hd-title').textContent.toLowerCase().includes(q) ||
+                (bodyEl && bodyEl.textContent.toLowerCase().includes(q));
     card.style.display = match ? '' : 'none';
   });
 }
