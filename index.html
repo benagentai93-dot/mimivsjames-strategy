@@ -3050,6 +3050,26 @@ function filterHdInline(input) {
 
 
 /* ── ATR 停損計算 ── */
+function calcHedge() {
+  var port      = parseFloat(document.getElementById('hedgePortfolio').value)  || 0;
+  var idxPrice  = parseFloat(document.getElementById('hedgeIndexPrice').value) || 0;
+  var pct       = parseFloat(document.getElementById('hedgePct').value)        || 0;
+  var putDelta  = parseFloat(document.getElementById('hedgePutDelta').value)   || 0;
+  if (!port || !idxPrice || !putDelta) return;
+  var hedgeAmt     = port * (pct / 100);
+  var fullShares   = port / idxPrice;
+  var fullContracts = fullShares / 100;
+  var hedgeContracts = Math.round(hedgeAmt / idxPrice / 100);
+  if (hedgeContracts < 1) hedgeContracts = 1;
+  var coveredValue = hedgeContracts * 100 * idxPrice;
+  var coveredPct   = (coveredValue / port * 100).toFixed(0);
+  document.getElementById('hedgeAmount').textContent        = '$' + Math.round(hedgeAmt).toLocaleString();
+  document.getElementById('hedgeContracts').textContent     = hedgeContracts + ' 口';
+  document.getElementById('hedgeFullContracts').textContent = '完全對沖需 ' + Math.round(fullContracts) + ' 口';
+  document.getElementById('hedgeCoveredValue').textContent  = '$' + Math.round(coveredValue).toLocaleString();
+  document.getElementById('hedgeCoveredPct').textContent    = '已對沖 ' + coveredPct + '%';
+}
+
 function calcITM() {
   var price    = parseFloat(document.getElementById('itmStockPrice').value) || 0;
   var capital  = parseFloat(document.getElementById('itmCapital').value)    || 0;
@@ -3895,6 +3915,102 @@ function showStage(n, btn) {
       <div style="padding:14px;border-radius:10px;background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2);">
         <div style="font-weight:700;color:var(--blue);margin-bottom:8px;font-size:13px;">&#9661; 退可守（風險大幅降低）</div>
         <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">最大損失 = 權利金總額。釋放 <strong style="color:var(--text);">80~90% 資金</strong>可做避險、短債或保留靈活度。</div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="strategy-card" style="margin-top:24px;">
+    <div class="section-title">&#128737;&#65039; 對沖口數計算（Hedge Size）</div>
+
+    <!-- When: 時機警訊 -->
+    <div style="margin-bottom:20px;">
+      <div style="font-weight:700;font-size:14px;color:var(--accent);margin-bottom:10px;">&#9312; When — 什麼時候才需要對沖？</div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
+        <div style="padding:8px 12px;border-radius:6px;background:rgba(239,68,68,.06);border-left:3px solid var(--red);">
+          <strong style="color:var(--red);">情緒過熱</strong>：CNN 恐慌貪婪指數 &gt;80（極度貪婪）或 VIX 異常變化
+        </div>
+        <div style="padding:8px 12px;border-radius:6px;background:rgba(245,158,11,.06);border-left:3px solid var(--orange);">
+          <strong style="color:var(--orange);">技術乖離</strong>：指數偏離 50MA 超過 8～12%，均值回歸風險高
+        </div>
+        <div style="padding:8px 12px;border-radius:6px;background:rgba(59,130,246,.06);border-left:3px solid var(--blue);">
+          <strong style="color:var(--blue);">重大事件前夕</strong>：CPI、FOMC 決議、NVDA 等大型權值股財報
+        </div>
+      </div>
+      <div style="margin-top:8px;padding:8px 12px;border-radius:6px;background:rgba(45,212,168,.06);font-size:12px;color:var(--text-secondary);">
+        &#9888;&#65039; 多頭行情裡天天買 Put = 消耗利潤。<strong style="color:var(--accent);">只在警訊出現時才啟動，才是划算的避險。</strong>
+      </div>
+    </div>
+
+    <!-- What: 合約規格 -->
+    <div style="margin-bottom:20px;">
+      <div style="font-weight:700;font-size:14px;color:var(--accent);margin-bottom:10px;">&#9313; What — 挑對合約，CP 值才高</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;">
+        <div style="padding:12px;border-radius:8px;background:var(--card);border:1px solid var(--card-border);">
+          <div style="font-weight:700;color:var(--text);margin-bottom:6px;">&#128197; DTE 45～90 天</div>
+          <div style="color:var(--text-secondary);line-height:1.7;">避開末日期權（最後 30 天 Theta 加速融化）。提早平倉可拿回大部分本金。</div>
+        </div>
+        <div style="padding:12px;border-radius:8px;background:var(--card);border:1px solid var(--card-border);">
+          <div style="font-weight:700;color:var(--text);margin-bottom:6px;">&#916; Delta 0.60～0.70 ITM Put</div>
+          <div style="color:var(--text-secondary);line-height:1.7;">包含內在價值，時間價值佔比低。大盤跌 $1，Put 漲 $0.7，真正對沖正股虧損。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How: 計算機 -->
+    <div style="margin-bottom:20px;">
+      <div style="font-weight:700;font-size:14px;color:var(--accent);margin-bottom:12px;">&#9314; How — 避險口數計算機</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+        <div class="form-group">
+          <label style="font-size:12px;color:var(--text-secondary);">持股總市值（$）</label>
+          <input type="number" id="hedgePortfolio" value="100000" step="1000" oninput="calcHedge()" style="width:100%;padding:8px 10px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:6px;color:var(--text);font-size:14px;">
+        </div>
+        <div class="form-group">
+          <label style="font-size:12px;color:var(--text-secondary);">對沖指數現價（如 SPY $）</label>
+          <input type="number" id="hedgeIndexPrice" value="500" step="1" oninput="calcHedge()" style="width:100%;padding:8px 10px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:6px;color:var(--text);font-size:14px;">
+        </div>
+        <div class="form-group">
+          <label style="font-size:12px;color:var(--text-secondary);">對沖比例（%）</label>
+          <input type="number" id="hedgePct" value="50" step="5" min="10" max="100" oninput="calcHedge()" style="width:100%;padding:8px 10px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:6px;color:var(--text);font-size:14px;">
+        </div>
+        <div class="form-group">
+          <label style="font-size:12px;color:var(--text-secondary);">Put Delta（絕對值，建議 0.60～0.70）</label>
+          <input type="number" id="hedgePutDelta" value="0.65" step="0.01" min="0.01" max="0.99" oninput="calcHedge()" style="width:100%;padding:8px 10px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:6px;color:var(--text);font-size:14px;">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+        <div class="stat-card" style="padding:12px;">
+          <div class="label">對沖部位市值</div>
+          <div class="value" id="hedgeAmount" style="font-size:20px;">$50,000</div>
+        </div>
+        <div class="stat-card" style="padding:12px;border:2px solid var(--accent);">
+          <div class="label" style="color:var(--accent);">建議買入 Put</div>
+          <div class="value" id="hedgeContracts" style="font-size:28px;color:var(--accent);">1 口</div>
+          <div style="font-size:11px;color:var(--text-secondary);margin-top:2px;" id="hedgeFullContracts">完全對沖需 2 口</div>
+        </div>
+        <div class="stat-card" style="padding:12px;">
+          <div class="label">對應持股曝險</div>
+          <div class="value" id="hedgeCoveredValue" style="font-size:20px;">$50,000</div>
+          <div style="font-size:11px;color:var(--text-secondary);margin-top:2px;" id="hedgeCoveredPct">已對沖 50%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 進階：不買期權的時機 -->
+    <div>
+      <div style="font-weight:700;font-size:14px;color:var(--accent);margin-bottom:10px;">&#9315; 進階 — 什麼時候「不買期權」最划算？</div>
+      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;padding:8px 12px;border-radius:6px;background:rgba(239,68,68,.06);border-left:3px solid var(--red);">
+        當市場 <strong style="color:var(--red);">IV（隱含波動率）過高</strong>時，Put 變得非常貴，這時買保險最不划算。
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;">
+        <div style="padding:12px;border-radius:8px;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);">
+          <div style="font-weight:700;color:var(--green);margin-bottom:6px;">方案 A：直接減倉</div>
+          <div style="color:var(--text-secondary);line-height:1.7;">賣掉 1/3～1/4 獲利正股，換成現金。<strong style="color:var(--text);">現金是最好的避險</strong>，無 Theta 損耗，等大盤跌完再右側追擊買回。</div>
+        </div>
+        <div style="padding:12px;border-radius:8px;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.2);">
+          <div style="font-weight:700;color:var(--purple);margin-bottom:6px;">方案 B：Collar 策略</div>
+          <div style="color:var(--text-secondary);line-height:1.7;">持有正股 → <strong style="color:var(--text);">Sell Covered Call</strong> 收租 → 用權利金補貼 Put 保費。避險成本可降至接近 0。</div>
+        </div>
       </div>
     </div>
   </div>
