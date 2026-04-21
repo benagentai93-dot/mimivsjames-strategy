@@ -550,6 +550,189 @@
   #hdSearch { font-size: 15px; }
 }
 
+/* ===================================================== */
+/* 手機閱讀優化 (Mobile Readability Enhancements)        */
+/* ===================================================== */
+
+/* Tablet & small-desktop: collapse dense multi-column grids */
+@media (max-width: 900px) {
+  div[style*="grid-template-columns:repeat(4,1fr)"],
+  div[style*="grid-template-columns:repeat(5,1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  div[style*="grid-template-columns:repeat(3,1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Phones */
+@media (max-width: 640px) {
+  /* --- Global spacing --- */
+  .page { padding: 14px 12px !important; }
+  .card, .pyramid-card { padding: 16px !important; border-radius: 10px; }
+  .strategy-card { padding: 18px !important; border-radius: 10px; }
+  .banner { padding: 18px 16px !important; border-radius: 10px; }
+  .banner h2 { font-size: 19px !important; line-height: 1.35; }
+  .banner p { font-size: 14px !important; line-height: 1.75 !important; }
+  .footer { padding: 24px 14px !important; font-size: 12px !important; line-height: 1.8; }
+
+  /* --- Navbar --- */
+  .navbar {
+    padding: 8px 12px !important;
+    height: auto !important;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .logo { margin-right: 0; }
+  .logo svg { width: 22px; height: 22px; }
+  .logo-text { font-size: 14px !important; }
+  .logo-sub { font-size: 10px !important; }
+  .nav-tabs {
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab { font-size: 13px !important; padding: 8px 12px !important; }
+
+  /* --- Stat cards --- */
+  .stat-card { padding: 14px !important; border-radius: 10px; }
+  .stat-card .label { font-size: 12px !important; }
+  .stat-card .value { font-size: 22px !important; }
+  .grid-4 { gap: 10px !important; margin-bottom: 16px !important; }
+  .grid-cards-2 { gap: 14px !important; }
+
+  /* --- Collapse inline multi-column grids to single column --- */
+  div[style*="grid-template-columns:repeat(3,1fr)"],
+  div[style*="grid-template-columns:repeat(4,1fr)"],
+  div[style*="grid-template-columns:repeat(5,1fr)"],
+  div[style*="grid-template-columns:1fr 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  /* 2-column grids: keep side-by-side when short, but give breathing room */
+  div[style*="grid-template-columns:1fr 1fr"] {
+    gap: 10px !important;
+  }
+  /* 4-col decision matrix (label/value/value/value) -> stacked rows */
+  div[style*="grid-template-columns:auto 1fr 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+  }
+  div[style*="grid-template-columns:auto 1fr 1fr 1fr"] > div {
+    border-bottom: 1px solid rgba(255,255,255,.05) !important;
+  }
+
+  /* Option 4-quadrant chart: collapse to single column, flatten vertical labels */
+  div[style*="grid-template-columns:80px 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto !important;
+    gap: 8px !important;
+    border-radius: 10px !important;
+  }
+  div[style*="writing-mode:vertical-rl"] {
+    writing-mode: horizontal-tb !important;
+    letter-spacing: 1px !important;
+    padding: 8px 12px !important;
+    border-radius: 8px !important;
+    font-size: 13px !important;
+  }
+
+  /* --- Form inputs: 16px font prevents iOS auto-zoom on focus --- */
+  .form-group input,
+  .form-group select,
+  .modal input {
+    font-size: 16px !important;
+    padding: 12px 14px !important;
+  }
+  .form-group label { font-size: 13px !important; }
+  .form-row { gap: 10px !important; margin-bottom: 12px !important; }
+
+  /* --- Buttons: larger tap target --- */
+  .btn-primary, .btn-blue {
+    font-size: 15px !important;
+    padding: 14px !important;
+  }
+  .btn-secondary { font-size: 13px !important; padding: 10px 16px !important; }
+
+  /* --- Tables --- */
+  table { font-size: 13px; }
+  th, td { padding: 10px 10px !important; }
+  .table-card { padding: 14px !important; }
+  .table-header {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 6px;
+    margin-bottom: 12px !important;
+  }
+
+  /* --- Risk box --- */
+  .risk-box {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    padding: 14px 16px !important;
+  }
+  .risk-pnl { margin-left: 0 !important; }
+
+  /* --- Pyramid & card titles --- */
+  .pyramid-title { font-size: 15px !important; }
+  .form-title { font-size: 16px !important; margin-bottom: 14px !important; }
+
+  /* --- Strategy cards --- */
+  .strategy-card h3 { font-size: 16px !important; }
+  .strategy-card p,
+  .strategy-card li { font-size: 14px !important; line-height: 1.75 !important; }
+  .strategy-card .card-icon { width: 42px; height: 42px; font-size: 20px; margin-bottom: 12px; }
+
+  /* --- Inline h3/h2 headings bumped to readable size --- */
+  h2[style], h3[style] { font-size: 16px !important; }
+
+  /* --- Enlarge the smallest inline font sizes for readability --- */
+  [style*="font-size:11px"] { font-size: 12.5px !important; }
+  [style*="font-size:12px"] { font-size: 13px !important; }
+  [style*="font-size:13px"] { font-size: 14px !important; line-height: 1.75; }
+
+  /* --- Reduce excessive inline padding on nested boxes --- */
+  div[style*="padding:22px"] { padding: 16px !important; }
+  div[style*="padding:20px"] { padding: 14px !important; }
+  div[style*="padding:18px"] { padding: 14px !important; }
+
+  /* --- Tip & result boxes --- */
+  .tip-box { padding: 12px 14px !important; }
+  .tip-box p { font-size: 13px !important; }
+  .result-item { font-size: 13px !important; }
+
+  /* --- Modal --- */
+  .modal { padding: 20px !important; border-radius: 12px; }
+  .modal h3 { font-size: 16px !important; }
+  .modal-actions { flex-direction: column; gap: 8px !important; }
+  .modal-actions .btn-primary,
+  .modal-actions .btn-secondary { width: 100%; }
+
+  /* --- Slider hints readable --- */
+  .slider-hint { font-size: 12px; line-height: 1.5; }
+
+  /* --- Backup section --- */
+  .backup-btns { flex-wrap: wrap; gap: 8px; }
+  .backup-btns .btn-secondary { flex: 1 1 auto; min-width: 130px; }
+}
+
+/* Very narrow phones */
+@media (max-width: 420px) {
+  .page { padding: 12px 10px !important; }
+  .grid-4 { grid-template-columns: 1fr !important; }
+  .stat-card .value { font-size: 20px !important; }
+  .banner h2 { font-size: 17px !important; }
+  /* Collapse remaining 2-column inline grids on the narrowest phones */
+  div[style*="grid-template-columns:1fr 1fr"]:not([style*="grid-template-columns:1fr 1fr 1fr"]) {
+    grid-template-columns: 1fr !important;
+  }
+  .nav-tab { font-size: 12px !important; padding: 7px 10px !important; }
+  .logo-text { font-size: 13px !important; }
+}
+
 </style>
 </head>
 <body>
