@@ -550,38 +550,62 @@
   #hdSearch { font-size: 15px; }
 }
 
-/* ===================================================== */
-/* 手機閱讀優化 (Mobile Readability Enhancements)        */
-/* ===================================================== */
+/* ========================================================= */
+/* 手機閱讀優化 (Mobile Readability Enhancements)             */
+/* 策略：在 ≤ 768px 時把「所有」多欄 grid 一律收合為單欄，   */
+/*       放大內文字級、縮小外框 padding、讓長中文段落好讀。  */
+/* ========================================================= */
 
-/* Tablet & small-desktop: collapse dense multi-column grids */
-@media (max-width: 900px) {
+/* 防止整頁水平捲動 */
+html, body { overflow-x: hidden; }
+
+/* 平板：9+ 欄和 4 欄先降為 2 欄 */
+@media (max-width: 960px) {
   div[style*="grid-template-columns:repeat(4,1fr)"],
   div[style*="grid-template-columns:repeat(5,1fr)"] {
     grid-template-columns: repeat(2, 1fr) !important;
   }
-  div[style*="grid-template-columns:repeat(3,1fr)"] {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
 }
 
-/* Phones */
-@media (max-width: 640px) {
-  /* --- Global spacing --- */
-  .page { padding: 14px 12px !important; }
-  .card, .pyramid-card { padding: 16px !important; border-radius: 10px; }
-  .strategy-card { padding: 18px !important; border-radius: 10px; }
-  .banner { padding: 18px 16px !important; border-radius: 10px; }
-  .banner h2 { font-size: 19px !important; line-height: 1.35; }
-  .banner p { font-size: 14px !important; line-height: 1.75 !important; }
-  .footer { padding: 24px 14px !important; font-size: 12px !important; line-height: 1.8; }
+/* 手機（包含大尺寸手機與小平板直立）：所有多欄 grid 收為單欄 */
+@media (max-width: 768px) {
+  /* === 全域：避免水平溢出，讓內容完整填滿可視區 === */
+  body { font-size: 15px; line-height: 1.65; }
+  .page { padding: 12px 12px 32px !important; max-width: 100% !important; }
 
-  /* --- Navbar --- */
+  /* === 卡片容器統一縮 padding === */
+  .card, .pyramid-card,
+  .stat-card, .strategy-card {
+    padding: 14px !important;
+    border-radius: 10px !important;
+  }
+  .banner {
+    padding: 16px 14px !important;
+    border-radius: 10px !important;
+    margin-bottom: 14px !important;
+  }
+  .banner h2 {
+    font-size: 18px !important;
+    line-height: 1.4 !important;
+    margin-bottom: 8px !important;
+  }
+  .banner p {
+    font-size: 14px !important;
+    line-height: 1.8 !important;
+  }
+  .footer {
+    padding: 22px 14px !important;
+    font-size: 12px !important;
+    line-height: 1.8 !important;
+  }
+
+  /* === 導覽列：logo 與 tabs 各自成列 === */
   .navbar {
     padding: 8px 12px !important;
     height: auto !important;
     flex-wrap: wrap;
     gap: 8px;
+    position: sticky;
   }
   .logo { margin-right: 0; }
   .logo svg { width: 22px; height: 22px; }
@@ -589,33 +613,47 @@
   .logo-sub { font-size: 10px !important; }
   .nav-tabs {
     width: 100%;
+    overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     padding-bottom: 2px;
+    flex-wrap: nowrap;
   }
   .nav-tabs::-webkit-scrollbar { display: none; }
-  .nav-tab { font-size: 13px !important; padding: 8px 12px !important; }
+  .nav-tab {
+    font-size: 13px !important;
+    padding: 8px 12px !important;
+    flex-shrink: 0;
+  }
 
-  /* --- Stat cards --- */
-  .stat-card { padding: 14px !important; border-radius: 10px; }
-  .stat-card .label { font-size: 12px !important; }
-  .stat-card .value { font-size: 22px !important; }
-  .grid-4 { gap: 10px !important; margin-bottom: 16px !important; }
-  .grid-cards-2 { gap: 14px !important; }
+  /* === 佈局類：強制單欄（覆蓋 desktop grid-2/4） === */
+  .grid-2 { grid-template-columns: 1fr !important; gap: 14px !important; }
+  .grid-4 { grid-template-columns: 1fr 1fr !important; gap: 10px !important; margin-bottom: 14px !important; }
+  .grid-cards-2 { grid-template-columns: 1fr !important; gap: 14px !important; }
 
-  /* --- Collapse inline multi-column grids to single column --- */
+  /* === Stat cards：縮字級 === */
+  .stat-card .label { font-size: 12px !important; margin-bottom: 4px !important; }
+  .stat-card .value { font-size: 20px !important; }
+
+  /* === 關鍵：所有 inline grid 一律收為單欄 === */
+  div[style*="grid-template-columns:repeat(2,1fr)"],
   div[style*="grid-template-columns:repeat(3,1fr)"],
   div[style*="grid-template-columns:repeat(4,1fr)"],
   div[style*="grid-template-columns:repeat(5,1fr)"],
-  div[style*="grid-template-columns:1fr 1fr 1fr"] {
+  div[style*="grid-template-columns:repeat(6,1fr)"],
+  div[style*="grid-template-columns:1fr 1fr"],
+  div[style*="grid-template-columns:1fr 1fr 1fr"],
+  div[style*="grid-template-columns:1fr 1fr 1fr 1fr"] {
     grid-template-columns: 1fr !important;
-    gap: 12px !important;
-  }
-  /* 2-column grids: keep side-by-side when short, but give breathing room */
-  div[style*="grid-template-columns:1fr 1fr"] {
     gap: 10px !important;
   }
-  /* 4-col decision matrix (label/value/value/value) -> stacked rows */
+
+  /* auto 1fr（標籤 + 值）維持兩欄，間距放大 */
+  div[style*="grid-template-columns:auto 1fr"] {
+    gap: 6px 12px !important;
+  }
+
+  /* 出場決策矩陣：4 欄 auto+1fr×3 → 堆疊 */
   div[style*="grid-template-columns:auto 1fr 1fr 1fr"] {
     grid-template-columns: 1fr !important;
     gap: 0 !important;
@@ -624,113 +662,128 @@
     border-bottom: 1px solid rgba(255,255,255,.05) !important;
   }
 
-  /* Option 4-quadrant chart: collapse to single column, flatten vertical labels */
+  /* 選擇權四象限圖：收為單欄 */
   div[style*="grid-template-columns:80px 1fr 1fr"] {
     grid-template-columns: 1fr !important;
     grid-template-rows: auto !important;
     gap: 8px !important;
-    border-radius: 10px !important;
   }
+  /* 直式標籤（BUY 買方 / SELL 賣方）改為水平 */
   div[style*="writing-mode:vertical-rl"] {
     writing-mode: horizontal-tb !important;
-    letter-spacing: 1px !important;
-    padding: 8px 12px !important;
+    letter-spacing: 2px !important;
+    padding: 8px 14px !important;
     border-radius: 8px !important;
     font-size: 13px !important;
   }
 
-  /* --- Form inputs: 16px font prevents iOS auto-zoom on focus --- */
+  /* === 放大所有小字以利閱讀中文 === */
+  [style*="font-size:11px"] { font-size: 13px !important; }
+  [style*="font-size:12px"] { font-size: 13.5px !important; line-height: 1.7 !important; }
+  [style*="font-size:13px"] { font-size: 14px !important; line-height: 1.8 !important; }
+  [style*="font-size:14px"] { font-size: 14.5px !important; line-height: 1.8 !important; }
+
+  /* inline heading 統一縮小為手機友善尺寸 */
+  h2[style], h3[style] { font-size: 16px !important; line-height: 1.4 !important; }
+  div[style*="font-size:17px"],
+  div[style*="font-size:18px"] { font-size: 16px !important; }
+  div[style*="font-size:20px"],
+  div[style*="font-size:22px"],
+  div[style*="font-size:32px"] { font-size: 24px !important; }
+
+  /* === 大幅縮減 inline padding，讓內容不被擠 === */
+  [style*="padding:32px"] { padding: 16px !important; }
+  [style*="padding:28px"] { padding: 16px !important; }
+  [style*="padding:24px"] { padding: 14px !important; }
+  [style*="padding:22px"] { padding: 14px !important; }
+  [style*="padding:20px"] { padding: 14px !important; }
+  [style*="padding:18px"] { padding: 13px !important; }
+
+  /* === 表單：避免 iOS 聚焦自動縮放 === */
   .form-group input,
   .form-group select,
   .modal input {
     font-size: 16px !important;
-    padding: 12px 14px !important;
+    padding: 11px 14px !important;
   }
-  .form-group label { font-size: 13px !important; }
-  .form-row { gap: 10px !important; margin-bottom: 12px !important; }
+  .form-group label { font-size: 13px !important; margin-bottom: 5px !important; }
+  .form-row { flex-direction: column; gap: 10px !important; margin-bottom: 12px !important; }
 
-  /* --- Buttons: larger tap target --- */
+  /* === 按鈕加大 tap 區域 === */
   .btn-primary, .btn-blue {
     font-size: 15px !important;
     padding: 14px !important;
   }
-  .btn-secondary { font-size: 13px !important; padding: 10px 16px !important; }
+  .btn-secondary { font-size: 13px !important; padding: 10px 14px !important; }
 
-  /* --- Tables --- */
-  table { font-size: 13px; }
-  th, td { padding: 10px 10px !important; }
-  .table-card { padding: 14px !important; }
+  /* === 表格：縮小 padding；持股表靠既有的 .table-card overflow-x === */
+  table { font-size: 13px !important; }
+  th, td { padding: 9px 10px !important; white-space: nowrap; }
+  .table-card { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
   .table-header {
     flex-direction: column;
     align-items: flex-start !important;
-    gap: 6px;
+    gap: 6px !important;
     margin-bottom: 12px !important;
   }
 
-  /* --- Risk box --- */
+  /* === 風控列、Pyramid、Strategy cards === */
   .risk-box {
     flex-direction: column;
     align-items: flex-start !important;
-    gap: 10px !important;
-    padding: 14px 16px !important;
+    gap: 8px !important;
+    padding: 12px 14px !important;
   }
   .risk-pnl { margin-left: 0 !important; }
 
-  /* --- Pyramid & card titles --- */
   .pyramid-title { font-size: 15px !important; }
-  .form-title { font-size: 16px !important; margin-bottom: 14px !important; }
+  .form-title { font-size: 16px !important; margin-bottom: 12px !important; }
 
-  /* --- Strategy cards --- */
   .strategy-card h3 { font-size: 16px !important; }
   .strategy-card p,
-  .strategy-card li { font-size: 14px !important; line-height: 1.75 !important; }
-  .strategy-card .card-icon { width: 42px; height: 42px; font-size: 20px; margin-bottom: 12px; }
+  .strategy-card li {
+    font-size: 14px !important;
+    line-height: 1.85 !important;
+  }
+  .strategy-card .card-icon {
+    width: 40px; height: 40px; font-size: 20px; margin-bottom: 10px;
+  }
 
-  /* --- Inline h3/h2 headings bumped to readable size --- */
-  h2[style], h3[style] { font-size: 16px !important; }
-
-  /* --- Enlarge the smallest inline font sizes for readability --- */
-  [style*="font-size:11px"] { font-size: 12.5px !important; }
-  [style*="font-size:12px"] { font-size: 13px !important; }
-  [style*="font-size:13px"] { font-size: 14px !important; line-height: 1.75; }
-
-  /* --- Reduce excessive inline padding on nested boxes --- */
-  div[style*="padding:22px"] { padding: 16px !important; }
-  div[style*="padding:20px"] { padding: 14px !important; }
-  div[style*="padding:18px"] { padding: 14px !important; }
-
-  /* --- Tip & result boxes --- */
+  /* === tip box、結果 === */
   .tip-box { padding: 12px 14px !important; }
-  .tip-box p { font-size: 13px !important; }
+  .tip-box p { font-size: 13px !important; line-height: 1.75 !important; }
   .result-item { font-size: 13px !important; }
 
-  /* --- Modal --- */
-  .modal { padding: 20px !important; border-radius: 12px; }
+  /* === Modal === */
+  .modal { padding: 18px !important; border-radius: 12px !important; width: 92vw !important; }
   .modal h3 { font-size: 16px !important; }
   .modal-actions { flex-direction: column; gap: 8px !important; }
   .modal-actions .btn-primary,
   .modal-actions .btn-secondary { width: 100%; }
 
-  /* --- Slider hints readable --- */
+  /* === Slider === */
   .slider-hint { font-size: 12px; line-height: 1.5; }
 
-  /* --- Backup section --- */
+  /* === 備份按鈕 === */
   .backup-btns { flex-wrap: wrap; gap: 8px; }
   .backup-btns .btn-secondary { flex: 1 1 auto; min-width: 130px; }
+
+  /* === 學習心得區 === */
+  .hd-title { font-size: 14px !important; }
+  .hd-body { font-size: 14px !important; line-height: 1.85 !important; }
 }
 
-/* Very narrow phones */
+/* 超窄手機（≤ 420px）：連 stat-card 的 2×2 也收單欄 */
 @media (max-width: 420px) {
-  .page { padding: 12px 10px !important; }
-  .grid-4 { grid-template-columns: 1fr !important; }
-  .stat-card .value { font-size: 20px !important; }
+  .page { padding: 10px 10px 28px !important; }
+  .grid-4 { grid-template-columns: 1fr !important; gap: 8px !important; }
+  .stat-card .value { font-size: 19px !important; }
   .banner h2 { font-size: 17px !important; }
-  /* Collapse remaining 2-column inline grids on the narrowest phones */
-  div[style*="grid-template-columns:1fr 1fr"]:not([style*="grid-template-columns:1fr 1fr 1fr"]) {
-    grid-template-columns: 1fr !important;
-  }
+  .banner { padding: 14px !important; }
+  .card, .strategy-card, .pyramid-card, .stat-card { padding: 12px !important; }
   .nav-tab { font-size: 12px !important; padding: 7px 10px !important; }
   .logo-text { font-size: 13px !important; }
+  .logo-sub { display: none; }
 }
 
 </style>
