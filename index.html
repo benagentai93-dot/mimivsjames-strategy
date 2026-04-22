@@ -950,10 +950,12 @@ NVDA                        <span style="color:var(--text-secondary);">← 直�
       <table>
         <thead><tr><th>想做什麼</th><th>打什麼</th></tr></thead>
         <tbody>
-          <tr><td>三層對沖 SOP</td><td><code style="color:var(--accent);">/hedge</code></td></tr>
-          <tr><td>對沖口數計算</td><td><code style="color:var(--accent);">/hedgesize NVDA 70</code></td></tr>
-          <tr><td>ITM Call 口數計算</td><td><code style="color:var(--accent);">/itmcall NVDA 10000</code></td></tr>
+          <tr><td>大盤 3WH 對沖 SOP</td><td><code style="color:var(--accent);">/hedge</code><br><span style="font-size:12px;color:var(--text-secondary);">VIX/F&amp;G/PCC + SPY 乖離 → 是否加指數 Put</span></td></tr>
+          <tr><td>個股對沖分析 ⭐</td><td><code style="color:var(--accent);">/hedge NVDA</code><br><span style="font-size:12px;color:var(--text-secondary);">掃該股 chain → 真實 IV/skew/支持位 → 推薦結構</span></td></tr>
+          <tr><td>對沖口數計算 ⭐</td><td><code style="color:var(--accent);">/hedgesize NVDA 50 1M</code><br><span style="font-size:12px;color:var(--text-secondary);">Top-3 Put 排行榜：輕量 / 主推 / 重裝</span></td></tr>
+          <tr><td>ITM Call 口數計算 ⭐</td><td><code style="color:var(--accent);">/itmcall NVDA 50000 3M</code><br><span style="font-size:12px;color:var(--text-secondary);">Top-3 Call 排行榜：保守 / 均衡 / 槓桿</span></td></tr>
           <tr><td>VRVP 選擇權訊號</td><td><code style="color:var(--accent);">/options NVDA</code></td></tr>
+          <tr><td>Chain 深度分析 ⭐</td><td><code style="color:var(--accent);">/options NVDA --deep</code><br><span style="font-size:12px;color:var(--text-secondary);">3 期 × ATM±5 → IV/Skew/Term/GammaWalls/Smile/Sentiment</span></td></tr>
         </tbody>
       </table>
     </div>
