@@ -759,16 +759,17 @@ html, body { overflow-x: hidden; }
 <div id="tab13" class="page active">
   <div class="banner">
     <h2>&#128640; 第一次使用 MimiVsJames Bot</h2>
-    <p>這是給新手的快速上手指南：30 秒讓 Bot 跑起來，第一天從盤前到盤後的完整流程，以及最常用指令地圖。先看這頁，再去看 SOP。</p>
+    <p>目標讀者：第一次打開這個 Bot、連 /scan 是什麼都不知道的你。看完 15 分鐘，你就能盤前跑完宏觀掃描 → 進場前檢查 → 盤後復盤的完整一天。</p>
   </div>
 
   <!-- 系統做什麼 -->
   <div class="card" style="margin-bottom:20px;border-left:4px solid var(--accent);">
-    <h3 style="font-size:17px;margin-bottom:14px;">&#127919; 系統做什麼</h3>
+    <h3 style="font-size:17px;margin-bottom:14px;">&#127919; 這個系統做什麼？</h3>
+    <p style="color:var(--text);font-size:14px;line-height:1.8;margin-bottom:10px;">一句話：它幫你把 <b>MimiVsJames 美股操作方法</b>自動化。你在 Telegram 打指令，Bot 去問 TradingView 拿資料、計算訊號、回你一段可執行的判讀。</p>
     <ul style="padding-left:20px;line-height:1.9;color:var(--text);font-size:14px;">
-      <li><b>選股</b>：每日掃出符合 Mimi（短線突破 / EMA 系統）與 James（長線財報 AVWAP）的標的</li>
-      <li><b>風控</b>：算倉位、停損、盈虧比，並提醒當日是否該 HALT</li>
-      <li><b>覆盤</b>：盤後自動寫日記、追蹤倉位、記錄勝率</li>
+      <li><b>掃描</b>：找訊號（<code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/scan</code>、<code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/zone</code>、<code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/reversal</code>）</li>
+      <li><b>判讀</b>：告訴你該不該進（<code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/checklist</code>、<code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/rr</code>、<code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/ask</code>）</li>
+      <li><b>執行</b>：告訴你怎麼下單、停利、出場（<code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/pt</code>、<code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/exit</code>、<code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/journal</code>）</li>
     </ul>
   </div>
 
@@ -776,20 +777,23 @@ html, body { overflow-x: hidden; }
   <div class="card" style="margin-bottom:20px;">
     <h3 style="font-size:17px;margin-bottom:14px;">&#9989; 開始前三件事</h3>
     <ol style="padding-left:22px;line-height:1.9;color:var(--text);font-size:14px;">
-      <li>把 Bot 加為 Telegram 好友（找管理員拿連結）</li>
-      <li>記下你的 <b>session 起始資金</b>（後面 <code style="background:var(--input-bg);padding:2px 6px;border-radius:4px;color:var(--accent);">/risk</code> 會用）</li>
-      <li>確認你今天有 <b>15 分鐘</b> 看盤前 + <b>5 分鐘</b> 盤後</li>
+      <li>打開 <b>TradingView 桌面版</b>，圖表上要有 <b>FRVP Levels</b> 和 <b>AVWAP Anchor</b> 兩個指標（不是 Webapp）</li>
+      <li>Telegram 打開 Bot 對話視窗</li>
+      <li>先打 <code style="background:var(--input-bg);padding:2px 6px;border-radius:4px;color:var(--accent);">/help</code> — 看所有指令列表（不用背，隨時調出來看）</li>
     </ol>
   </div>
 
   <!-- 30 秒上手 -->
   <div class="card" style="margin-bottom:24px;border:2px solid var(--accent);background:rgba(45,212,168,.04);">
-    <h3 style="font-size:18px;margin-bottom:14px;color:var(--accent);">&#9201;&#65039; 30 秒上手</h3>
-    <p style="color:var(--text-secondary);font-size:13px;margin-bottom:12px;">在 Telegram 輸入：</p>
-    <pre style="background:var(--input-bg);padding:14px 16px;border-radius:8px;border:1px solid var(--input-border);overflow-x:auto;font-family:'SF Mono','Monaco','Menlo',monospace;font-size:13px;line-height:1.8;color:var(--accent);margin:0;"><code>/start
-/help
-/status</code></pre>
-    <p style="color:var(--text-secondary);font-size:13px;margin-top:12px;">看到回覆 = 系統正常。看不到 = 找管理員。</p>
+    <h3 style="font-size:18px;margin-bottom:14px;color:var(--accent);">&#9201;&#65039; 30 秒上手：第一次就跑這三個</h3>
+    <pre style="background:var(--input-bg);padding:14px 16px;border-radius:8px;border:1px solid var(--input-border);overflow-x:auto;font-family:'SF Mono','Monaco','Menlo',monospace;font-size:13px;line-height:1.8;color:var(--accent);margin:0;"><code>/macro                      <span style="color:var(--text-secondary);">← 看今天盤勢能不能做（紅燈就收工）</span>
+NVDA                        <span style="color:var(--text-secondary);">← 直接打股票代號，掃日線訊號</span>
+/ask 今天 NVDA 值得進嗎？   <span style="color:var(--text-secondary);">← 問 AI 顧問</span></code></pre>
+    <ul style="padding-left:20px;line-height:1.85;color:var(--text);font-size:13px;margin-top:14px;">
+      <li><code style="color:var(--accent);">/macro</code> 回你 VIX、F&amp;G、GEX、ADL、盤勢五個數字 + 結論（綠 / 黃 / 紅燈）</li>
+      <li>直接輸入代號 = <code style="color:var(--accent);">/scan SYMBOL</code> 的簡寫，Bot 回訊號強度、型態、進場建議</li>
+      <li><code style="color:var(--accent);">/ask</code> 是 AI 顧問，讀完整套策略文件幫你判讀（吃 Claude 訂閱額度，$0 邊際成本）</li>
+    </ul>
   </div>
 
   <!-- 完整第一天流程 -->
@@ -797,49 +801,58 @@ html, body { overflow-x: hidden; }
   <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px;">
 
     <!-- 盤前 -->
-    <div class="strategy-card">
+    <div class="strategy-card" style="grid-column:1 / -1;">
       <div class="card-icon" style="background:rgba(245,158,11,.15);color:var(--orange);">&#127769;</div>
-      <h3>盤前 30 分鐘</h3>
-      <ol style="padding-left:18px;line-height:1.85;font-size:14px;">
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/halt</code> — 看今天是否該休息（VIX 過高、累計虧損超標等）</li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/macro</code> — 看大盤環境（VIX、SPY、QQQ）</li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/scan swing</code> — 掃今日候選</li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/fullscan TICKER</code> — 對候選做完整檢查</li>
+      <h3>盤前（09:00–09:30 ET）</h3>
+      <ol style="padding-left:18px;line-height:1.95;font-size:14px;">
+        <li><b>HALT 自檢（10 秒，不是指令，是問自己）：</b><br>
+          <span style="font-size:13px;color:var(--text-secondary);">H — Hurt（我有急著翻本嗎？）／ A — Angry（我對市場生氣嗎？）／ L — Lonely（我有自己判斷嗎？）／ T — Tired（精神夠嗎？）<b style="color:var(--red);">任一紅燈 → 今天觀望</b></span>
+        </li>
+        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/macro</code> — 五維宏觀：🟢正常 / 🟠單筆風險降到 1% / 🔴暫停新多倉 + <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/hedge</code></li>
+        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/scan swing</code> — 批次掃波段持股（先在 TradingView 建好 watchlist）</li>
+        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/fullscan</code> — 全持倉訊號快照</li>
       </ol>
     </div>
 
     <!-- 開盤 -->
     <div class="strategy-card">
       <div class="card-icon" style="background:rgba(59,130,246,.15);color:var(--blue);">&#9889;</div>
-      <h3>開盤</h3>
-      <p style="font-size:14px;margin-bottom:10px;">開盤前 5 分鐘輸入：</p>
+      <h3>開盤（09:30–09:45 ET）</h3>
       <pre style="background:var(--input-bg);padding:10px 12px;border-radius:6px;font-family:'SF Mono','Monaco',monospace;font-size:13px;color:var(--accent);margin:0 0 10px;"><code>/open15 auto on</code></pre>
-      <p style="font-size:13px;color:var(--text-secondary);">Bot 會在開盤 15 分鐘後自動推送開盤分析</p>
+      <p style="font-size:13px;color:var(--text-secondary);">打完就走開。Bot 在 09:45 / 每整點 / 15:50 自動掃短線持股 + 觀察名單，有訊號就推播。不做短線就跳過。</p>
     </div>
 
     <!-- 盤中進場 -->
     <div class="strategy-card" style="grid-column:1 / -1;">
       <div class="card-icon" style="background:rgba(239,68,68,.15);color:var(--red);">&#128293;</div>
-      <h3>盤中進場流程（每筆都這樣做）</h3>
+      <h3>盤中進場流程（每筆都這樣做，約 2 分鐘）</h3>
       <ol style="padding-left:18px;line-height:1.95;font-size:14px;">
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/check TICKER</code> — 確認還在進場區</li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/risk TICKER ENTRY STOP</code> — 算倉位（會回傳建議股數與 R:R）</li>
-        <li>下單（用券商）</li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/buy TICKER 股數 價格</code> — 記錄到系統</li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/setstop TICKER 價格</code> — 設停損</li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/settarget TICKER 價格</code> — 設目標</li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/positions</code> — 確認倉位列表正確</li>
+        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">NVDA</code> — 掃日線，看訊號強度、型態</li>
+        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/valuation NVDA</code> — 估值階段（2 或 4 最好）</li>
+        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/cycle</code> — 景氣階段是否匹配</li>
+        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/checklist long</code>（短線打 <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">short</code>）— 全 YES 才繼續</li>
+        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/rr NVDA</code> — RR 必須 ≥ 2</li>
+        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/zone NVDA</code>（可選）— 共振鐵底進場點</li>
+        <li>TradingView 用 Long Position 工具畫進場／停損／目標 → 下單<b style="color:var(--red);">同時掛停損單</b></li>
+        <li>盤後補：<code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/journal entry NVDA</code></li>
       </ol>
+      <div style="margin-top:10px;padding:10px;background:rgba(45,212,168,.06);border-radius:6px;font-size:13px;line-height:1.8;">
+        <b>停利規劃：</b><code style="color:var(--accent);">/pt NVDA</code> → 3:3:4 分批（Phase 1 +2R 出 30% 停損移成本／Phase 2 +3R 出 30%／Phase 3 跌破 AVWAP 全出）<br>
+        <b>要賣或虧中：</b><code style="color:var(--accent);">/advice NVDA</code> → Hold / Reduce / Exit + 停損移到哪<br>
+        <b>批次掃全持倉紅黃綠燈：</b><code style="color:var(--accent);">/exit</code>
+      </div>
     </div>
 
     <!-- 盤後 -->
     <div class="strategy-card">
       <div class="card-icon" style="background:rgba(139,92,246,.15);color:var(--purple);">&#127769;</div>
-      <h3>盤後</h3>
+      <h3>盤後（16:00+）</h3>
       <ol style="padding-left:18px;line-height:1.85;font-size:14px;">
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/closeday</code> — 收盤總結（自動寫日記）</li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/journal</code> — 今天交易回顧</li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/stats</code> — 累積勝率 / 期望值</li>
+        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/journal exit NVDA</code> — 當日出場紀錄</li>
+        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/journal entry META</code> — 當日進場紀錄</li>
+        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/review daily</code> — 3 分鐘自動簡報</li>
+        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/portfolio</code> — 當日損益結算</li>
+        <li>週五加跑 <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/journal week</code></li>
       </ol>
     </div>
 
@@ -848,9 +861,11 @@ html, body { overflow-x: hidden; }
       <div class="card-icon" style="background:rgba(34,197,94,.15);color:var(--green);">&#128161;</div>
       <h3>卡住怎麼辦</h3>
       <ul style="padding-left:18px;line-height:1.85;font-size:14px;">
-        <li>不確定下一步 → <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/ask 你的問題</code></li>
         <li>忘了指令 → <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/help</code></li>
-        <li>系統異常 → <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/status</code> + 找管理員</li>
+        <li>Bot 沒反應 → <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/status</code></li>
+        <li>不知該打哪個 → <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/ask 我想 XXX 該用什麼指令？</code></li>
+        <li>掃描無結果 → 確認 TradingView 開著、FRVP / AVWAP 指標已載入</li>
+        <li>要撤銷 → <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/cancel</code>　要確認更新 → <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/confirm</code></li>
       </ul>
     </div>
   </div>
@@ -859,109 +874,134 @@ html, body { overflow-x: hidden; }
   <h3 style="font-size:20px;margin:30px 0 16px;color:var(--text);">&#127919; 指令地圖（按任務分類）</h3>
 
   <div class="card" style="margin-bottom:16px;">
-    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">1&#65039;&#8419; 系統 / 環境</h3>
+    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">&#128269; 我想找訊號</h3>
     <div style="overflow-x:auto;">
       <table>
-        <thead><tr><th>指令</th><th>用途</th></tr></thead>
+        <thead><tr><th>想做什麼</th><th>打什麼</th></tr></thead>
         <tbody>
-          <tr><td><code style="color:var(--accent);">/start</code></td><td>啟動 Bot</td></tr>
-          <tr><td><code style="color:var(--accent);">/help</code></td><td>指令清單</td></tr>
-          <tr><td><code style="color:var(--accent);">/status</code></td><td>系統狀態</td></tr>
-          <tr><td><code style="color:var(--accent);">/halt</code></td><td>今日是否該休息</td></tr>
-          <tr><td><code style="color:var(--accent);">/macro</code></td><td>大盤環境（VIX / SPY / QQQ）</td></tr>
+          <tr><td>看單一股票</td><td><code style="color:var(--accent);">NVDA</code> 或 <code style="color:var(--accent);">/scan NVDA</code></td></tr>
+          <tr><td>掃全部波段持股</td><td><code style="color:var(--accent);">/scan swing</code></td></tr>
+          <tr><td>找共振鐵底</td><td><code style="color:var(--accent);">/zone NVDA</code></td></tr>
+          <tr><td>找 BB 收斂突破</td><td><code style="color:var(--accent);">/squeeze</code></td></tr>
+          <tr><td>找 2B 假突破 / 破底翻</td><td><code style="color:var(--accent);">/reversal</code></td></tr>
+          <tr><td>找高品質訊號</td><td><code style="color:var(--accent);">/hq</code></td></tr>
+          <tr><td>財報後漂移機會</td><td><code style="color:var(--accent);">/pead NVDA</code></td></tr>
+          <tr><td>全持倉訊號快照</td><td><code style="color:var(--accent);">/fullscan</code></td></tr>
+          <tr><td>15 分鐘週期</td><td><code style="color:var(--accent);">/scan NVDA 15</code></td></tr>
+          <tr><td>今日短線標的</td><td><code style="color:var(--accent);">/shortlist</code></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
   <div class="card" style="margin-bottom:16px;">
-    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">2&#65039;&#8419; 選股 / 掃描</h3>
+    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">&#128721; 我要進場，先檢查</h3>
     <div style="overflow-x:auto;">
       <table>
-        <thead><tr><th>指令</th><th>用途</th></tr></thead>
+        <thead><tr><th>想做什麼</th><th>打什麼</th></tr></thead>
         <tbody>
-          <tr><td><code style="color:var(--accent);">/scan swing</code></td><td>波段候選（Mimi 系統）</td></tr>
-          <tr><td><code style="color:var(--accent);">/scan long</code></td><td>長線候選（James 系統）</td></tr>
-          <tr><td><code style="color:var(--accent);">/scan short</code></td><td>當沖候選</td></tr>
-          <tr><td><code style="color:var(--accent);">/fullscan TICKER</code></td><td>單一標的完整檢查</td></tr>
-          <tr><td><code style="color:var(--accent);">/check TICKER</code></td><td>快速檢查（進場前必跑）</td></tr>
-          <tr><td><code style="color:var(--accent);">/avwap TICKER</code></td><td>財報 AVWAP（James）</td></tr>
+          <tr><td>短線七問（當沖~5 日）</td><td><code style="color:var(--accent);">/checklist short</code></td></tr>
+          <tr><td>長線九問（波段~長線）</td><td><code style="color:var(--accent);">/checklist long</code></td></tr>
+          <tr><td>計算 RR</td><td><code style="color:var(--accent);">/rr NVDA</code></td></tr>
+          <tr><td>檢查估值階段</td><td><code style="color:var(--accent);">/valuation NVDA</code></td></tr>
+          <tr><td>檢查景氣階段</td><td><code style="color:var(--accent);">/cycle</code></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
   <div class="card" style="margin-bottom:16px;">
-    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">3&#65039;&#8419; 風控 / 倉位</h3>
+    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">&#128176; 我有持倉，要管理</h3>
     <div style="overflow-x:auto;">
       <table>
-        <thead><tr><th>指令</th><th>用途</th></tr></thead>
+        <thead><tr><th>想做什麼</th><th>打什麼</th></tr></thead>
         <tbody>
-          <tr><td><code style="color:var(--accent);">/risk TICKER ENTRY STOP</code></td><td>算倉位 + R:R</td></tr>
-          <tr><td><code style="color:var(--accent);">/buy TICKER 股數 價格</code></td><td>記錄買進</td></tr>
-          <tr><td><code style="color:var(--accent);">/sell TICKER 股數 價格</code></td><td>記錄賣出</td></tr>
-          <tr><td><code style="color:var(--accent);">/setstop TICKER 價格</code></td><td>設/改停損</td></tr>
-          <tr><td><code style="color:var(--accent);">/settarget TICKER 價格</code></td><td>設/改目標</td></tr>
-          <tr><td><code style="color:var(--accent);">/positions</code></td><td>當前倉位列表</td></tr>
-          <tr><td><code style="color:var(--accent);">/exposure</code></td><td>總風險敞口</td></tr>
+          <tr><td>⭐ 我現在該怎麼辦（加／減／抱／全平）</td><td><code style="color:var(--accent);">/advice NVDA</code></td></tr>
+          <tr><td>規劃分批停利（3:3:4）</td><td><code style="color:var(--accent);">/pt NVDA</code></td></tr>
+          <tr><td>自訂財報日錨點停利</td><td><code style="color:var(--accent);">/custom NVDA frvp=2025-02-20 avwap=2025-02-20</code></td></tr>
+          <tr><td>批次六層出場掃描</td><td><code style="color:var(--accent);">/exit</code></td></tr>
+          <tr><td>校正實際停損</td><td><code style="color:var(--accent);">/advice set NVDA stop=190.00</code></td></tr>
+          <tr><td>當前損益 + 健檢</td><td><code style="color:var(--accent);">/portfolio</code></td></tr>
+          <tr><td>長線基本面健檢</td><td><code style="color:var(--accent);">/longterm NVDA</code></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
   <div class="card" style="margin-bottom:16px;">
-    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">4&#65039;&#8419; 盤中監控</h3>
+    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">&#127758; 我想看大盤</h3>
     <div style="overflow-x:auto;">
       <table>
-        <thead><tr><th>指令</th><th>用途</th></tr></thead>
+        <thead><tr><th>想做什麼</th><th>打什麼</th></tr></thead>
         <tbody>
-          <tr><td><code style="color:var(--accent);">/open15 auto on</code></td><td>開盤 15 分鐘自動分析</td></tr>
-          <tr><td><code style="color:var(--accent);">/watch TICKER</code></td><td>加入觀察名單</td></tr>
-          <tr><td><code style="color:var(--accent);">/alerts</code></td><td>查看警報</td></tr>
-          <tr><td><code style="color:var(--accent);">/quote TICKER</code></td><td>即時報價</td></tr>
+          <tr><td>五維宏觀快照</td><td><code style="color:var(--accent);">/macro</code></td></tr>
+          <tr><td>市場廣度深度</td><td><code style="color:var(--accent);">/adl</code></td></tr>
+          <tr><td>景氣階段</td><td><code style="color:var(--accent);">/cycle</code></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
   <div class="card" style="margin-bottom:16px;">
-    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">5&#65039;&#8419; 盤後 / 覆盤</h3>
+    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">&#128737;&#65039; 我要避險</h3>
     <div style="overflow-x:auto;">
       <table>
-        <thead><tr><th>指令</th><th>用途</th></tr></thead>
+        <thead><tr><th>想做什麼</th><th>打什麼</th></tr></thead>
         <tbody>
-          <tr><td><code style="color:var(--accent);">/closeday</code></td><td>收盤總結</td></tr>
-          <tr><td><code style="color:var(--accent);">/journal</code></td><td>今日交易日記</td></tr>
-          <tr><td><code style="color:var(--accent);">/stats</code></td><td>累積勝率 / 期望值</td></tr>
-          <tr><td><code style="color:var(--accent);">/review TICKER</code></td><td>單檔交易覆盤</td></tr>
+          <tr><td>三層對沖 SOP</td><td><code style="color:var(--accent);">/hedge</code></td></tr>
+          <tr><td>對沖口數計算</td><td><code style="color:var(--accent);">/hedgesize NVDA 70</code></td></tr>
+          <tr><td>ITM Call 口數計算</td><td><code style="color:var(--accent);">/itmcall NVDA 10000</code></td></tr>
+          <tr><td>VRVP 選擇權訊號</td><td><code style="color:var(--accent);">/options NVDA</code></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
   <div class="card" style="margin-bottom:16px;">
-    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">6&#65039;&#8419; 學習 / 知識</h3>
+    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">&#128211; 我要記錄 / 復盤</h3>
     <div style="overflow-x:auto;">
       <table>
-        <thead><tr><th>指令</th><th>用途</th></tr></thead>
+        <thead><tr><th>想做什麼</th><th>打什麼</th></tr></thead>
         <tbody>
-          <tr><td><code style="color:var(--accent);">/ask 問題</code></td><td>AI 投資顧問（深度）</td></tr>
-          <tr><td><code style="color:var(--accent);">/learn 主題</code></td><td>學習筆記</td></tr>
-          <tr><td><code style="color:var(--accent);">/glossary 詞</code></td><td>術語解釋</td></tr>
+          <tr><td>記進場</td><td><code style="color:var(--accent);">/journal entry NVDA</code></td></tr>
+          <tr><td>記出場</td><td><code style="color:var(--accent);">/journal exit NVDA</code></td></tr>
+          <tr><td>每日簡報</td><td><code style="color:var(--accent);">/review daily</code></td></tr>
+          <tr><td>週五深度復盤</td><td><code style="color:var(--accent);">/review weekly</code> 或 <code style="color:var(--accent);">/journal week</code></td></tr>
+          <tr><td>看統計 / 資金曲線</td><td><code style="color:var(--accent);">/stats week</code>（或 <code style="color:var(--accent);">month</code>、<code style="color:var(--accent);">ytd</code>、<code style="color:var(--accent);">all</code>）</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px;">
+    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">&#129302; 我要問 AI</h3>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead><tr><th>想做什麼</th><th>打什麼</th></tr></thead>
+        <tbody>
+          <tr><td>問策略判讀（Claude，$0）</td><td><code style="color:var(--accent);">/ask 你的問題</code></td></tr>
+          <tr><td>問 PDF 深度文章</td><td><code style="color:var(--accent);">/ask nlm 你的問題</code></td></tr>
+          <tr><td>連續對話</td><td><code style="color:var(--accent);">/ask</code>（不帶問題）</td></tr>
+          <tr><td>引用某則追問</td><td><code style="color:var(--accent);">/ask ref #A-42 新問題</code></td></tr>
+          <tr><td>合併 2~5 則重問</td><td><code style="color:var(--accent);">/ask merge #A-42 #A-45 新問題</code></td></tr>
+          <tr><td>保存到 Obsidian</td><td><code style="color:var(--accent);">/ask save #A-42</code></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
   <div class="card" style="margin-bottom:24px;">
-    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">7&#65039;&#8419; 設定</h3>
+    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">&#9881;&#65039; 系統 / 環境</h3>
     <div style="overflow-x:auto;">
       <table>
         <thead><tr><th>指令</th><th>用途</th></tr></thead>
         <tbody>
-          <tr><td><code style="color:var(--accent);">/setcapital 金額</code></td><td>設定總資金</td></tr>
-          <tr><td><code style="color:var(--accent);">/setrisk 百分比</code></td><td>單筆風險上限</td></tr>
-          <tr><td><code style="color:var(--accent);">/preferences</code></td><td>偏好設定</td></tr>
+          <tr><td><code style="color:var(--accent);">/help</code></td><td>指令清單</td></tr>
+          <tr><td><code style="color:var(--accent);">/status</code></td><td>Bot 運行狀態</td></tr>
+          <tr><td><code style="color:var(--accent);">/cancel</code></td><td>撤銷操作</td></tr>
+          <tr><td><code style="color:var(--accent);">/confirm</code></td><td>確認更新</td></tr>
+          <tr><td><code style="color:var(--accent);">/open15 auto on</code></td><td>開盤自動三階段掃描</td></tr>
+          <tr><td><code style="color:var(--accent);">/open15 close</code></td><td>收盤決策</td></tr>
         </tbody>
       </table>
     </div>
@@ -969,73 +1009,136 @@ html, body { overflow-x: hidden; }
 
   <!-- /ask 深度介紹 -->
   <div class="card" style="margin-bottom:24px;border-left:4px solid var(--blue);">
-    <h3 style="font-size:18px;margin-bottom:12px;">&#129302; <code style="color:var(--blue);">/ask</code> — 你的 AI 投資顧問</h3>
-    <p style="font-size:14px;line-height:1.8;color:var(--text);margin-bottom:12px;">當你不確定該怎麼做、想理解一個現象、或要深度討論某個標的時用它。它會結合你的倉位、市場數據、歷史日記給回答。</p>
-    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">範例：</p>
+    <h3 style="font-size:18px;margin-bottom:12px;">&#129302; <code style="color:var(--blue);">/ask</code> — 你的 AI 交易顧問</h3>
+    <p style="font-size:14px;line-height:1.8;color:var(--text);margin-bottom:12px;">掃描指令回你「數字」，<code style="color:var(--blue);">/ask</code> 幫你「解讀」。它讀完整套 MimiVsJames 策略文件，結合你的倉位與市場數據給可執行建議。</p>
+
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;"><b>兩個引擎：</b></p>
+    <div style="overflow-x:auto;margin-bottom:14px;">
+      <table>
+        <thead><tr><th>指令</th><th>引擎</th><th>何時用</th></tr></thead>
+        <tbody>
+          <tr><td><code style="color:var(--accent);">/ask 問題</code></td><td>&#129302; Claude Opus 4.7（預設）</td><td>99% 情況用這個。讀本地策略文件，$0 邊際</td></tr>
+          <tr><td><code style="color:var(--accent);">/ask nlm 問題</code></td><td>&#128218; NotebookLM</td><td>需要引用 PDF 深度文章時（少見）</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;"><b>連續對話 vs 引用：</b></p>
+    <pre style="background:var(--input-bg);padding:12px 14px;border-radius:6px;font-family:'SF Mono','Monaco',monospace;font-size:12.5px;color:var(--text);line-height:1.75;margin:0 0 12px;overflow-x:auto;"><code><span style="color:var(--accent);">/ask NVDA 今天訊號怎麼樣？</span>
+<span style="color:var(--text-secondary);">→ #A-42 · NVDA 日線 LONG 訊號...</span>
+
+<span style="color:var(--accent);">/ask 那我該進多少倉？</span>        <span style="color:var(--text-secondary);"># 接續問，自動引用 #A-42</span>
+<span style="color:var(--accent);">/ask ref #A-42 換成 15 分鐘週期呢？</span>  <span style="color:var(--text-secondary);"># 指定引用某則</span>
+<span style="color:var(--accent);">/ask save #A-42</span>                <span style="color:var(--text-secondary);"># 存到 Obsidian 知識庫</span></code></pre>
+
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;"><b>典型用法：</b></p>
     <pre style="background:var(--input-bg);padding:12px 14px;border-radius:6px;font-family:'SF Mono','Monaco',monospace;font-size:13px;color:var(--accent);line-height:1.8;margin:0;overflow-x:auto;"><code>/ask NVDA 現在進場合理嗎？
 /ask 為什麼今天 VIX 突然飆？
 /ask 我這週為什麼一直停損？</code></pre>
   </div>
 
   <!-- 典型一天 -->
-  <div class="card" style="margin-bottom:24px;">
-    <h3 style="font-size:18px;margin-bottom:14px;">&#128293; 典型一天指令組合</h3>
-    <pre style="background:var(--input-bg);padding:14px 16px;border-radius:8px;border:1px solid var(--input-border);font-family:'SF Mono','Monaco',monospace;font-size:13px;color:var(--text);line-height:1.85;overflow-x:auto;margin:0;"><code><span style="color:var(--text-secondary);"># 盤前</span>
-/halt
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px;">
+    <div class="card">
+      <h3 style="font-size:16px;margin-bottom:12px;">&#128200; 波段操作者的一天（10 分鐘）</h3>
+      <pre style="background:var(--input-bg);padding:12px 14px;border-radius:6px;font-family:'SF Mono','Monaco',monospace;font-size:12.5px;color:var(--text);line-height:1.8;overflow-x:auto;margin:0;"><code><span style="color:var(--text-secondary);"># 盤前 5 分鐘</span>
 /macro
 /scan swing
-/fullscan NVDA
+/fullscan
+
+<span style="color:var(--text-secondary);"># NVDA 有訊號，進場 3 分鐘</span>
+NVDA
+/valuation NVDA
+/checklist long
+/rr NVDA
+/zone NVDA
+<span style="color:var(--text-secondary);">（下單 + 掛停損單）</span>
+
+<span style="color:var(--text-secondary);"># 出場規劃</span>
+/pt NVDA
+
+<span style="color:var(--text-secondary);"># 盤後 1 分鐘</span>
+/journal entry NVDA
+/review daily
+/portfolio</code></pre>
+    </div>
+    <div class="card">
+      <h3 style="font-size:16px;margin-bottom:12px;">&#9889; 短線操作者的一天</h3>
+      <pre style="background:var(--input-bg);padding:12px 14px;border-radius:6px;font-family:'SF Mono','Monaco',monospace;font-size:12.5px;color:var(--text);line-height:1.8;overflow-x:auto;margin:0;"><code><span style="color:var(--text-secondary);"># 盤前</span>
+/macro
+/squeeze
+/reversal
+/shortlist
 
 <span style="color:var(--text-secondary);"># 開盤</span>
 /open15 auto on
 
-<span style="color:var(--text-secondary);"># 進場（每筆）</span>
-/check NVDA
-/risk NVDA 145.50 142.00
-/buy NVDA 50 145.60
-/setstop NVDA 142.00
-/settarget NVDA 152.00
+<span style="color:var(--text-secondary);"># 盤中觸發</span>
+/scan NVDA 15
+/rr NVDA
+/checklist short
 
-<span style="color:var(--text-secondary);"># 盤後</span>
-/closeday
-/journal
-/stats</code></pre>
+<span style="color:var(--text-secondary);"># 收盤前</span>
+/open15 close</code></pre>
+    </div>
   </div>
 
   <!-- 操作者路徑 -->
+  <h3 style="font-size:20px;margin:30px 0 16px;color:var(--text);">&#127919; 找到你的操作者路徑</h3>
   <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px;">
     <div class="strategy-card">
-      <div class="card-icon" style="background:rgba(45,212,168,.15);color:var(--accent);">&#127919;</div>
-      <h3>新手前 7 天</h3>
-      <ol style="padding-left:18px;line-height:1.85;font-size:14px;">
-        <li>每天跑完整流程，但 <b>只用 20% 資金</b></li>
-        <li>每筆都用 <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/risk</code>，不要憑感覺押注</li>
-        <li>遇到不懂就問 <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/ask</code></li>
-        <li>每晚看 <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/journal</code> 找模式</li>
-      </ol>
+      <div class="card-icon" style="background:rgba(59,130,246,.15);color:var(--blue);">&#9889;</div>
+      <h3>短線（當沖~5 日）</h3>
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <code style="color:var(--accent);">/macro</code> <code style="color:var(--accent);">/squeeze</code> <code style="color:var(--accent);">/reversal</code> <code style="color:var(--accent);">/open15</code> <code style="color:var(--accent);">/scan SYMBOL 15</code> <code style="color:var(--accent);">/checklist short</code>
+      </p>
     </div>
     <div class="strategy-card">
-      <div class="card-icon" style="background:rgba(139,92,246,.15);color:var(--purple);">&#128218;</div>
-      <h3>下一步學什麼</h3>
-      <ul style="padding-left:18px;line-height:1.85;font-size:14px;">
-        <li>看「<b>交易 SOP</b>」分頁 — 完整進出場流程</li>
-        <li>看「<b>型態指南</b>」 — 認識常見突破型態</li>
-        <li>看「<b>長線選股決策</b>」 — James 系統思路</li>
-        <li>看「<b>財報 AVWAP</b>」 — 機構成本計算</li>
-      </ul>
+      <div class="card-icon" style="background:rgba(45,212,168,.15);color:var(--accent);">&#128200;</div>
+      <h3>波段（1 週~3 個月）⭐ 系統主力</h3>
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <code style="color:var(--accent);">/macro</code> <code style="color:var(--accent);">/scan swing</code> <code style="color:var(--accent);">/zone</code> <code style="color:var(--accent);">/pt</code> <code style="color:var(--accent);">/exit</code> <code style="color:var(--accent);">/journal week</code>
+      </p>
     </div>
+    <div class="strategy-card">
+      <div class="card-icon" style="background:rgba(139,92,246,.15);color:var(--purple);">&#127963;&#65039;</div>
+      <h3>長線（3 個月以上）</h3>
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <code style="color:var(--accent);">/cycle</code> <code style="color:var(--accent);">/longterm</code> <code style="color:var(--accent);">/pead</code> — 每季一次即可
+      </p>
+    </div>
+    <div class="strategy-card">
+      <div class="card-icon" style="background:rgba(245,158,11,.15);color:var(--orange);">&#127919;</div>
+      <h3>混合型</h3>
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        主線 70% 走波段 SOP，副線 30% 走短線 SOP，獨立停損、獨立節奏。
+      </p>
+    </div>
+  </div>
+
+  <!-- 下一步 -->
+  <div class="card" style="margin-bottom:24px;">
+    <h3 style="font-size:18px;margin-bottom:14px;">&#128218; 下一步該學什麼</h3>
+    <ol style="padding-left:22px;line-height:2;font-size:14px;color:var(--text);">
+      <li>看「<b>交易 SOP</b>」分頁 — 每日例行工作的完整版</li>
+      <li>看「<b>部位/停損</b>」 — 進場前自我審問（HALT + 七/九問）</li>
+      <li>看「<b>型態指南</b>」 — FRVP + AVWAP 共振鐵底</li>
+      <li>看「<b>停利計算</b>」 — 3:3:4 分批停利邏輯詳解</li>
+      <li>看「<b>再平衡/風控</b>」 — 反馬丁加倉倉位管理</li>
+    </ol>
   </div>
 
   <!-- 五條鐵律 -->
   <div class="card" style="margin-bottom:24px;border:2px solid var(--red);background:rgba(239,68,68,.04);">
-    <h3 style="font-size:18px;margin-bottom:14px;color:var(--red);">&#9888;&#65039; 五條鐵律（看完才能開始）</h3>
+    <h3 style="font-size:18px;margin-bottom:14px;color:var(--red);">&#9888;&#65039; 五條鐵律（刺在手上）</h3>
     <ol style="padding-left:22px;line-height:2.1;font-size:15px;color:var(--text);">
-      <li><b>單筆風險 ≤ 總資金 1~2%</b> — 違反就停手</li>
-      <li><b>沒算 R:R 不進場</b> — 至少要 2:1</li>
-      <li><b>進場前先設停損</b> — 不能進場後再想</li>
-      <li><b>當日累計虧損 &gt; 3~5% → HALT</b> — 不要報復性交易</li>
-      <li><b>系統說不能買就不買</b> — 不要凹單</li>
+      <li><b>HALT 紅燈 → 今日不交易</b>，照常生活不動手</li>
+      <li><b>RR &lt; 2 不進場</b>，沒有例外</li>
+      <li><code style="color:var(--accent);">/checklist</code> <b>任一 ☐ 未勾選 → Cancel</b></li>
+      <li><b>下單同時掛停損單</b>，不是心裡想想</li>
+      <li><b>連續 3 筆虧損 → 強制休息一週</b></li>
     </ol>
+    <p style="font-size:12px;color:var(--text-secondary);margin-top:14px;text-align:right;">最後更新：2026-04-22 · 建議每 3 個月重讀一次，紀律會偷偷退化</p>
   </div>
 </div>
 
