@@ -6738,6 +6738,164 @@ QLD(55-65%)：提供基本的槓桿beta收益，確保能跑贏SSO
         <p style="font-size:12px;color:var(--text-secondary);margin:4px 0 0;">一般均線計算時間與收盤價；AVWAP 將起點「錨定」在重大事件上，算出帶動趨勢的大資金真實平均成本。</p>
       </div>
     </div>
+
+    <!-- AVWAP 示意圖 SVG -->
+    <div style="background:var(--input-bg);border-radius:8px;padding:16px;margin-bottom:14px;">
+      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;text-align:center;">從「錨點事件」起算的機構動態成本線 · AVWAP ± 2σ 通道</div>
+      <svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+        <!-- 背景格線 -->
+        <g stroke="var(--card-border)" stroke-width="0.5" opacity="0.4">
+          <line x1="60" y1="60" x2="780" y2="60"/>
+          <line x1="60" y1="140" x2="780" y2="140"/>
+          <line x1="60" y1="220" x2="780" y2="220"/>
+          <line x1="60" y1="300" x2="780" y2="300"/>
+        </g>
+
+        <!-- Y 軸 -->
+        <line x1="60" y1="20" x2="60" y2="340" stroke="var(--text-secondary)" stroke-width="1" opacity="0.5"/>
+        <!-- X 軸 (時間) -->
+        <line x1="60" y1="340" x2="780" y2="340" stroke="var(--text-secondary)" stroke-width="1" opacity="0.5"/>
+        <polygon points="780,340 773,336 773,344" fill="var(--text-secondary)" opacity="0.6"/>
+        <text x="420" y="362" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="var(--text-secondary)">時間 →</text>
+
+        <!-- +2σ 上軌 (曲線) -->
+        <path d="M 140,120 Q 280,85 420,65 T 720,55"
+              fill="none" stroke="var(--purple)" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.75"/>
+        <text x="735" y="58" font-family="system-ui,sans-serif" font-size="10" fill="var(--purple)" font-weight="600">+2σ</text>
+
+        <!-- AVWAP 主線 (較粗、藍色) -->
+        <path d="M 140,205 Q 280,185 420,170 T 720,150"
+              fill="none" stroke="var(--blue)" stroke-width="2.5"/>
+        <text x="735" y="153" font-family="system-ui,sans-serif" font-size="11" fill="var(--blue)" font-weight="700">AVWAP</text>
+
+        <!-- -2σ 下軌 (曲線) -->
+        <path d="M 140,290 Q 280,285 420,275 T 720,245"
+              fill="none" stroke="var(--purple)" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.75"/>
+        <text x="735" y="248" font-family="system-ui,sans-serif" font-size="10" fill="var(--purple)" font-weight="600">−2σ</text>
+
+        <!-- 通道內淺色填充 (夾在 +2σ / -2σ 之間) -->
+        <path d="M 140,120 Q 280,85 420,65 T 720,55 L 720,245 Q 560,265 420,275 T 140,290 Z"
+              fill="var(--blue)" opacity="0.05"/>
+
+        <!-- ===== 錨點事件 ===== -->
+        <!-- 錨點前的平淡走勢 (灰色細線) -->
+        <polyline points="70,240 85,245 100,235 115,230 125,232"
+                  fill="none" stroke="var(--text-secondary)" stroke-width="1" opacity="0.4"/>
+
+        <!-- 錨點：大跳空 + 爆量長紅 K -->
+        <g>
+          <!-- 跳空缺口 (虛線標示) -->
+          <line x1="125" y1="232" x2="140" y2="220" stroke="var(--text-secondary)" stroke-width="0.5" stroke-dasharray="2,2" opacity="0.5"/>
+          <!-- 爆量長紅 K -->
+          <line x1="145" y1="180" x2="145" y2="225" stroke="var(--green)" stroke-width="1"/>
+          <rect x="139" y="185" width="12" height="35" fill="var(--green)"/>
+          <!-- 錨點標記 ⚓ -->
+          <circle cx="145" cy="205" r="14" fill="none" stroke="var(--accent)" stroke-width="2"/>
+          <text x="145" y="210" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" fill="var(--accent)">⚓</text>
+          <!-- 錨點說明 -->
+          <text x="75" y="160" font-family="system-ui,sans-serif" font-size="10" fill="var(--accent)" font-weight="700">錨點事件</text>
+          <text x="75" y="174" font-family="system-ui,sans-serif" font-size="9" fill="var(--text-secondary)">(財報 / FOMC /</text>
+          <text x="75" y="185" font-family="system-ui,sans-serif" font-size="9" fill="var(--text-secondary)">大盤大底爆量)</text>
+        </g>
+
+        <!-- ===== K 線走勢 (從錨點延伸) ===== -->
+        <g>
+          <!-- 錨點後上漲段 -->
+          <line x1="175" y1="170" x2="175" y2="195" stroke="var(--green)" stroke-width="1"/>
+          <rect x="170" y="173" width="10" height="18" fill="var(--green)"/>
+
+          <line x1="205" y1="155" x2="205" y2="178" stroke="var(--green)" stroke-width="1"/>
+          <rect x="200" y="158" width="10" height="18" fill="var(--green)"/>
+
+          <line x1="235" y1="150" x2="235" y2="170" stroke="var(--green)" stroke-width="1"/>
+          <rect x="230" y="152" width="10" height="16" fill="var(--green)"/>
+
+          <!-- 碰到 +2σ 上軌 (獲利了結) -->
+          <line x1="265" y1="108" x2="265" y2="135" stroke="var(--green)" stroke-width="1"/>
+          <rect x="260" y="108" width="10" height="22" fill="var(--green)"/>
+
+          <!-- 拉回測 AVWAP -->
+          <line x1="295" y1="130" x2="295" y2="170" stroke="var(--red)" stroke-width="1"/>
+          <rect x="290" y="135" width="10" height="30" fill="var(--red)"/>
+
+          <line x1="325" y1="170" x2="325" y2="195" stroke="var(--red)" stroke-width="1"/>
+          <rect x="320" y="176" width="10" height="18" fill="var(--red)"/>
+
+          <!-- 回測 AVWAP 量縮不破 (下引線) -->
+          <line x1="355" y1="175" x2="355" y2="200" stroke="var(--green)" stroke-width="1"/>
+          <rect x="350" y="178" width="10" height="14" fill="var(--green)"/>
+
+          <!-- 從 AVWAP 反彈 -->
+          <line x1="385" y1="160" x2="385" y2="185" stroke="var(--green)" stroke-width="1"/>
+          <rect x="380" y="162" width="10" height="18" fill="var(--green)"/>
+
+          <line x1="415" y1="140" x2="415" y2="165" stroke="var(--green)" stroke-width="1"/>
+          <rect x="410" y="143" width="10" height="18" fill="var(--green)"/>
+
+          <line x1="445" y1="120" x2="445" y2="145" stroke="var(--green)" stroke-width="1"/>
+          <rect x="440" y="123" width="10" height="18" fill="var(--green)"/>
+
+          <!-- 再衝 +2σ -->
+          <line x1="475" y1="75" x2="475" y2="110" stroke="var(--green)" stroke-width="1"/>
+          <rect x="470" y="80" width="10" height="24" fill="var(--green)"/>
+
+          <!-- 回落 -->
+          <line x1="505" y1="90" x2="505" y2="130" stroke="var(--red)" stroke-width="1"/>
+          <rect x="500" y="95" width="10" height="30" fill="var(--red)"/>
+
+          <line x1="535" y1="125" x2="535" y2="165" stroke="var(--red)" stroke-width="1"/>
+          <rect x="530" y="130" width="10" height="30" fill="var(--red)"/>
+
+          <!-- 跌破 AVWAP (停損訊號) -->
+          <line x1="565" y1="165" x2="565" y2="215" stroke="var(--red)" stroke-width="1.5"/>
+          <rect x="559" y="170" width="12" height="40" fill="var(--red)"/>
+
+          <!-- 續跌 -->
+          <line x1="595" y1="200" x2="595" y2="235" stroke="var(--red)" stroke-width="1"/>
+          <rect x="590" y="205" width="10" height="25" fill="var(--red)"/>
+
+          <!-- 打到 -2σ 反彈 -->
+          <line x1="625" y1="235" x2="625" y2="265" stroke="var(--green)" stroke-width="1"/>
+          <rect x="620" y="238" width="10" height="20" fill="var(--green)"/>
+
+          <line x1="655" y1="215" x2="655" y2="245" stroke="var(--green)" stroke-width="1"/>
+          <rect x="650" y="218" width="10" height="22" fill="var(--green)"/>
+
+          <line x1="685" y1="200" x2="685" y2="225" stroke="var(--green)" stroke-width="1"/>
+          <rect x="680" y="203" width="10" height="18" fill="var(--green)"/>
+        </g>
+
+        <!-- ===== 關鍵訊號標註 ===== -->
+        <!-- 碰 +2σ 獲利了結 -->
+        <circle cx="265" cy="115" r="11" fill="none" stroke="var(--purple)" stroke-width="1.5"/>
+        <text x="200" y="45" font-family="system-ui,sans-serif" font-size="10" fill="var(--purple)" font-weight="700">① 碰 +2σ · 短線獲利了結</text>
+
+        <!-- 回測 AVWAP 不破 -->
+        <circle cx="355" cy="195" r="11" fill="none" stroke="var(--orange)" stroke-width="1.5"/>
+        <text x="300" y="330" font-family="system-ui,sans-serif" font-size="10" fill="var(--orange)" font-weight="700">② 回測 AVWAP 量縮不破 · 最佳加碼位</text>
+
+        <!-- 跌破 AVWAP 停損 -->
+        <circle cx="565" cy="190" r="12" fill="none" stroke="var(--red)" stroke-width="1.5"/>
+        <text x="460" y="38" font-family="system-ui,sans-serif" font-size="10" fill="var(--red)" font-weight="700">③ 帶量跌破 AVWAP · 果斷停損</text>
+
+        <!-- 打到 -2σ 恐慌超跌 -->
+        <circle cx="625" cy="250" r="11" fill="none" stroke="var(--green)" stroke-width="1.5"/>
+        <text x="540" y="325" font-family="system-ui,sans-serif" font-size="10" fill="var(--green)" font-weight="700">④ 觸 −2σ · 恐慌超跌抄底參考</text>
+
+        <!-- 價格標籤 -->
+        <g font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--text-secondary)">
+          <text x="45" y="65" text-anchor="end">高</text>
+          <text x="45" y="225" text-anchor="end">錨點價</text>
+          <text x="45" y="335" text-anchor="end">低</text>
+        </g>
+      </svg>
+      <div style="font-size:11px;color:var(--text-secondary);margin-top:10px;text-align:center;line-height:1.7;">
+        <span style="color:var(--accent);font-weight:600;">⚓ 錨點</span> = 重大事件日　｜
+        <span style="color:var(--blue);font-weight:600;">AVWAP</span> = 錨點起算的大資金平均成本　｜
+        <span style="color:var(--purple);font-weight:600;">±2σ</span> = 95% 機率極限邊界（過熱 / 超跌）
+      </div>
+    </div>
+
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px;">
       <div style="background:var(--input-bg);border-radius:8px;padding:12px;">
         <div style="color:var(--blue);font-weight:700;margin-bottom:6px;font-size:13px;">常用錨點（重大事件）</div>
