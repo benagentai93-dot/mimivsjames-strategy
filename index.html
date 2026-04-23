@@ -1472,17 +1472,17 @@ Darvas Box：多頭趨勢（通常要求股價創下 52 週新高或歷史新高
 
   <!-- 型態導覽標籤 -->
   <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
-    <button onclick="showPattern('bottom')" id="btn-bottom" style="padding:8px 18px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:var(--green);color:#0f1923;">&#128200; 底部型態</button>
-    <button onclick="showPattern('stagnation')" id="btn-stagnation" style="padding:8px 18px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:var(--card-border);color:var(--text);">&#9203; 滯漲型態</button>
-    <button onclick="showPattern('breakout')" id="btn-breakout" style="padding:8px 18px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:var(--card-border);color:var(--text);">&#9889; 突破型態</button>
-    <button onclick="showPattern('top')" id="btn-top" style="padding:8px 18px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:var(--card-border);color:var(--text);">&#128308; 頂部型態</button>
+    <button onclick="showPattern('bottom')" id="btn-bottom" style="padding:8px 18px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:var(--green);color:#0f1923;">&#127793; 底部型態</button>
+    <button onclick="showPattern('stagnation')" id="btn-stagnation" style="padding:8px 18px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:var(--card-border);color:var(--text);">&#129700; 滯漲型態</button>
+    <button onclick="showPattern('breakout')" id="btn-breakout" style="padding:8px 18px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:var(--card-border);color:var(--text);">&#128208; 突破型態</button>
+    <button onclick="showPattern('top')" id="btn-top" style="padding:8px 18px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:var(--card-border);color:var(--text);">&#128314; 頂部型態</button>
   </div>
 
   <!-- ===== 底部型態 ===== -->
   <div id="pattern-bottom">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
       <div class="strategy-card" style="grid-column:1/-1;">
-        <div class="card-icon icon-green">&#128200;</div>
+        <div class="card-icon icon-green">&#127793;</div>
         <h3>底部型態 — 核心定義</h3>
         <p>底部型態是市場從劇烈下跌轉為主力完成吸籌、發出轉強訊號的完整結構。<strong>止跌 ≠ 見底</strong>：止跌只是拋壓減輕的過渡期；真正的底部是套牢籌碼沉澱、主力接籌後發出確認突破訊號。重點不在尋找最低點，而是等待「確認轉強」的右側進場訊號。</p>
       </div>
@@ -1568,7 +1568,7 @@ Darvas Box：多頭趨勢（通常要求股價創下 52 週新高或歷史新高
   <div id="pattern-stagnation" style="display:none;">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
       <div class="strategy-card" style="grid-column:1/-1;">
-        <div class="card-icon icon-orange">&#9203;</div>
+        <div class="card-icon icon-orange">&#129700;</div>
         <h3>滯漲型態 — 核心定義</h3>
         <p>股價上漲一段時間後到達相對高點，無法繼續創新高，轉為水平橫向整理。<strong>滯漲 ≠ 轉空</strong>：可能是主力短暫休息等待題材，或是鎖碼護盤（中小型股常見）。必須視為「黃色警戒」，雙手準備：帶量突破箱頂 → 繼續做多；跌破箱底 → 確認頂部，離場。</p>
       </div>
@@ -1618,7 +1618,7 @@ Darvas Box：多頭趨勢（通常要求股價創下 52 週新高或歷史新高
   <div id="pattern-breakout" style="display:none;">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
       <div class="strategy-card" style="grid-column:1/-1;">
-        <div class="card-icon icon-accent">&#9889;</div>
+        <div class="card-icon icon-accent">&#128208;</div>
         <h3>突破型態 — 核心定義</h3>
         <p>股價在盤整或面臨關鍵壓力時向上穿透阻力，代表多方取得壓倒性優勢，準備開啟新一段上漲趨勢。市場充斥主力用來誘多的「假突破」，真突破必須同時滿足三大核心條件。</p>
       </div>
@@ -1684,7 +1684,7 @@ Darvas Box：多頭趨勢（通常要求股價創下 52 週新高或歷史新高
   <div id="pattern-top" style="display:none;">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
       <div class="strategy-card" style="grid-column:1/-1;">
-        <div class="card-icon icon-red">&#128308;</div>
+        <div class="card-icon icon-red">&#128314;</div>
         <h3>頂部型態 — 核心定義</h3>
         <p>股價在上漲一段時間後到達高點，無法繼續創新高並轉而反轉下跌的結構。圖形如「山」形，代表買盤力道無法延續、資金逐漸撤出，是趨勢由多頭轉空頭的關鍵轉折。通常在頂部形成前，會先出現一段「滯漲型態」。<strong>看到頂部確立，操作核心只有一個字：跑。</strong></p>
       </div>
