@@ -6504,6 +6504,199 @@ QLD(55-65%)：提供基本的槓桿beta收益，確保能跑贏SSO
         <p style="font-size:12px;color:var(--text-secondary);margin:4px 0 0;">傳統成交量告訴你「哪天」熱絡；VRVP 把成交量轉 90° 顯示「哪個價位」有大量真金白銀。</p>
       </div>
     </div>
+
+    <!-- VRVP 示意圖 SVG -->
+    <div style="background:var(--input-bg);border-radius:8px;padding:16px;margin-bottom:14px;">
+      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;text-align:center;">左：K 線走勢　｜　右：成交量分布（籌碼地圖）</div>
+      <svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+        <!-- 背景分區 -->
+        <rect x="0" y="0" width="540" height="380" fill="transparent"/>
+        <rect x="540" y="0" width="260" height="380" fill="transparent"/>
+
+        <!-- 價值區域 VA 帶狀背景 (VAH ~ VAL 範圍) -->
+        <rect x="0" y="130" width="800" height="130" fill="var(--accent)" opacity="0.06"/>
+
+        <!-- ===== 左側：價格走勢 ===== -->
+        <!-- Y 軸刻度標籤 -->
+        <g font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--text-secondary)">
+          <text x="8" y="50">$ 高</text>
+          <text x="8" y="135">VAH</text>
+          <text x="8" y="200">POC</text>
+          <text x="8" y="263">VAL</text>
+          <text x="8" y="345">$ 低</text>
+        </g>
+
+        <!-- 水平參考線 -->
+        <line x1="40" y1="130" x2="800" y2="130" stroke="var(--orange)" stroke-width="1" stroke-dasharray="4,3" opacity="0.7"/>
+        <line x1="40" y1="195" x2="800" y2="195" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="2,2" opacity="0.9"/>
+        <line x1="40" y1="260" x2="800" y2="260" stroke="var(--orange)" stroke-width="1" stroke-dasharray="4,3" opacity="0.7"/>
+
+        <!-- LVN 真空區標示 (價格區間 90~125, y=85~125) -->
+        <rect x="40" y="85" width="500" height="40" fill="var(--red)" opacity="0.07"/>
+        <text x="50" y="105" font-family="system-ui,sans-serif" font-size="10" fill="var(--red)" opacity="0.85">LVN 真空區 · 無支撐 · 易快速滑價</text>
+
+        <!-- K 線走勢 (折線示意價格路徑，從左下起漲→POC 洗盤→突破→回測→再上) -->
+        <polyline points="60,310 90,285 120,290 150,265 180,240 210,215 240,200 270,195 300,205 330,198 360,170 390,140 420,150 450,110 480,95 510,110 540,100"
+                  fill="none" stroke="var(--text-secondary)" stroke-width="1.5" opacity="0.4"/>
+
+        <!-- K 線 (簡化 candles) -->
+        <g>
+          <!-- 上漲 K (綠) -->
+          <line x1="75" y1="305" x2="75" y2="320" stroke="var(--green)" stroke-width="1"/>
+          <rect x="70" y="305" width="10" height="12" fill="var(--green)"/>
+
+          <line x1="105" y1="280" x2="105" y2="295" stroke="var(--green)" stroke-width="1"/>
+          <rect x="100" y="280" width="10" height="12" fill="var(--green)"/>
+
+          <line x1="135" y1="275" x2="135" y2="295" stroke="var(--red)" stroke-width="1"/>
+          <rect x="130" y="283" width="10" height="10" fill="var(--red)"/>
+
+          <line x1="165" y1="255" x2="165" y2="275" stroke="var(--green)" stroke-width="1"/>
+          <rect x="160" y="258" width="10" height="14" fill="var(--green)"/>
+
+          <line x1="195" y1="230" x2="195" y2="248" stroke="var(--green)" stroke-width="1"/>
+          <rect x="190" y="232" width="10" height="14" fill="var(--green)"/>
+
+          <line x1="225" y1="205" x2="225" y2="225" stroke="var(--green)" stroke-width="1"/>
+          <rect x="220" y="208" width="10" height="14" fill="var(--green)"/>
+
+          <!-- POC 區盤整多根 K -->
+          <line x1="255" y1="188" x2="255" y2="208" stroke="var(--green)" stroke-width="1"/>
+          <rect x="250" y="190" width="10" height="14" fill="var(--green)"/>
+
+          <line x1="285" y1="190" x2="285" y2="213" stroke="var(--red)" stroke-width="1"/>
+          <rect x="280" y="198" width="10" height="12" fill="var(--red)"/>
+
+          <line x1="315" y1="195" x2="315" y2="215" stroke="var(--green)" stroke-width="1"/>
+          <rect x="310" y="200" width="10" height="12" fill="var(--green)"/>
+
+          <line x1="345" y1="188" x2="345" y2="210" stroke="var(--green)" stroke-width="1"/>
+          <rect x="340" y="192" width="10" height="14" fill="var(--green)"/>
+
+          <!-- 突破 VAH 長紅 K -->
+          <line x1="375" y1="160" x2="375" y2="200" stroke="var(--green)" stroke-width="1"/>
+          <rect x="370" y="165" width="10" height="28" fill="var(--green)"/>
+
+          <!-- 快速穿越 LVN 真空上衝 -->
+          <line x1="405" y1="132" x2="405" y2="160" stroke="var(--green)" stroke-width="1"/>
+          <rect x="400" y="135" width="10" height="22" fill="var(--green)"/>
+
+          <line x1="435" y1="142" x2="435" y2="162" stroke="var(--red)" stroke-width="1"/>
+          <rect x="430" y="148" width="10" height="10" fill="var(--red)"/>
+
+          <line x1="465" y1="105" x2="465" y2="135" stroke="var(--green)" stroke-width="1"/>
+          <rect x="460" y="108" width="10" height="24" fill="var(--green)"/>
+
+          <line x1="495" y1="90" x2="495" y2="110" stroke="var(--green)" stroke-width="1"/>
+          <rect x="490" y="92" width="10" height="16" fill="var(--green)"/>
+
+          <line x1="525" y1="95" x2="525" y2="115" stroke="var(--red)" stroke-width="1"/>
+          <rect x="520" y="100" width="10" height="10" fill="var(--red)"/>
+        </g>
+
+        <!-- 當前價格指標 -->
+        <g>
+          <line x1="530" y1="100" x2="540" y2="100" stroke="var(--accent)" stroke-width="2"/>
+          <text x="485" y="80" font-family="system-ui,sans-serif" font-size="10" fill="var(--accent)" font-weight="700">突破 VAH</text>
+        </g>
+
+        <!-- 分隔線 -->
+        <line x1="540" y1="20" x2="540" y2="360" stroke="var(--card-border)" stroke-width="1" stroke-dasharray="2,2"/>
+
+        <!-- ===== 右側：成交量分布（橫條） ===== -->
+        <!-- 每一橫條對應一個價位帶，寬度 = 該價位成交量 -->
+        <g>
+          <!-- 高價區 (小量，壓力區上方) -->
+          <rect x="550" y="28" width="30" height="10" fill="var(--text-secondary)" opacity="0.55"/>
+          <rect x="550" y="42" width="45" height="10" fill="var(--text-secondary)" opacity="0.55"/>
+          <rect x="550" y="56" width="38" height="10" fill="var(--text-secondary)" opacity="0.55"/>
+          <rect x="550" y="70" width="60" height="10" fill="var(--text-secondary)" opacity="0.6"/>
+
+          <!-- HVN 高成交量節點 (VAH 附近) -->
+          <rect x="550" y="84" width="120" height="10" fill="var(--green)" opacity="0.9"/>
+          <rect x="550" y="98" width="140" height="10" fill="var(--green)" opacity="0.95"/>
+          <rect x="550" y="112" width="110" height="10" fill="var(--green)" opacity="0.9"/>
+
+          <!-- VAH 區 -->
+          <rect x="550" y="126" width="75" height="10" fill="var(--orange)" opacity="0.75"/>
+
+          <!-- LVN 真空區 (極短橫條，VAH 與 POC 之間) -->
+          <rect x="550" y="140" width="20" height="10" fill="var(--red)" opacity="0.55"/>
+          <rect x="550" y="154" width="15" height="10" fill="var(--red)" opacity="0.55"/>
+          <rect x="550" y="168" width="22" height="10" fill="var(--red)" opacity="0.55"/>
+          <rect x="550" y="182" width="18" height="10" fill="var(--red)" opacity="0.55"/>
+
+          <!-- POC 控制點 (最長橫條) -->
+          <rect x="550" y="196" width="220" height="12" fill="var(--accent)" opacity="1"/>
+
+          <!-- POC 旁次大 HVN -->
+          <rect x="550" y="212" width="165" height="10" fill="var(--green)" opacity="0.95"/>
+          <rect x="550" y="226" width="135" height="10" fill="var(--green)" opacity="0.9"/>
+          <rect x="550" y="240" width="105" height="10" fill="var(--green)" opacity="0.85"/>
+
+          <!-- VAL 區 -->
+          <rect x="550" y="254" width="70" height="10" fill="var(--orange)" opacity="0.75"/>
+
+          <!-- 低價區 (逐漸變短，無人承接) -->
+          <rect x="550" y="268" width="48" height="10" fill="var(--text-secondary)" opacity="0.55"/>
+          <rect x="550" y="282" width="55" height="10" fill="var(--text-secondary)" opacity="0.55"/>
+          <rect x="550" y="296" width="40" height="10" fill="var(--text-secondary)" opacity="0.55"/>
+          <rect x="550" y="310" width="28" height="10" fill="var(--text-secondary)" opacity="0.5"/>
+          <rect x="550" y="324" width="35" height="10" fill="var(--text-secondary)" opacity="0.5"/>
+          <rect x="550" y="338" width="22" height="10" fill="var(--text-secondary)" opacity="0.5"/>
+        </g>
+
+        <!-- 右側標註 -->
+        <g font-family="system-ui,-apple-system,sans-serif" font-size="11">
+          <!-- POC -->
+          <text x="780" y="206" text-anchor="end" fill="var(--accent)" font-weight="700">POC 控制點</text>
+          <line x1="770" y1="202" x2="775" y2="202" stroke="var(--accent)" stroke-width="1.5"/>
+
+          <!-- HVN 上方 -->
+          <text x="780" y="99" text-anchor="end" fill="var(--green)" font-weight="600">HVN 籌碼山丘</text>
+
+          <!-- VAH -->
+          <text x="780" y="134" text-anchor="end" fill="var(--orange)" font-weight="700">VAH 價值區高</text>
+
+          <!-- LVN -->
+          <text x="780" y="162" text-anchor="end" fill="var(--red)" font-weight="600">LVN 籌碼真空</text>
+
+          <!-- VAL -->
+          <text x="780" y="262" text-anchor="end" fill="var(--orange)" font-weight="700">VAL 價值區低</text>
+
+          <!-- HVN 下方 -->
+          <text x="780" y="222" text-anchor="end" fill="var(--green)" font-weight="600">HVN 鐵底</text>
+        </g>
+
+        <!-- 左側操作提示 -->
+        <g font-family="system-ui,-apple-system,sans-serif" font-size="10" font-weight="600">
+          <!-- POC 鐵底買點 -->
+          <circle cx="270" cy="200" r="10" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="160" y="228" fill="var(--accent)">① 回測 POC 不破 · 鐵底加碼</text>
+
+          <!-- 突破 VAH -->
+          <circle cx="390" cy="140" r="10" fill="none" stroke="var(--green)" stroke-width="1.5"/>
+          <text x="300" y="115" fill="var(--green)">② 帶量突破 VAH</text>
+
+          <!-- LVN 快速穿越 -->
+          <text x="395" y="75" fill="var(--red)">③ 穿越 LVN 真空 · 加速上衝</text>
+        </g>
+
+        <!-- 底部箭頭：成交量軸 -->
+        <g>
+          <line x1="550" y1="355" x2="780" y2="355" stroke="var(--text-secondary)" stroke-width="1" opacity="0.6"/>
+          <polygon points="780,355 773,351 773,359" fill="var(--text-secondary)" opacity="0.6"/>
+          <text x="665" y="372" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="var(--text-secondary)">成交量 (越長 = 籌碼越重)</text>
+        </g>
+      </svg>
+      <div style="font-size:11px;color:var(--text-secondary);margin-top:10px;text-align:center;line-height:1.7;">
+        <span style="color:var(--accent);font-weight:600;">POC</span> = 最長橫條 · 絕對共識價　｜
+        <span style="color:var(--green);font-weight:600;">HVN</span> = 籌碼山丘 · 支撐/壓力　｜
+        <span style="color:var(--red);font-weight:600;">LVN</span> = 籌碼真空 · 快速滑價　｜
+        <span style="color:var(--orange);font-weight:600;">VAH/VAL</span> = 包住 70% 成交量的價值區
+      </div>
+    </div>
+
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px;">
       <div style="background:var(--input-bg);border-radius:8px;padding:12px;">
         <div style="color:var(--accent);font-weight:700;margin-bottom:6px;font-size:13px;">POC 控制點</div>
