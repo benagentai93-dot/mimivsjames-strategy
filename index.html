@@ -758,456 +758,401 @@ html, body { overflow-x: hidden; }
 <!-- TAB 0: 指令教學 / QUICKSTART -->
 <div id="tab13" class="page active">
   <div class="banner">
-    <h2>&#128640; 第一次使用 MimiVsJames Bot</h2>
-    <p>目標讀者：第一次打開這個 Bot、連 /scan 是什麼都不知道的你。看完 15 分鐘，你就能盤前跑完宏觀掃描 → 進場前檢查 → 盤後復盤的完整一天。</p>
-  </div>
-
-  <!-- 系統做什麼 -->
-  <div class="card" style="margin-bottom:20px;border-left:4px solid var(--accent);">
-    <h3 style="font-size:17px;margin-bottom:14px;">&#127919; 這個系統做什麼？</h3>
-    <p style="color:var(--text);font-size:14px;line-height:1.8;margin-bottom:10px;">一句話：它幫你把 <b>MimiVsJames 美股操作方法</b>自動化。你在 Telegram 打指令，Bot 去問 TradingView 拿資料、計算訊號、回你一段可執行的判讀。</p>
-    <ul style="padding-left:20px;line-height:1.9;color:var(--text);font-size:14px;">
-      <li><b>掃描</b>：找訊號（<code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/scan</code>、<code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/zone</code>、<code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/reversal</code>）</li>
-      <li><b>判讀</b>：告訴你該不該進（<code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/checklist</code>、<code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/rr</code>、<code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/ask</code>）</li>
-      <li><b>執行</b>：告訴你怎麼下單、停利、出場（<code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/pt</code>、<code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/exit</code>、<code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/journal</code>）</li>
-    </ul>
-  </div>
-
-  <!-- 開始前三件事 -->
-  <div class="card" style="margin-bottom:20px;">
-    <h3 style="font-size:17px;margin-bottom:14px;">&#9989; 開始前三件事</h3>
-    <ol style="padding-left:22px;line-height:1.9;color:var(--text);font-size:14px;">
-      <li>打開 <b>TradingView 桌面版</b>，圖表上要有 <b>FRVP Levels</b> 和 <b>AVWAP Anchor</b> 兩個指標（不是 Webapp）</li>
-      <li>Telegram 打開 Bot 對話視窗</li>
-      <li>先打 <code style="background:var(--input-bg);padding:2px 6px;border-radius:4px;color:var(--accent);">/help</code> — 看所有指令列表（不用背，隨時調出來看）</li>
-    </ol>
+    <h2>&#127919; MimiVsJames Bot 指令速查 — 教學 × 應用時機</h2>
+    <p>每個指令都標 <b>怎麼打</b>（語法）+ <b>什麼時候用</b>（時機）+ <b>回什麼</b>（輸出重點）。按一天的時間順序排列 — 從盤前到盤後直接照打。</p>
   </div>
 
   <!-- 30 秒上手 -->
-  <div class="card" style="margin-bottom:24px;border:2px solid var(--accent);background:rgba(45,212,168,.04);">
+  <div class="card" style="margin-bottom:20px;border:2px solid var(--accent);background:rgba(45,212,168,.04);">
     <h3 style="font-size:18px;margin-bottom:14px;color:var(--accent);">&#9201;&#65039; 30 秒上手：第一次就跑這三個</h3>
     <pre style="background:var(--input-bg);padding:14px 16px;border-radius:8px;border:1px solid var(--input-border);overflow-x:auto;font-family:'SF Mono','Monaco','Menlo',monospace;font-size:13px;line-height:1.8;color:var(--accent);margin:0;"><code>/macro                      <span style="color:var(--text-secondary);">← 看今天盤勢能不能做（紅燈就收工）</span>
 NVDA                        <span style="color:var(--text-secondary);">← 直接打股票代號，掃日線訊號</span>
 /ask 今天 NVDA 值得進嗎？   <span style="color:var(--text-secondary);">← 問 AI 顧問</span></code></pre>
-    <ul style="padding-left:20px;line-height:1.85;color:var(--text);font-size:13px;margin-top:14px;">
-      <li><code style="color:var(--accent);">/macro</code> 回你 VIX、F&amp;G、GEX、ADL、盤勢五個數字 + 結論（綠 / 黃 / 紅燈）</li>
-      <li>直接輸入代號 = <code style="color:var(--accent);">/scan SYMBOL</code> 的簡寫，Bot 回訊號強度、型態、進場建議</li>
-      <li><code style="color:var(--accent);">/ask</code> 是 AI 顧問，讀完整套策略文件幫你判讀（吃 Claude 訂閱額度，$0 邊際成本）</li>
-    </ul>
   </div>
 
-  <!-- 完整第一天流程 -->
-  <h3 style="font-size:20px;margin:30px 0 16px;color:var(--text);">&#128197; 完整第一天流程</h3>
-  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px;">
-
-    <!-- 盤前 -->
-    <div class="strategy-card" style="grid-column:1 / -1;">
-      <div class="card-icon" style="background:rgba(245,158,11,.15);color:var(--orange);">&#127769;</div>
-      <h3>盤前（09:00–09:30 ET）</h3>
-      <ol style="padding-left:18px;line-height:1.95;font-size:14px;">
-        <li><b>HALT 自檢（10 秒，不是指令，是問自己）：</b><br>
-          <span style="font-size:13px;color:var(--text-secondary);">H — Hurt（我有急著翻本嗎？）／ A — Angry（我對市場生氣嗎？）／ L — Lonely（我有自己判斷嗎？）／ T — Tired（精神夠嗎？）<b style="color:var(--red);">任一紅燈 → 今天觀望</b></span>
-        </li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/macro</code> — 五維宏觀：🟢正常 / 🟠單筆風險降到 1% / 🔴暫停新多倉 + <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/hedge</code></li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/scan swing</code> — 批次掃波段持股（先在 TradingView 建好 watchlist）</li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/fullscan</code> — 全持倉訊號快照</li>
+  <!-- 前置 + 卡關 -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+    <div class="card">
+      <h3 style="font-size:15px;margin-bottom:10px;">&#9989; 開始前三件事</h3>
+      <ol style="padding-left:20px;line-height:1.85;color:var(--text);font-size:13px;margin:0;">
+        <li>打開 <b>TradingView 桌面版</b>，圖表上要有 <b>FRVP Levels</b> 和 <b>AVWAP Anchor</b> 兩個指標</li>
+        <li>Telegram 打開 Bot 對話視窗</li>
+        <li>不會打就 <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/help</code> 看清單</li>
       </ol>
     </div>
-
-    <!-- 開盤 -->
-    <div class="strategy-card">
-      <div class="card-icon" style="background:rgba(59,130,246,.15);color:var(--blue);">&#9889;</div>
-      <h3>開盤（09:30–09:45 ET）</h3>
-      <pre style="background:var(--input-bg);padding:10px 12px;border-radius:6px;font-family:'SF Mono','Monaco',monospace;font-size:13px;color:var(--accent);margin:0 0 10px;"><code>/open15 auto on</code></pre>
-      <p style="font-size:13px;color:var(--text-secondary);">打完就走開。Bot 在 09:45 / 每整點 / 15:50 自動掃短線持股 + 觀察名單，有訊號就推播。不做短線就跳過。</p>
-    </div>
-
-    <!-- 盤中進場 -->
-    <div class="strategy-card" style="grid-column:1 / -1;">
-      <div class="card-icon" style="background:rgba(239,68,68,.15);color:var(--red);">&#128293;</div>
-      <h3>盤中進場流程（每筆都這樣做，約 2 分鐘）</h3>
-      <ol style="padding-left:18px;line-height:1.95;font-size:14px;">
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">NVDA</code> — 掃日線，看訊號強度、型態</li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/valuation NVDA</code> — 估值階段（2 或 4 最好）</li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/cycle</code> — 景氣階段是否匹配</li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/checklist long</code>（短線打 <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">short</code>）— 全 YES 才繼續</li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/rr NVDA</code> — RR 必須 ≥ 2</li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/zone NVDA</code>（可選）— 共振鐵底進場點</li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/ladder NVDA stop=185</code>（可選）— 反馬丁四段加倉，拆細風險</li>
-        <li>TradingView 用 Long Position 工具畫進場／停損／目標 → 下單<b style="color:var(--red);">同時掛停損單</b></li>
-        <li>盤後補：<code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/journal entry NVDA</code></li>
-      </ol>
-      <div style="margin-top:10px;padding:10px;background:rgba(45,212,168,.06);border-radius:6px;font-size:13px;line-height:1.8;">
-        <b>停利規劃：</b><code style="color:var(--accent);">/pt NVDA</code> → 3:3:4 分批（Phase 1 +2R 出 30% 停損移成本／Phase 2 +3R 出 30%／Phase 3 跌破 AVWAP 全出）<br>
-        <b>反馬丁加倉：</b><code style="color:var(--accent);">/ladder NVDA stop=185</code> → 60/20/10/10% 四段加碼（只加活的，不加死的）<br>
-        <b>期權磁吸位：</b><code style="color:var(--accent);">/wall NVDA</code> → Call/Put Wall + Max Pain + γ Flip 四層關鍵位<br>
-        <b>機構動向：</b><code style="color:var(--accent);">/darkpool NVDA</code> → FINRA 暗池放量/NMS 排名<br>
-        <b>要賣或虧中：</b><code style="color:var(--accent);">/advice NVDA</code> → Hold / Reduce / Exit + 停損移到哪<br>
-        <b>批次掃全持倉紅黃綠燈：</b><code style="color:var(--accent);">/exit</code>
-      </div>
-    </div>
-
-    <!-- 盤後 -->
-    <div class="strategy-card">
-      <div class="card-icon" style="background:rgba(139,92,246,.15);color:var(--purple);">&#127769;</div>
-      <h3>盤後（16:00+）</h3>
-      <ol style="padding-left:18px;line-height:1.85;font-size:14px;">
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/journal exit NVDA</code> — 當日出場紀錄</li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/journal entry META</code> — 當日進場紀錄</li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/review daily</code> — 3 分鐘自動簡報</li>
-        <li><code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/portfolio</code> — 當日損益結算</li>
-        <li>週五加跑 <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/journal week</code></li>
-      </ol>
-    </div>
-
-    <!-- 卡住 -->
-    <div class="strategy-card">
-      <div class="card-icon" style="background:rgba(34,197,94,.15);color:var(--green);">&#128161;</div>
-      <h3>卡住怎麼辦</h3>
-      <ul style="padding-left:18px;line-height:1.85;font-size:14px;">
-        <li>忘了指令 → <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/help</code></li>
-        <li>Bot 沒反應 → <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/status</code></li>
-        <li>不知該打哪個 → <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/ask 我想 XXX 該用什麼指令？</code></li>
-        <li>掃描無結果 → 確認 TradingView 開著、FRVP / AVWAP 指標已載入</li>
-        <li>要撤銷 → <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/cancel</code>　要確認更新 → <code style="background:var(--input-bg);padding:1px 6px;border-radius:4px;color:var(--accent);">/confirm</code></li>
+    <div class="card">
+      <h3 style="font-size:15px;margin-bottom:10px;">&#128293; 系統三件事</h3>
+      <ul style="padding-left:20px;line-height:1.85;color:var(--text);font-size:13px;margin:0;">
+        <li><b>掃描</b>：<code style="color:var(--accent);">/scan</code> <code style="color:var(--accent);">/zone</code> <code style="color:var(--accent);">/reversal</code></li>
+        <li><b>判讀</b>：<code style="color:var(--accent);">/checklist</code> <code style="color:var(--accent);">/rr</code> <code style="color:var(--accent);">/ask</code></li>
+        <li><b>執行</b>：<code style="color:var(--accent);">/pt</code> <code style="color:var(--accent);">/ladder</code> <code style="color:var(--accent);">/exit</code> <code style="color:var(--accent);">/journal</code></li>
       </ul>
     </div>
   </div>
 
-  <!-- 指令地圖 -->
-  <h3 style="font-size:20px;margin:30px 0 16px;color:var(--text);">&#127919; 指令地圖（按任務分類）</h3>
+  <!-- 一天的時序：盤前 → 11:30 ET → 盤中進場 -->
+  <h3 style="font-size:20px;margin:30px 0 16px;color:var(--text);">&#128197; 一天的時序流（每個指令都附 時機 + 回什麼）</h3>
 
-  <div class="card" style="margin-bottom:16px;">
-    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">&#128269; 我想找訊號</h3>
-    <div style="overflow-x:auto;">
-      <table>
-        <thead><tr><th>想做什麼</th><th>打什麼</th></tr></thead>
-        <tbody>
-          <tr><td>看單一股票</td><td><code style="color:var(--accent);">NVDA</code> 或 <code style="color:var(--accent);">/scan NVDA</code></td></tr>
-          <tr><td>掃全部波段持股</td><td><code style="color:var(--accent);">/scan swing</code></td></tr>
-          <tr><td>找共振鐵底</td><td><code style="color:var(--accent);">/zone NVDA</code></td></tr>
-          <tr><td>找 BB 收斂突破</td><td><code style="color:var(--accent);">/squeeze</code></td></tr>
-          <tr><td>找 2B 假突破 / 破底翻</td><td><code style="color:var(--accent);">/reversal</code></td></tr>
-          <tr><td>找高品質訊號</td><td><code style="color:var(--accent);">/hq</code></td></tr>
-          <tr><td>財報後漂移機會</td><td><code style="color:var(--accent);">/pead NVDA</code></td></tr>
-          <tr><td>全持倉訊號快照</td><td><code style="color:var(--accent);">/fullscan</code></td></tr>
-          <tr><td>15 分鐘週期</td><td><code style="color:var(--accent);">/scan NVDA 15</code></td></tr>
-          <tr><td>今日短線標的</td><td><code style="color:var(--accent);">/shortlist</code></td></tr>
-        </tbody>
-      </table>
+  <!-- 🌅 盤前 -->
+  <div class="card" style="margin-bottom:16px;border-left:4px solid var(--orange);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <span style="font-size:22px;">&#127769;</span>
+      <h3 style="font-size:17px;margin:0;color:var(--orange);">盤前（09:00–09:30 ET）</h3>
+    </div>
+    <p style="font-size:12.5px;color:var(--text-secondary);margin-bottom:12px;line-height:1.7;"><b style="color:var(--red);">HALT 自檢（10 秒）</b>：H 急著翻本？／A 對市場生氣？／L 沒自己判斷？／T 精神不夠？任一紅燈 → 今天觀望。</p>
+
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/macro</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 每天打開 Bot 第一個指令，30 秒判斷今天能不能做。<br><b style="color:var(--purple);">回什麼</b> · VIX、F&amp;G、GEX、ADL、盤勢五個數字 + 結論燈號（🟢正常 / 🟠單筆 1.5%→1% / 🔴暫停新多倉、改 <code>/hedge</code>）</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/scan swing</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · macro 過後，批次掃「波段持股」watchlist 所有標的的日線訊號（先在 TradingView 建好 watchlist）。<br><b style="color:var(--purple);">回什麼</b> · 每檔的訊號強度／型態／建議動作。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/fullscan</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · scan swing 後，看「整個持倉」30 秒一覽。<br><b style="color:var(--purple);">回什麼</b> · 全持倉訊號矩陣，標出今天需要動作的標的。</div>
     </div>
   </div>
 
-  <div class="card" style="margin-bottom:16px;">
-    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">&#128721; 我要進場，先檢查</h3>
-    <div style="overflow-x:auto;">
-      <table>
-        <thead><tr><th>想做什麼</th><th>打什麼</th></tr></thead>
-        <tbody>
-          <tr><td>短線七問（當沖~5 日）</td><td><code style="color:var(--accent);">/checklist short</code></td></tr>
-          <tr><td>長線九問（波段~長線）</td><td><code style="color:var(--accent);">/checklist long</code></td></tr>
-          <tr><td>計算 RR</td><td><code style="color:var(--accent);">/rr NVDA</code></td></tr>
-          <tr><td>檢查估值階段</td><td><code style="color:var(--accent);">/valuation NVDA</code></td></tr>
-          <tr><td>檢查景氣階段</td><td><code style="color:var(--accent);">/cycle</code></td></tr>
-        </tbody>
-      </table>
+  <!-- ⚡ 開盤後 2 小時 11:30 ET -->
+  <div class="card" style="margin-bottom:16px;border-left:4px solid var(--blue);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+      <span style="font-size:22px;">&#9889;</span>
+      <h3 style="font-size:17px;margin:0;color:var(--blue);">開盤後 2 小時（11:30 ET）</h3>
+      <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--green);color:#fff;">2026-04-26 改版</span>
+    </div>
+
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/open15 auto on</code><span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--green);color:#fff;">⭐ NEW</span></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 做短線當天打一次，然後就走開。Bot 在 11:30 ET 自動掃短線+波段+觀察三類 watchlist，有訊號推播。<br><b style="color:var(--purple);">回什麼</b> · K1+K2+K3 八劇本／<b>VWAP 4 種盤型</b>（穩定站上／假拉真出／橫盤／多次測不破）／Darvas Box 一封 Telegram 完整定調。<br><b style="color:var(--text-secondary);">舊版差異</b> · 舊版分 09:35/40/45 三段 → 新版單一 11:30（24 根 5m bars 才足以判 VWAP 盤型）。不做短線跳過。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/open15</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 沒等到 11:30 自動觸發，或想立刻知道當下盤型。手動觸發。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/open15 close</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 收盤前 15 分鐘做的「今日收盤決策」。</div>
     </div>
   </div>
 
-  <div class="card" style="margin-bottom:16px;">
-    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">&#128176; 我有持倉，要管理</h3>
-    <div style="overflow-x:auto;">
-      <table>
-        <thead><tr><th>想做什麼</th><th>打什麼</th></tr></thead>
-        <tbody>
-          <tr><td>⭐ 我現在該怎麼辦（加／減／抱／全平）</td><td><code style="color:var(--accent);">/advice NVDA</code></td></tr>
-          <tr><td>規劃分批停利（3:3:4）</td><td><code style="color:var(--accent);">/pt NVDA</code></td></tr>
-          <tr><td>⭐ 反馬丁加倉（60/20/10/10% 四段）</td><td><code style="color:var(--accent);">/ladder NVDA stop=185</code><br><span style="font-size:12px;color:var(--text-secondary);">可加 <code>risk=2%</code> 切積極版、<code>cash=50000</code> 限制可動用現金</span></td></tr>
-          <tr><td>自訂財報日錨點停利</td><td><code style="color:var(--accent);">/custom NVDA frvp=2025-02-20 avwap=2025-02-20</code></td></tr>
-          <tr><td>批次六層出場掃描</td><td><code style="color:var(--accent);">/exit</code></td></tr>
-          <tr><td>校正進場停損 L1（X &lt; cost）</td><td><code style="color:var(--accent);">/advice set NVDA entrystop=190</code></td></tr>
-          <tr><td>鎖利移動停損 L2（X ≥ entryStop）</td><td><code style="color:var(--accent);">/advice set NVDA trail=210</code></td></tr>
-          <tr><td>取消移動停損</td><td><code style="color:var(--accent);">/advice set NVDA trail=none</code></td></tr>
-          <tr><td>當前損益 + 健檢</td><td><code style="color:var(--accent);">/portfolio</code></td></tr>
-          <tr><td>長線基本面健檢</td><td><code style="color:var(--accent);">/longterm NVDA</code></td></tr>
-        </tbody>
-      </table>
+  <!-- 🔥 盤中進場 -->
+  <div class="card" style="margin-bottom:16px;border-left:4px solid var(--red);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <span style="font-size:22px;">&#128293;</span>
+      <h3 style="font-size:17px;margin:0;color:var(--red);">盤中 — 要進場時</h3>
+    </div>
+
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">NVDA</code><span style="font-size:11px;color:var(--text-secondary);">＝</span><code style="color:var(--accent);font-weight:700;font-size:14px;">/scan NVDA</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 看到任何標的想進場，先打代號掃日線。<br><b style="color:var(--purple);">回什麼</b> · 訊號強度／型態／📅 視窗（預設 6 個月日線）／進場建議／<b>RS vs SPY</b>（個股 1m vs SPY 1m）／<b>雙重背離警報</b>（觸發時才顯示）。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/scan NVDA 15</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 短線進場想看 15 分鐘週期。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--green);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--green);font-weight:700;font-size:14px;">/fa NVDA</code><span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--green);color:#fff;">⭐ NEW</span><span style="font-size:11px;color:var(--text-secondary);">取代 /longterm + /valuation + /cycle</span></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 進場前一次看完「個股類型 + 長線體質 + 景氣循環」。<br><b style="color:var(--purple);">回什麼</b> · ① 估值四階段（本夢比／營收爆發／估值警戒／成熟）② 長線體質：P/E + ROIC + FCF margin + 營收成長 ③ 景氣循環：美林時鐘當前位置 + 受惠類股 ④ <b>🎯 綜合判讀</b>：類型 × 景氣 → 倉位建議（0-30% 防禦 / 70-100% 強烈做多 etc.）</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/checklist long</code> ｜ <code style="color:var(--accent);font-weight:700;font-size:14px;">/checklist short</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · scan + fa 都過後的最後關卡。波段~長線 → long（九問），當沖~5 日 → short（七問）。<br><b style="color:var(--purple);">規則</b> · 任一 ☐ 未勾 → Cancel。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/rr NVDA</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · checklist 全 YES 後算 RR 值。<b style="color:var(--red);">RR &lt; 2 不進場。</b></div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/zone NVDA</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 想找<b>共振鐵底</b>（FRVP POC + AVWAP）當進場點。<br><b style="color:var(--purple);">回什麼</b> · POC × AVWAP 共振／<b>HVN/LVN 籌碼結構</b>（上下方支撐牆 + ⚠️ LVN 真空帶警示，跌進去會滑價）。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/squeeze</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 盤中找 BB 收斂後的突破標的。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/reversal</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 找 2B 假突破／破底翻機會。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/hq</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 只想看高品質訊號（過濾雜訊）。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/pead NVDA</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 找財報後漂移（PEAD）機會。</div>
     </div>
   </div>
 
-  <div class="card" style="margin-bottom:16px;">
-    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">&#127758; 我想看大盤</h3>
-    <div style="overflow-x:auto;">
-      <table>
-        <thead><tr><th>想做什麼</th><th>打什麼</th></tr></thead>
-        <tbody>
-          <tr><td>五維宏觀快照</td><td><code style="color:var(--accent);">/macro</code></td></tr>
-          <tr><td>市場廣度深度</td><td><code style="color:var(--accent);">/adl</code></td></tr>
-          <tr><td>景氣階段</td><td><code style="color:var(--accent);">/cycle</code></td></tr>
-        </tbody>
-      </table>
+  <!-- 💰 持倉管理 -->
+  <div class="card" style="margin-bottom:16px;border-left:4px solid var(--green);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <span style="font-size:22px;">&#128176;</span>
+      <h3 style="font-size:17px;margin:0;color:var(--green);">持倉管理</h3>
+    </div>
+
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/advice NVDA</code><span style="font-size:11px;color:var(--orange);">⭐</span></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 單檔不知道該加／減／抱／全平。<br><b style="color:var(--purple);">回什麼</b> · 持倉階段 × Scanner 訊號 × 量能/乖離 × 六層出場 → 具體動作（Hold/Reduce/Exit + 幾股 + 停損移到哪）。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/exit</code><span style="font-size:11px;color:var(--text-secondary);">（無參數）</span></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 批次掃全持倉的紅／黃／綠燈。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/advice set NVDA stop=190</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 校正進場停損 L1（X &lt; cost 寫 entryStop）。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/advice set NVDA trail=210</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 鎖利移動停損 L2（X ≥ entryStop）。取消用 <code>trail=none</code>。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/pt NVDA</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 進場後規劃 <b>3:3:4 分批停利</b>。<br><b style="color:var(--purple);">回什麼</b> · Phase 1 +2R 出 30% / Phase 2 +3R 出 30% / Phase 3 跌破 AVWAP 出 40%。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/custom NVDA frvp=2025-02-20 avwap=2025-02-20</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 自訂財報日當錨點做停利規劃。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--green);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--green);font-weight:700;font-size:14px;">/ladder NVDA stop=185</code><span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--green);color:#fff;">⭐ NEW</span><span style="font-size:11px;color:var(--text-secondary);">2026-04-26 翻轉成 vault 標準 scale-up</span></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 訊號強想分批進場 → 反馬丁兩階段金字塔。<br><b style="color:var(--purple);">回什麼</b>（預設 mode=both）· <b>Build 建倉 0→60%</b>：30%(0R 試單) + 20%(+0.5R) + 10%(+1R 突破前高) ／ <b>Fill 拉滿 60→100%</b>：20%(+1.5R 突破季線) + 10%(+2.5R RS 強) + 10%(+4R 主升段)。<br><b style="color:var(--text-secondary);">可選</b> · <code>mode=build</code>（剛起手）／ <code>mode=fill</code>（已建好倉）／ <code>risk=2%</code> ／ <code>cash=50000</code>。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/portfolio</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 看當前損益 + 持倉健檢。</div>
     </div>
   </div>
 
-  <div class="card" style="margin-bottom:16px;">
-    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">&#128737;&#65039; 我要避險</h3>
-    <div style="overflow-x:auto;">
-      <table>
-        <thead><tr><th>想做什麼</th><th>打什麼</th></tr></thead>
-        <tbody>
-          <tr><td>大盤 3WH 對沖 SOP</td><td><code style="color:var(--accent);">/hedge</code><br><span style="font-size:12px;color:var(--text-secondary);">VIX/F&amp;G/PCC + SPY 乖離 → 是否加指數 Put</span></td></tr>
-          <tr><td>個股對沖分析 ⭐</td><td><code style="color:var(--accent);">/hedge NVDA</code><br><span style="font-size:12px;color:var(--text-secondary);">掃該股 chain → 真實 IV/skew/支持位 → 推薦結構</span></td></tr>
-          <tr><td>對沖口數計算 ⭐</td><td><code style="color:var(--accent);">/hedgesize NVDA 50 1M</code><br><span style="font-size:12px;color:var(--text-secondary);">Top-3 Put 排行榜：輕量 / 主推 / 重裝</span></td></tr>
-          <tr><td>ITM Call 口數計算 ⭐</td><td><code style="color:var(--accent);">/itmcall NVDA 50000 3M</code><br><span style="font-size:12px;color:var(--text-secondary);">Top-3 Call 排行榜：保守 / 均衡 / 槓桿</span></td></tr>
-          <tr><td>VRVP 選擇權訊號</td><td><code style="color:var(--accent);">/options NVDA</code></td></tr>
-          <tr><td>Chain 深度分析 ⭐</td><td><code style="color:var(--accent);">/options NVDA --deep</code><br><span style="font-size:12px;color:var(--text-secondary);">3 期 × ATM±5 → IV/Skew/Term/GammaWalls/Smile/Sentiment</span></td></tr>
-          <tr><td>期權磁吸位 ⭐ NEW</td><td><code style="color:var(--accent);">/wall NVDA</code><br><span style="font-size:12px;color:var(--text-secondary);">Call/Put Wall + Max Pain + γ Flip 四層磁吸 + ATR 距離 + AI 判讀</span></td></tr>
-          <tr><td>指定到期日磁吸位</td><td><code style="color:var(--accent);">/wall NVDA 2026-05-16</code></td></tr>
-        </tbody>
-      </table>
+  <!-- 🛡️ 避險 -->
+  <div class="card" style="margin-bottom:16px;border-left:4px solid var(--purple);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <span style="font-size:22px;">&#128737;&#65039;</span>
+      <h3 style="font-size:17px;margin:0;color:var(--purple);">避險</h3>
+    </div>
+
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/hedge</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · macro 紅燈或 SPY 乖離過大，需要大盤 3WH 對沖 SOP。<br><b style="color:var(--purple);">回什麼</b> · VIX/F&amp;G/PCC + SPY 乖離 → 是否加指數 Put。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/hedge NVDA</code><span style="font-size:11px;color:var(--orange);">⭐</span></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 單檔大倉位想對沖 → 掃該股 chain → 真實 IV/skew/支持位 → 推薦結構。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/hedgesize NVDA 50 1M</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 已決定對沖，要算口數 → Top-3 Put 排行榜（輕量／主推／重裝）。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/itmcall NVDA 50000 3M</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 想用 ITM Call 取代股票 → Top-3 Call 排行榜（保守／均衡／槓桿）。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/options NVDA</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 看 VRVP 選擇權訊號。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/options NVDA --deep</code><span style="font-size:11px;color:var(--orange);">⭐</span></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 深度 chain 分析 → 3 期 × ATM±5 → IV/Skew/Term/GammaWalls/Smile/Sentiment。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/wall NVDA</code><span style="font-size:11px;color:var(--orange);">⭐</span><span style="font-size:11px;color:var(--text-secondary);">指定到期日：<code>/wall NVDA 2026-05-16</code></span></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 進場前看「目標」、停損前看「最近的支撐磁吸」、波段持有時觀察是否被 Call Wall 卡住。<br><b style="color:var(--purple);">回什麼</b> · Call Wall / Put Wall / Max Pain / γ Flip 四層磁吸 + ATR 距離 + AI 判讀。</div>
     </div>
   </div>
 
-  <div class="card" style="margin-bottom:16px;">
-    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">&#127761; 我要看機構動向（暗池）</h3>
-    <div style="overflow-x:auto;">
-      <table>
-        <thead><tr><th>想做什麼</th><th>打什麼</th></tr></thead>
-        <tbody>
-          <tr><td>FINRA 暗池週成交 ⭐ NEW</td><td><code style="color:var(--accent);">/darkpool NVDA</code><br><span style="font-size:12px;color:var(--text-secondary);">ATS 成交股數/金額 + NMS 全市場排名 + 4 週趨勢 + 1 行判讀</span></td></tr>
-        </tbody>
-      </table>
+  <!-- 🌑 機構動向 -->
+  <div class="card" style="margin-bottom:16px;border-left:4px solid var(--text);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <span style="font-size:22px;">&#127761;</span>
+      <h3 style="font-size:17px;margin:0;color:var(--text);">機構動向</h3>
     </div>
-    <p style="font-size:12px;color:var(--text-secondary);margin-top:8px;line-height:1.7;">⚠️ <b>資料延遲</b>：FINRA 在 T+2 週才公布，「本週」其實是 2~3 週前的資料。這是定位／趨勢工具，不是即時訊號。</p>
-  </div>
 
-  <div class="card" style="margin-bottom:16px;">
-    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">&#128211; 我要記錄 / 復盤</h3>
-    <div style="overflow-x:auto;">
-      <table>
-        <thead><tr><th>想做什麼</th><th>打什麼</th></tr></thead>
-        <tbody>
-          <tr><td>記進場</td><td><code style="color:var(--accent);">/journal entry NVDA</code></td></tr>
-          <tr><td>記出場</td><td><code style="color:var(--accent);">/journal exit NVDA</code></td></tr>
-          <tr><td>每日簡報</td><td><code style="color:var(--accent);">/review daily</code></td></tr>
-          <tr><td>週五深度復盤</td><td><code style="color:var(--accent);">/review weekly</code> 或 <code style="color:var(--accent);">/journal week</code></td></tr>
-          <tr><td>看統計 / 資金曲線</td><td><code style="color:var(--accent);">/stats week</code>（或 <code style="color:var(--accent);">month</code>、<code style="color:var(--accent);">ytd</code>、<code style="color:var(--accent);">all</code>）</td></tr>
-        </tbody>
-      </table>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--green);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--green);font-weight:700;font-size:14px;">/darkpool</code><span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--green);color:#fff;">⭐ NEW</span><span style="font-size:11px;color:var(--text-secondary);">2026-04-26 加大盤模式</span></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 每天看大盤暗池資金流向 / 期權做市商部位。<br><b style="color:var(--purple);">回什麼</b> · <b>DIX</b>(Dark Index) + <b>GEX</b>(Gamma Exposure) + 5d/20d MA + 60d 區間 + 閾值對照（DIX &gt; 49% FOMO 極端 / &gt; 45% 機構吃貨 / 40-45% 常態 / &lt; 40% 倒貨；GEX &gt; 0 = 做市商長 gamma 穩定盤 / &lt; 0 = 短 gamma 波動放大）。<br><b style="color:var(--text-secondary);">資料</b> · squeezemetrics.com，daily 更新。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/darkpool NVDA</code><span style="font-size:11px;color:var(--orange);">⭐</span></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 基本面/技術面看好但<b>怕沒主力跟進</b> → 確認機構是否在動；或反過來，<b>懷疑有人偷偷收貨</b> → 看暗池放量。<br><b style="color:var(--purple);">回什麼</b> · 本週 ATS 成交 + NMS 排名 + 4 週對比 + 1 行判讀。<br><span style="color:var(--red);">⚠️ FINRA T+2 週才公布，是定位／趨勢工具，不是即時訊號。</span></div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;border-left:3px solid var(--green);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--green);font-weight:700;font-size:14px;">/adl</code><span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--green);color:#fff;">⭐ NEW</span><span style="font-size:11px;color:var(--text-secondary);">2026-04-26 加廣度背離</span></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 盤勢看似創高但「感覺不對勁」想驗證。<br><b style="color:var(--purple);">回什麼</b> · NYSE/QQQ/IWM 三層 ADL + Rule D × ATR 預警 + <b>🚨 廣度背離主動偵測</b>（SPY 創新高但 ADL 沒同步，「虛胖多頭」警報）。</div>
     </div>
   </div>
 
-  <div class="card" style="margin-bottom:16px;">
-    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">&#129302; 我要問 AI</h3>
-    <div style="overflow-x:auto;">
-      <table>
-        <thead><tr><th>想做什麼</th><th>打什麼</th></tr></thead>
-        <tbody>
-          <tr><td>問策略判讀（Claude，$0）</td><td><code style="color:var(--accent);">/ask 你的問題</code></td></tr>
-          <tr><td>問 PDF 深度文章</td><td><code style="color:var(--accent);">/ask nlm 你的問題</code></td></tr>
-          <tr><td>連續對話</td><td><code style="color:var(--accent);">/ask</code>（不帶問題）</td></tr>
-          <tr><td>引用某則追問</td><td><code style="color:var(--accent);">/ask ref #A-42 新問題</code></td></tr>
-          <tr><td>合併 2~5 則重問</td><td><code style="color:var(--accent);">/ask merge #A-42 #A-45 新問題</code></td></tr>
-          <tr><td>保存到 Obsidian</td><td><code style="color:var(--accent);">/ask save #A-42</code></td></tr>
-        </tbody>
-      </table>
+  <!-- 🆕 v2.0 推薦池自動化 -->
+  <div class="card" style="margin-bottom:16px;border:2px solid var(--green);background:rgba(34,197,94,.04);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+      <span style="font-size:22px;">&#127381;</span>
+      <h3 style="font-size:17px;margin:0;color:var(--green);">v2.0 推薦池自動化（2026-04-26）</h3>
+    </div>
+
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--green);">
+      <div style="font-weight:700;color:var(--green);font-size:13.5px;margin-bottom:4px;">📥 把 PDF 丟進 <code style="color:var(--green);">MimivsJames產業分析及個股推薦/</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 收到 MimiVsJames 新文章。<br><b style="color:var(--purple);">自動發生</b> · Claude 蒸餾 → Obsidian <code>_reports/</code> 含 ⭐ / 💬 / 🎯 / 🛑 → TV「💎 Mimi 推薦池」watchlist → Telegram 廣播。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--green);">
+      <div style="font-weight:700;color:var(--green);font-size:13.5px;margin-bottom:4px;">💬 對 Claude 說「跑盤前掃描」/「掃推薦池」/「today's premarket」</div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · cron 沒跑或想手動觸發。<br><b style="color:var(--purple);">回什麼</b> · Telegram 一封 5 桶分類（📈短線進場 / 📈波段進場 / 📉短線退出 / 📉波段退出 / ⚪持續觀察）+ macro + 今日重點。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--green);">
+      <div style="font-weight:700;color:var(--green);font-size:13.5px;margin-bottom:4px;">🗑️ 在 TV「💎 Mimi 推薦池」右鍵刪除</div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 池子太多想清掉某檔。<br><b style="color:var(--purple);">自動發生</b> · skill 下次掃描自動偵測，標記 <code>removed_at</code>（免下任何指令）。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--green);">
+      <div style="font-weight:700;color:var(--green);font-size:13.5px;margin-bottom:4px;">📝 編輯 <code style="color:var(--green);">tradingview-mcp/mimivsjames/broadcast-whitelist.json</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 增 / 減 Telegram 廣播對象。<br><b style="color:var(--purple);">格式</b> · 在 <code>chatIds</code> 陣列加減 ID。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;border-left:3px solid var(--green);">
+      <div style="font-weight:700;color:var(--green);font-size:13.5px;margin-bottom:4px;">🔍 <code style="color:var(--green);">cat ~/tradingview-mcp/logs/premarket-$(date +%Y%m%d).log</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 想看每日 cron 觸發狀態 / debug。</div>
     </div>
   </div>
 
-  <div class="card" style="margin-bottom:24px;">
-    <h3 style="font-size:16px;margin-bottom:12px;color:var(--accent);">&#9881;&#65039; 系統 / 環境</h3>
-    <div style="overflow-x:auto;">
-      <table>
-        <thead><tr><th>指令</th><th>用途</th></tr></thead>
-        <tbody>
-          <tr><td><code style="color:var(--accent);">/help</code></td><td>指令清單</td></tr>
-          <tr><td><code style="color:var(--accent);">/status</code></td><td>Bot 運行狀態</td></tr>
-          <tr><td><code style="color:var(--accent);">/cancel</code></td><td>撤銷操作</td></tr>
-          <tr><td><code style="color:var(--accent);">/confirm</code></td><td>確認更新</td></tr>
-          <tr><td><code style="color:var(--accent);">/open15 auto on</code></td><td>開盤自動三階段掃描</td></tr>
-          <tr><td><code style="color:var(--accent);">/open15 close</code></td><td>收盤決策</td></tr>
-        </tbody>
-      </table>
+  <!-- 📓 盤後紀錄 -->
+  <div class="card" style="margin-bottom:16px;border-left:4px solid var(--purple);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <span style="font-size:22px;">&#128221;</span>
+      <h3 style="font-size:17px;margin:0;color:var(--purple);">盤後紀錄（16:00+）</h3>
+    </div>
+
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/journal entry NVDA</code> ｜ <code style="color:var(--accent);font-weight:700;font-size:14px;">/journal exit NVDA</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 當日有進場／出場就記。盤中不用急，收盤後補。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/review daily</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 當日收盤，3 分鐘自動生成每日簡報。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/journal week</code> ｜ <code style="color:var(--accent);font-weight:700;font-size:14px;">/review weekly</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 週五深度復盤（這週做對什麼、做錯什麼）。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/stats week</code><span style="font-size:11px;color:var(--text-secondary);">（或 <code>month</code> / <code>ytd</code> / <code>all</code>）</span></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 看統計／資金曲線。</div>
     </div>
   </div>
 
-  <!-- /ladder /wall /darkpool 三張深度介紹 -->
-  <h3 style="font-size:20px;margin:30px 0 16px;color:var(--text);">&#11088; 三個進階指令深入看</h3>
-  <div style="display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:24px;">
-
-    <!-- /ladder -->
-    <div class="card" style="border-left:4px solid var(--accent);">
-      <h3 style="font-size:17px;margin-bottom:10px;">&#128200; <code style="color:var(--accent);">/ladder</code> — 反馬丁加倉（贏家才加碼）</h3>
-      <p style="font-size:13.5px;line-height:1.8;color:var(--text);margin-bottom:10px;">訊號強但不敢一次重押？用四段加倉法把風險拆細，<b>不加死的、只加活的</b>。股價走對才加，走錯不加。</p>
-      <pre style="background:var(--input-bg);padding:12px 14px;border-radius:6px;font-family:'SF Mono','Monaco',monospace;font-size:13px;color:var(--accent);line-height:1.8;margin:0 0 12px;overflow-x:auto;"><code>/ladder NVDA stop=185                   <span style="color:var(--text-secondary);"># 基本用法</span>
-/ladder NVDA stop=185 risk=2%           <span style="color:var(--text-secondary);"># 只要積極版</span>
-/ladder NVDA stop=185 cash=50000        <span style="color:var(--text-secondary);"># 限定可動用現金</span></code></pre>
-      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:6px;"><b>四段加碼比例：</b></p>
-      <ul style="padding-left:20px;line-height:1.85;font-size:13px;color:var(--text);margin-bottom:8px;">
-        <li><b>第 1 段 60%</b>：訊號成立立即進場（最大倉位）</li>
-        <li><b>第 2 段 20%</b>：+1R 加碼（走對了再加）</li>
-        <li><b>第 3 段 10%</b>：+2R 加碼</li>
-        <li><b>第 4 段 10%</b>：+3R 加碼</li>
-      </ul>
-      <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.7;margin:0;">總風險固定 <b>1%（保守版）</b>或 <b>2%（積極版）</b>，Bot 會並列兩版讓你挑。</p>
+  <!-- 🤖 AI 顧問 -->
+  <div class="card" style="margin-bottom:16px;border-left:4px solid var(--blue);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <span style="font-size:22px;">&#129302;</span>
+      <h3 style="font-size:17px;margin:0;color:var(--blue);">AI 顧問</h3>
     </div>
+    <p style="font-size:12.5px;color:var(--text-secondary);margin-bottom:12px;line-height:1.7;">掃描指令回「數字」，<code style="color:var(--blue);">/ask</code> 幫你「解讀」。讀完整套 MimiVsJames 策略文件 + 你的倉位 + 市場數據給可執行建議。</p>
 
-    <!-- /wall -->
-    <div class="card" style="border-left:4px solid var(--purple);">
-      <h3 style="font-size:17px;margin-bottom:10px;">&#127981; <code style="color:var(--purple);">/wall</code> — 期權磁吸位（股價往哪「黏」）</h3>
-      <p style="font-size:13.5px;line-height:1.8;color:var(--text);margin-bottom:10px;">期權 OI 集中的價位會像磁鐵把股價吸過去 — 這是<b>選擇權做市商對沖行為</b>造成的真實現象，不是玄學。</p>
-      <pre style="background:var(--input-bg);padding:12px 14px;border-radius:6px;font-family:'SF Mono','Monaco',monospace;font-size:13px;color:var(--accent);line-height:1.8;margin:0 0 12px;overflow-x:auto;"><code>/wall NVDA                  <span style="color:var(--text-secondary);"># 最近月</span>
-/wall NVDA 2026-05-16       <span style="color:var(--text-secondary);"># 指定到期日</span></code></pre>
-      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:6px;"><b>四個關鍵價位：</b></p>
-      <ul style="padding-left:20px;line-height:1.85;font-size:13px;color:var(--text);margin-bottom:10px;">
-        <li><b style="color:var(--red);">Call Wall</b>（壓力磁吸）— 大量 Call OI 集中位，做市商會賣壓上檔</li>
-        <li><b style="color:var(--green);">Put Wall</b>（支撐磁吸）— 大量 Put OI 集中位，做市商會買撐下檔</li>
-        <li><b style="color:var(--orange);">Max Pain</b>（到期日重力中心）— 選擇權買方總損失最大的價位，股價常往這裡靠</li>
-        <li><b style="color:var(--blue);">γ Flip</b>（波動轉折）— 負 Gamma → 正 Gamma 的轉折價，跨過會放大波動</li>
-      </ul>
-      <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.7;margin:0;">每個價位都附 <b>% 距離</b> + <b>ATR 倍數</b>（用 ATR(14) 換算成「幾天的波動」），最後 AI 給一行判讀。<br>
-      <b>用法時機</b>：進場前看「目標」、停損前看「最近的支撐磁吸」、波段持有時觀察是否被 Call Wall 卡住。</p>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--blue);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--blue);font-weight:700;font-size:14px;">/ask 你的問題</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 99% 用這個。<br><b style="color:var(--purple);">引擎</b> · Claude Opus 4.7 讀本地策略文件，$0 訂閱額度。</div>
     </div>
-
-    <!-- /darkpool -->
-    <div class="card" style="border-left:4px solid var(--blue);">
-      <h3 style="font-size:17px;margin-bottom:10px;">&#127761; <code style="color:var(--blue);">/darkpool</code> — FINRA 暗池流量（機構動向）</h3>
-      <p style="font-size:13.5px;line-height:1.8;color:var(--text);margin-bottom:10px;">機構大單常走<b>暗池（ATS）</b>避免衝擊報價 — FINRA 每週公布 ATS 成交數據，可以反推哪些股票被機構大力進出。</p>
-      <pre style="background:var(--input-bg);padding:12px 14px;border-radius:6px;font-family:'SF Mono','Monaco',monospace;font-size:13px;color:var(--accent);line-height:1.8;margin:0 0 12px;overflow-x:auto;"><code>/darkpool NVDA</code></pre>
-      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:6px;"><b>輸出內容：</b></p>
-      <ul style="padding-left:20px;line-height:1.85;font-size:13px;color:var(--text);margin-bottom:10px;">
-        <li><b>本週 ATS 成交</b>：股數 + 金額 + 筆數</li>
-        <li><b>NMS 排名</b>：在全市場 ~11,000 檔裡排第幾（前 0.05% 表示被瘋狂交易）</li>
-        <li><b>4 週對比</b>：本週成交 vs 前 4 週均值，放量/縮量百分比</li>
-        <li><b>判讀</b>：條件式給結論（Top 50 + 放量 30%+ → 機構大幅累積／出貨；Top 50 但縮量 → 機構興趣降溫）</li>
-      </ul>
-      <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.7;margin-bottom:10px;"><b>用法時機</b>：基本面／技術面看好但怕沒主力跟進 → 看暗池確認機構是否在動；或反過來，價格沒動但懷疑有人偷偷收貨 → 看暗池放量。</p>
-      <div style="padding:8px 10px;background:rgba(239,68,68,.06);border-radius:6px;font-size:12px;color:var(--red);line-height:1.7;">
-        ⚠️ <b>資料延遲</b>：FINRA 在 T+2 週才公布，「本週」其實是 2~3 週前的資料。是<b>定位／趨勢工具</b>，不是即時訊號。
-      </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/ask nlm 你的問題</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 需要引用 PDF 深度文章時（少見）。引擎為 NotebookLM。</div>
     </div>
-
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/ask</code><span style="font-size:11px;color:var(--text-secondary);">（不帶問題）</span></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 想接續上一輪追問（連續對話）。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/ask ref #A-42 新問題</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 指定引用某則歷史對話追問。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/ask merge #A-42 #A-45 新問題</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 合併 2~5 則歷史對話重問。</div>
+    </div>
+    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;border-left:3px solid var(--accent);">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/ask save #A-42</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 把判讀存成 Obsidian 筆記（<code>Trading/Knowledge/YYYY-MM-DD_xxx.md</code>）。</div>
+    </div>
   </div>
 
-  <!-- /ask 深度介紹 -->
-  <div class="card" style="margin-bottom:24px;border-left:4px solid var(--blue);">
-    <h3 style="font-size:18px;margin-bottom:12px;">&#129302; <code style="color:var(--blue);">/ask</code> — 你的 AI 交易顧問</h3>
-    <p style="font-size:14px;line-height:1.8;color:var(--text);margin-bottom:12px;">掃描指令回你「數字」，<code style="color:var(--blue);">/ask</code> 幫你「解讀」。它讀完整套 MimiVsJames 策略文件，結合你的倉位與市場數據給可執行建議。</p>
-
-    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;"><b>兩個引擎：</b></p>
-    <div style="overflow-x:auto;margin-bottom:14px;">
-      <table>
-        <thead><tr><th>指令</th><th>引擎</th><th>何時用</th></tr></thead>
-        <tbody>
-          <tr><td><code style="color:var(--accent);">/ask 問題</code></td><td>&#129302; Claude Opus 4.7（預設）</td><td>99% 情況用這個。讀本地策略文件，$0 邊際</td></tr>
-          <tr><td><code style="color:var(--accent);">/ask nlm 問題</code></td><td>&#128218; NotebookLM</td><td>需要引用 PDF 深度文章時（少見）</td></tr>
-        </tbody>
-      </table>
+  <!-- 🔧 系統 / 卡關 -->
+  <div class="card" style="margin-bottom:24px;border-left:4px solid var(--text-secondary);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <span style="font-size:22px;">&#128295;</span>
+      <h3 style="font-size:17px;margin:0;color:var(--text);">系統 / 卡關</h3>
     </div>
 
-    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;"><b>連續對話 vs 引用：</b></p>
-    <pre style="background:var(--input-bg);padding:12px 14px;border-radius:6px;font-family:'SF Mono','Monaco',monospace;font-size:12.5px;color:var(--text);line-height:1.75;margin:0 0 12px;overflow-x:auto;"><code><span style="color:var(--accent);">/ask NVDA 今天訊號怎麼樣？</span>
-<span style="color:var(--text-secondary);">→ #A-42 · NVDA 日線 LONG 訊號...</span>
-
-<span style="color:var(--accent);">/ask 那我該進多少倉？</span>        <span style="color:var(--text-secondary);"># 接續問，自動引用 #A-42</span>
-<span style="color:var(--accent);">/ask ref #A-42 換成 15 分鐘週期呢？</span>  <span style="color:var(--text-secondary);"># 指定引用某則</span>
-<span style="color:var(--accent);">/ask save #A-42</span>                <span style="color:var(--text-secondary);"># 存到 Obsidian 知識庫</span></code></pre>
-
-    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;"><b>典型用法：</b></p>
-    <pre style="background:var(--input-bg);padding:12px 14px;border-radius:6px;font-family:'SF Mono','Monaco',monospace;font-size:13px;color:var(--accent);line-height:1.8;margin:0;overflow-x:auto;"><code>/ask NVDA 現在進場合理嗎？
-/ask 為什麼今天 VIX 突然飆？
-/ask 我這週為什麼一直停損？</code></pre>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;">
+      <div style="background:var(--input-bg);border-radius:8px;padding:10px 12px;"><code style="color:var(--accent);font-weight:700;">/help</code> · <span style="font-size:12px;color:var(--text-secondary);">忘記指令名</span></div>
+      <div style="background:var(--input-bg);border-radius:8px;padding:10px 12px;"><code style="color:var(--accent);font-weight:700;">/status</code> · <span style="font-size:12px;color:var(--text-secondary);">Bot 沒反應確認運行</span></div>
+      <div style="background:var(--input-bg);border-radius:8px;padding:10px 12px;"><code style="color:var(--accent);font-weight:700;">/cancel</code> · <span style="font-size:12px;color:var(--text-secondary);">撤銷剛才操作</span></div>
+      <div style="background:var(--input-bg);border-radius:8px;padding:10px 12px;"><code style="color:var(--accent);font-weight:700;">/confirm</code> · <span style="font-size:12px;color:var(--text-secondary);">Bot 要二次確認時</span></div>
+    </div>
   </div>
 
-  <!-- 典型一天 -->
+  <!-- 🔥 典型一天 -->
+  <h3 style="font-size:20px;margin:30px 0 16px;color:var(--text);">&#128293; 典型一天的指令組合</h3>
   <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px;">
     <div class="card">
-      <h3 style="font-size:16px;margin-bottom:12px;">&#128200; 波段操作者的一天（10 分鐘）</h3>
-      <pre style="background:var(--input-bg);padding:12px 14px;border-radius:6px;font-family:'SF Mono','Monaco',monospace;font-size:12.5px;color:var(--text);line-height:1.8;overflow-x:auto;margin:0;"><code><span style="color:var(--text-secondary);"># 盤前 5 分鐘</span>
-/macro
-/scan swing
-/fullscan
+      <h3 style="font-size:16px;margin-bottom:12px;">&#128200; 波段操作者（10 分鐘）</h3>
+      <pre style="background:var(--input-bg);padding:12px 14px;border-radius:6px;font-family:'SF Mono','Monaco',monospace;font-size:12.5px;color:var(--text);line-height:1.8;overflow-x:auto;margin:0;"><code><span style="color:var(--text-secondary);"># 盤前</span>
+/macro                 <span style="color:var(--text-secondary);">← 宏觀</span>
+/scan swing            <span style="color:var(--text-secondary);">← 波段持股批次</span>
+/fullscan              <span style="color:var(--text-secondary);">← 整體快照</span>
 
-<span style="color:var(--text-secondary);"># NVDA 有訊號，進場 3 分鐘</span>
-NVDA
-/valuation NVDA
-/checklist long
-/rr NVDA
-/zone NVDA
+<span style="color:var(--text-secondary);"># 盤中（發現 NVDA 訊號）</span>
+NVDA                   <span style="color:var(--text-secondary);">← 含 RS + 雙重背離</span>
+/fa NVDA               <span style="color:var(--text-secondary);">← 類型+體質+景氣+綜合判讀</span>
+/checklist long        <span style="color:var(--text-secondary);">← 九問</span>
+/rr NVDA               <span style="color:var(--text-secondary);">← RR ≥ 2</span>
+/zone NVDA             <span style="color:var(--text-secondary);">← 共振 + HVN/LVN</span>
 <span style="color:var(--text-secondary);">（下單 + 掛停損單）</span>
+/ladder NVDA stop=X    <span style="color:var(--text-secondary);">← 反馬丁分批進場</span>
+/pt NVDA               <span style="color:var(--text-secondary);">← 3:3:4 停利</span>
 
-<span style="color:var(--text-secondary);"># 出場規劃</span>
-/pt NVDA
-
-<span style="color:var(--text-secondary);"># 盤後 1 分鐘</span>
+<span style="color:var(--text-secondary);"># 盤後</span>
 /journal entry NVDA
 /review daily
 /portfolio</code></pre>
     </div>
     <div class="card">
-      <h3 style="font-size:16px;margin-bottom:12px;">&#9889; 短線操作者的一天</h3>
+      <h3 style="font-size:16px;margin-bottom:12px;">&#9889; 短線操作者</h3>
       <pre style="background:var(--input-bg);padding:12px 14px;border-radius:6px;font-family:'SF Mono','Monaco',monospace;font-size:12.5px;color:var(--text);line-height:1.8;overflow-x:auto;margin:0;"><code><span style="color:var(--text-secondary);"># 盤前</span>
 /macro
-/squeeze
-/reversal
-/shortlist
+/squeeze               <span style="color:var(--text-secondary);">← BB 收斂</span>
+/reversal              <span style="color:var(--text-secondary);">← 2B / 破底翻</span>
+/shortlist             <span style="color:var(--text-secondary);">← 確認今日短線標的</span>
 
 <span style="color:var(--text-secondary);"># 開盤</span>
-/open15 auto on
+/open15 auto on        <span style="color:var(--text-secondary);">← 11:30 ET 自動觸發 + VWAP 4 盤型</span>
 
 <span style="color:var(--text-secondary);"># 盤中觸發</span>
-/scan NVDA 15
+/scan NVDA 15          <span style="color:var(--text-secondary);">← 15 分週期</span>
 /rr NVDA
-/checklist short
+/checklist short       <span style="color:var(--text-secondary);">← 七問</span>
 
 <span style="color:var(--text-secondary);"># 收盤前</span>
-/open15 close</code></pre>
+/open15 close          <span style="color:var(--text-secondary);">← 收盤決策</span></code></pre>
     </div>
   </div>
 
-  <!-- 操作者路徑 -->
-  <h3 style="font-size:20px;margin:30px 0 16px;color:var(--text);">&#127919; 找到你的操作者路徑</h3>
-  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px;">
-    <div class="strategy-card">
-      <div class="card-icon" style="background:rgba(59,130,246,.15);color:var(--blue);">&#9889;</div>
-      <h3>短線（當沖~5 日）</h3>
-      <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
-        <code style="color:var(--accent);">/macro</code> <code style="color:var(--accent);">/squeeze</code> <code style="color:var(--accent);">/reversal</code> <code style="color:var(--accent);">/open15</code> <code style="color:var(--accent);">/scan SYMBOL 15</code> <code style="color:var(--accent);">/checklist short</code>
-      </p>
+  <!-- 🛠 v2.1 變更摘要 -->
+  <div class="card" style="margin-bottom:24px;border:2px solid var(--green);background:rgba(34,197,94,.04);">
+    <h3 style="font-size:18px;margin-bottom:14px;color:var(--green);">&#128736;&#65039; v2.1 變更摘要（2026-04-26）</h3>
+    <p style="font-size:12.5px;color:var(--text-secondary);margin-bottom:14px;line-height:1.7;">對齊 vault <code>美股操作系統化整理/</code> 8 章 32 篇 md，9 個 task 完成：</p>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead><tr><th>變動</th><th>細節</th></tr></thead>
+        <tbody>
+          <tr><td><b style="color:var(--green);">新指令</b></td><td><code style="color:var(--accent);">/fa SYMBOL</code>（整併 /longterm + /valuation + /cycle + 估值四階段 + 綜合判讀）</td></tr>
+          <tr><td><b style="color:var(--green);">新模式</b></td><td><code style="color:var(--accent);">/darkpool</code>（無參數）= 大盤 DIX/GEX（squeezemetrics）</td></tr>
+          <tr><td><b style="color:var(--blue);">/scan 升級</b></td><td>加 RS vs SPY 行 + 雙重背離主動偵測</td></tr>
+          <tr><td><b style="color:var(--blue);">/zone 升級</b></td><td>加 HVN/LVN 籌碼結構 + LVN 真空帶警示</td></tr>
+          <tr><td><b style="color:var(--blue);">/ladder 翻轉</b></td><td>從 averaging-down → vault 02a:75 標準的 scale-up 反馬丁（build/fill 兩階段）</td></tr>
+          <tr><td><b style="color:var(--blue);">/open15 改版</b></td><td>11:30 ET 單一觸發（原 09:35/40/45 三段）+ VWAP 4 種盤型 + 三類 watchlist</td></tr>
+          <tr><td><b style="color:var(--blue);">/adl 升級</b></td><td>加廣度背離主動偵測</td></tr>
+          <tr><td><b style="color:var(--red);">已砍</b></td><td><code>/pattern</code>、<code>/formation</code>（資訊已在 /scan）／ <code>/longterm</code>、<code>/valuation</code>、<code>/cycle</code>（整併到 /fa）</td></tr>
+        </tbody>
+      </table>
     </div>
-    <div class="strategy-card">
-      <div class="card-icon" style="background:rgba(45,212,168,.15);color:var(--accent);">&#128200;</div>
-      <h3>波段（1 週~3 個月）⭐ 系統主力</h3>
-      <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
-        <code style="color:var(--accent);">/macro</code> <code style="color:var(--accent);">/scan swing</code> <code style="color:var(--accent);">/zone</code> <code style="color:var(--accent);">/pt</code> <code style="color:var(--accent);">/exit</code> <code style="color:var(--accent);">/journal week</code>
-      </p>
-    </div>
-    <div class="strategy-card">
-      <div class="card-icon" style="background:rgba(139,92,246,.15);color:var(--purple);">&#127963;&#65039;</div>
-      <h3>長線（3 個月以上）</h3>
-      <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
-        <code style="color:var(--accent);">/cycle</code> <code style="color:var(--accent);">/longterm</code> <code style="color:var(--accent);">/pead</code> — 每季一次即可
-      </p>
-    </div>
-    <div class="strategy-card">
-      <div class="card-icon" style="background:rgba(245,158,11,.15);color:var(--orange);">&#127919;</div>
-      <h3>混合型</h3>
-      <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
-        主線 70% 走波段 SOP，副線 30% 走短線 SOP，獨立停損、獨立節奏。
-      </p>
-    </div>
-  </div>
-
-  <!-- 下一步 -->
-  <div class="card" style="margin-bottom:24px;">
-    <h3 style="font-size:18px;margin-bottom:14px;">&#128218; 下一步該學什麼</h3>
-    <ol style="padding-left:22px;line-height:2;font-size:14px;color:var(--text);">
-      <li>看「<b>交易 SOP</b>」分頁 — 每日例行工作的完整版</li>
-      <li>看「<b>部位/停損</b>」 — 進場前自我審問（HALT + 七/九問）</li>
-      <li>看「<b>型態指南</b>」 — FRVP + AVWAP 共振鐵底</li>
-      <li>看「<b>停利計算</b>」 — 3:3:4 分批停利邏輯詳解</li>
-      <li>看「<b>再平衡/風控</b>」 — 反馬丁加倉倉位管理</li>
-    </ol>
   </div>
 
   <!-- 五條鐵律 -->
@@ -1220,7 +1165,7 @@ NVDA
       <li><b>下單同時掛停損單</b>，不是心裡想想</li>
       <li><b>連續 3 筆虧損 → 強制休息一週</b></li>
     </ol>
-    <p style="font-size:12px;color:var(--text-secondary);margin-top:14px;text-align:right;">最後更新：2026-04-22 · 建議每 3 個月重讀一次，紀律會偷偷退化</p>
+    <p style="font-size:12px;color:var(--text-secondary);margin-top:14px;text-align:right;">最後更新：2026-04-26（v2.1 — vault 對齊 refactor）· 建議每 3 個月重讀一次，紀律會偷偷退化</p>
   </div>
 </div>
 
