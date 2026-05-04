@@ -5210,7 +5210,16 @@ function saveData() {
 }
 
 // ========== TAB SWITCHING ==========
+const SITE_PASSWORD = '650123';
+const FREE_TABS = new Set(['tab13']); // 指令教學 free; others password-gated
+
 function switchTab(tabId, btn) {
+  if (!FREE_TABS.has(tabId) && sessionStorage.getItem('siteUnlocked') !== '1') {
+    const pwd = prompt('此分頁需要密碼才能查看：');
+    if (pwd === null) return;
+    if (pwd !== SITE_PASSWORD) { alert('密碼錯誤'); return; }
+    sessionStorage.setItem('siteUnlocked', '1');
+  }
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   btn.classList.add('active');
