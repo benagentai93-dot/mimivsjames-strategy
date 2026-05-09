@@ -817,28 +817,6 @@ NVDA                        <span style="color:var(--text-secondary);">← 直�
     </div>
   </div>
 
-  <!-- ⚡ 開盤後 2 小時 11:30 ET -->
-  <div class="card" style="margin-bottom:16px;border-left:4px solid var(--blue);">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
-      <span style="font-size:22px;">&#9889;</span>
-      <h3 style="font-size:17px;margin:0;color:var(--blue);">開盤後 2 小時（11:30 ET）</h3>
-      <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--green);color:#fff;">2026-04-26 改版</span>
-    </div>
-
-    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
-      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/open15 auto on</code><span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--green);color:#fff;">⭐ NEW</span></div>
-      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 做短線當天打一次，然後就走開。Bot 在 11:30 ET 自動掃短線+波段+觀察三類 watchlist，有訊號推播。<br><b style="color:var(--purple);">回什麼</b> · K1+K2+K3 八劇本／<b>VWAP 4 種盤型</b>（穩定站上／假拉真出／橫盤／多次測不破）／Darvas Box 一封 Telegram 完整定調。<br><b style="color:var(--text-secondary);">舊版差異</b> · 舊版分 09:35/40/45 三段 → 新版單一 11:30（24 根 5m bars 才足以判 VWAP 盤型）。不做短線跳過。</div>
-    </div>
-    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
-      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/open15</code></div>
-      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 沒等到 11:30 自動觸發，或想立刻知道當下盤型。手動觸發。</div>
-    </div>
-    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;border-left:3px solid var(--accent);">
-      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/open15 close</code></div>
-      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 收盤前 15 分鐘做的「今日收盤決策」。</div>
-    </div>
-  </div>
-
   <!-- 🔥 盤中進場 -->
   <div class="card" style="margin-bottom:16px;border-left:4px solid var(--red);">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
@@ -871,16 +849,12 @@ NVDA                        <span style="color:var(--text-secondary);">← 直�
       <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 想找<b>共振鐵底</b>（FRVP POC + AVWAP）當進場點。<br><b style="color:var(--purple);">回什麼</b> · POC × AVWAP 共振／<b>HVN/LVN 籌碼結構</b>（上下方支撐牆 + ⚠️ LVN 真空帶警示，跌進去會滑價）。</div>
     </div>
     <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
-      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/squeeze</code></div>
-      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 盤中找 BB 收斂後的突破標的。</div>
-    </div>
-    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
       <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/reversal</code></div>
       <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 找 2B 假突破／破底翻機會。</div>
     </div>
     <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
-      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/hq</code></div>
-      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 只想看高品質訊號（過濾雜訊）。</div>
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/fullscan</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 想一次看全持倉訊號摘要。HIGH QUALITY 2B、RSI 底背離、BB 收斂等 pattern 都在這裡看。</div>
     </div>
     <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;border-left:3px solid var(--accent);">
       <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/pead NVDA</code></div>
@@ -1017,28 +991,24 @@ NVDA                        <span style="color:var(--text-secondary);">← 直�
     </div>
   </div>
 
-  <!-- 📓 盤後紀錄 -->
+  <!-- 📓 盤後整理 -->
   <div class="card" style="margin-bottom:16px;border-left:4px solid var(--purple);">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
       <span style="font-size:22px;">&#128221;</span>
-      <h3 style="font-size:17px;margin:0;color:var(--purple);">盤後紀錄（16:00+）</h3>
+      <h3 style="font-size:17px;margin:0;color:var(--purple);">盤後整理（16:00+）</h3>
     </div>
 
     <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
-      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/journal entry NVDA</code> ｜ <code style="color:var(--accent);font-weight:700;font-size:14px;">/journal exit NVDA</code></div>
-      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 當日有進場／出場就記。盤中不用急，收盤後補。</div>
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/portfolio</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 收盤後看當日損益、持倉健檢與再平衡。</div>
     </div>
     <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
-      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/review daily</code></div>
-      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 當日收盤，3 分鐘自動生成每日簡報。</div>
-    </div>
-    <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--accent);">
-      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/journal week</code> ｜ <code style="color:var(--accent);font-weight:700;font-size:14px;">/review weekly</code></div>
-      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 週五深度復盤（這週做對什麼、做錯什麼）。</div>
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/exit</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 收盤後或隔天盤前批次掃全持倉六層出場紅／黃／綠燈。</div>
     </div>
     <div style="background:var(--input-bg);border-radius:8px;padding:12px 14px;border-left:3px solid var(--accent);">
-      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/stats week</code><span style="font-size:11px;color:var(--text-secondary);">（或 <code>month</code> / <code>ytd</code> / <code>all</code>）</span></div>
-      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 看統計／資金曲線。</div>
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;"><code style="color:var(--accent);font-weight:700;font-size:14px;">/advice NVDA</code></div>
+      <div style="font-size:12.5px;line-height:1.75;"><b style="color:var(--blue);">時機</b> · 單檔需要深度檢查時使用。<code>/exit SYMBOL</code> 已整併到這裡。</div>
     </div>
   </div>
 
@@ -1112,28 +1082,20 @@ NVDA                   <span style="color:var(--text-secondary);">← 含 RS + �
 /pt NVDA               <span style="color:var(--text-secondary);">← 3:3:4 停利</span>
 
 <span style="color:var(--text-secondary);"># 盤後</span>
-/journal entry NVDA
-/review daily
 /portfolio</code></pre>
     </div>
     <div class="card">
       <h3 style="font-size:16px;margin-bottom:12px;">&#9889; 短線操作者</h3>
       <pre style="background:var(--input-bg);padding:12px 14px;border-radius:6px;font-family:'SF Mono','Monaco',monospace;font-size:12.5px;color:var(--text);line-height:1.8;overflow-x:auto;margin:0;"><code><span style="color:var(--text-secondary);"># 盤前</span>
 /macro
-/squeeze               <span style="color:var(--text-secondary);">← BB 收斂</span>
+/fullscan              <span style="color:var(--text-secondary);">← 全持倉摘要，含 HIGH QUALITY / BB 收斂</span>
 /reversal              <span style="color:var(--text-secondary);">← 2B / 破底翻</span>
-/shortlist             <span style="color:var(--text-secondary);">← 確認今日短線標的</span>
-
-<span style="color:var(--text-secondary);"># 開盤</span>
-/open15 auto on        <span style="color:var(--text-secondary);">← 11:30 ET 自動觸發 + VWAP 4 盤型</span>
 
 <span style="color:var(--text-secondary);"># 盤中觸發</span>
 /scan NVDA 15          <span style="color:var(--text-secondary);">← 15 分週期</span>
+/scan NVDA 60          <span style="color:var(--text-secondary);">← 1 小時週期</span>
 /rr NVDA
-/checklist short       <span style="color:var(--text-secondary);">← 七問</span>
-
-<span style="color:var(--text-secondary);"># 收盤前</span>
-/open15 close          <span style="color:var(--text-secondary);">← 收盤決策</span></code></pre>
+/checklist short       <span style="color:var(--text-secondary);">← 七問</span></code></pre>
     </div>
   </div>
 
@@ -1146,7 +1108,7 @@ NVDA                   <span style="color:var(--text-secondary);">← 含 RS + �
         <thead><tr><th>使用情境</th><th>對應指令</th></tr></thead>
         <tbody>
           <tr><td><b style="color:var(--green);">第一次使用</b></td><td><code style="color:var(--accent);">/macro</code> → <code style="color:var(--accent);">NVDA</code> → <code style="color:var(--accent);">/ask 今天 NVDA 值得進嗎?</code></td></tr>
-          <tr><td><b style="color:var(--blue);">找訊號</b></td><td><code style="color:var(--accent);">/scan</code>、<code style="color:var(--accent);">/zone</code>、<code style="color:var(--accent);">/reversal</code>、<code style="color:var(--accent);">/fullscan</code>、<code style="color:var(--accent);">/pattern</code>、<code style="color:var(--accent);">/formation</code></td></tr>
+          <tr><td><b style="color:var(--blue);">找訊號</b></td><td><code style="color:var(--accent);">/scan SYMBOL</code>、<code style="color:var(--accent);">/scan SYMBOL 15</code>、<code style="color:var(--accent);">/zone SYMBOL</code>、<code style="color:var(--accent);">/reversal</code>、<code style="color:var(--accent);">/fullscan</code></td></tr>
           <tr><td><b style="color:var(--blue);">進場檢查</b></td><td><code style="color:var(--accent);">/fa SYMBOL</code> → <code style="color:var(--accent);">/checklist long</code> 或 <code style="color:var(--accent);">/checklist short</code> → <code style="color:var(--accent);">/rr SYMBOL</code></td></tr>
           <tr><td><b style="color:var(--blue);">持倉管理</b></td><td><code style="color:var(--accent);">/advice SYMBOL</code>、<code style="color:var(--accent);">/pt SYMBOL</code>、<code style="color:var(--accent);">/exit</code>、<code style="color:var(--accent);">/portfolio</code></td></tr>
           <tr><td><b style="color:var(--blue);">選擇權 / 避險</b></td><td><code style="color:var(--accent);">/hedge</code>、<code style="color:var(--accent);">/hedge SYMBOL</code>、<code style="color:var(--accent);">/options SYMBOL</code>、<code style="color:var(--accent);">/wall SYMBOL</code>、<code style="color:var(--accent);">/darkpool SYMBOL</code></td></tr>
